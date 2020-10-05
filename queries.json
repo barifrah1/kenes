@@ -1,0 +1,3 @@
+{
+  "participantsTable": "select id,level as category ,Fname,Lname,mail,tel as phone,reg_date,payment,sug,nlplevel from UserKenes"
+}
