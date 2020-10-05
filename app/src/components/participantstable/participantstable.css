@@ -1,0 +1,11 @@
+.tab {
+  margin: auto;
+  margin-top: 3vh;
+  direction: rtl;
+}
+.headerRow {
+  text-align: center;
+}
+.rows {
+  text-align: center;
+}

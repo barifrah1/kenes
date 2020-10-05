@@ -1,10 +1,7 @@
-import React,{Component} from 'react';
-import './logo.css'
+import React, { Component } from "react";
+import "./logo.css";
 
-const logo = () => {
-    return (
-    <img  src="/images/logonlp.png"></img>
-    );
-}
+const logo = (style) => {
+  return <img className="Logo" src="/images/logonlp.png"></img>;
+};
 export default logo;
-
