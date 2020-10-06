@@ -1,41 +1,36 @@
-const queries = require("./queries.json");
+const { all_queries } = require("./queries/queries");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
-const cs = require("./connectionString.json");
+const cs = require("./connectionString");
 const app = express();
 const port = process.env.PORT || 5000;
+const { execQuery } = require("./dbHandler/dbhandler");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.get("/api/getdata", (req, res) => {
-  const connection = mysql.createConnection({
-    host: cs.host,
-    user: cs.user,
-    password: cs.password,
-    database: cs.database,
-  });
-  connection.connect((err) => {
-    if (err) throw err;
-    console.log("Connected!");
-  });
-  connection.query(queries.participantsTable, (err, rows) => {
-    if (err) throw err;
-    res.send(rows);
-  });
-  connection.end();
-});
 
 app.get("/api/hello", (req, res) => {
   res.send({ express: "Hello From Express" });
 });
 
+/*return all UserData for participants table*/
+app.post("/api/getdata", (req, res) =>
+  execQuery(all_queries.participantsTable, req, res)
+);
+
+/*return  UserSadnaot for specific user participants table - expanded part */
+app.post("/api/get_user_sadnaot", (req, res) => {
+  const params = [req.phone];
+  execQuery(all_queries.userSadnaot, req, res);
+});
+
+app.listen(port, () => console.log(`Listening on port ${port}`));
+
+/*
 app.post("/api/world", (req, res) => {
   console.log(req.body);
   res.send(
     `I received your POST request. This is what you sent me: ${req.body.post}`
   );
-});
-
-app.listen(port, () => console.log(`Listening on port ${port}`));
+});*/
