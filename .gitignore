@@ -22,4 +22,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 connectionString.json
+<<<<<<< HEAD
 appp.js
+=======
+>>>>>>> b96b6c6573771b8caa4c7b021022ab4e03b66504
