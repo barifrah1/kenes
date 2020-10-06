@@ -3,7 +3,11 @@
   position: absolute;
   top: 12px;
   left: 10px;
-  width: 8vw;
-  height: 16vh;
+  /*width: 7vw;
+  height: 14vh;*/
+  max-width: 230px;
+  max-height: 95px;
+  width: auto;
+  height: auto;
   border-radius: 35%;
 }
