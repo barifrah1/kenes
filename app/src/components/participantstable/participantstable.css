@@ -2,10 +2,20 @@
   margin: auto;
   margin-top: 3vh;
   direction: rtl;
+  margin-bottom: 10vh;
 }
 .headerRow {
   text-align: center;
 }
 .rows {
   text-align: center;
+}
+
+.searching {
+  display: block;
+  align-self: right;
+  position: relative;
+  left: 65vw;
+  top: 1vh;
+  width: 15vw;
 }
