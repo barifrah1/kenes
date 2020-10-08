@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { useState, useEffect } from "react";
 import "./sadnaot_details.css";
-import moment from "moment";
-
 const SadnaotDetails = (props) => {
   const [sadnaot, setSadnaot] = useState([]);
   useEffect(() => {
@@ -33,7 +31,7 @@ const SadnaotDetails = (props) => {
     <ul>
       {sadnaot.map((sadna) => {
         return (
-          <li>
+          <li key={"sadna" + sadna.id}>
             <label>
               <b>{"סבב " + sadna.rang + " : "}</b>
             </label>

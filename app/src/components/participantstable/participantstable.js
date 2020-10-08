@@ -9,10 +9,17 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import "./participantstable.css";
 import moment from "moment";
 import Expanded from "../expanded/expanded";
+import Modal from "react-awesome-modal";
+import ExpandedDetails from "../expandeddetails/expandeddetails";
 
 const { SearchBar } = Search;
 
 function ParticipantsTable() {
+  const [editingModalInfo, setEditModalInfo] = useState({
+    visible: false,
+    row: [],
+    rowIndex: -1,
+  });
   const [data, setData] = useState([{ id: 1, name: "yosi", price: 10 }]);
   const [cols, setCols] = useState([
     {
@@ -20,7 +27,6 @@ function ParticipantsTable() {
       text: "#",
       type: "number",
       sort: true,
-      style: { "white-space": "nowrap" },
     },
 
     {
@@ -29,35 +35,30 @@ function ParticipantsTable() {
       type: "string",
       sort: true,
       formatter: (cell, row) => row.Fname + " " + row.Lname,
-      style: { "white-space": "nowrap" },
     },
     {
       dataField: "category",
       text: "קטגוריה",
       type: "string",
       sort: true,
-      style: { "white-space": "nowrap" },
     },
     {
       dataField: "phone",
       text: "טלפון",
       type: "string",
       sort: true,
-      style: { "white-space": "nowrap" },
     },
     {
       dataField: "mail",
       text: "מייל",
       type: "string",
       sort: true,
-      style: { "white-space": "nowrap" },
     },
     {
       dataField: "sug",
       text: "סוג כרטיס",
       type: "number",
       sort: true,
-      style: { "white-space": "nowrap" },
     },
     {
       dataField: "reg_date",
@@ -65,14 +66,12 @@ function ParticipantsTable() {
       type: "date",
       sort: true,
       formatter: (cell, row) => moment(cell).format("DD/MM/yyyy"),
-      style: { "white-space": "nowrap" },
     },
     {
       dataField: "payment",
       text: "תשלום",
       type: "bool",
       sort: true,
-      style: { "white-space": "nowrap" },
     },
     {
       dataField: "city",
@@ -80,7 +79,6 @@ function ParticipantsTable() {
       type: "string",
       sort: true,
       hidden: true,
-      style: { "white-space": "nowrap" },
     },
     {
       dataField: "vegan",
@@ -88,7 +86,6 @@ function ParticipantsTable() {
       type: "string",
       sort: true,
       hidden: true,
-      style: { "white-space": "nowrap" },
     },
     {
       dataField: "way",
@@ -96,7 +93,6 @@ function ParticipantsTable() {
       type: "string",
       sort: true,
       hidden: true,
-      style: { "white-space": "nowrap" },
     },
     {
       dataField: "inv",
@@ -104,9 +100,9 @@ function ParticipantsTable() {
       type: "number",
       sort: true,
       hidden: true,
-      style: { "white-space": "nowrap" },
     },
   ]);
+
   useEffect(() => {
     fetch("http://localhost:3000/api/getdata", {
       method: "post",
@@ -131,6 +127,15 @@ function ParticipantsTable() {
 
   const expandRow = {
     renderer: (row) => <Expanded row={row} cols={cols} />,
+  };
+
+  const selectRow = {
+    mode: "radio",
+    selectColumnPosition: "left",
+    clickToExpand: true,
+    clickToSelect: false,
+    onSelect: (row, isSelect, rowIndex, e) =>
+      setEditModalInfo({ visible: true, row: row, rowIndex: rowIndex }),
   };
 
   return (
@@ -159,6 +164,7 @@ function ParticipantsTable() {
               rowClasses="rows"
               pagination={paginationFactory()}
               expandRow={expandRow}
+              selectRow={selectRow}
               striped
               bordered
               hover
@@ -166,6 +172,23 @@ function ParticipantsTable() {
           </div>
         )}
       </ToolkitProvider>
+      <Modal
+        visible={editingModalInfo.visible}
+        width="400"
+        height="80%"
+        effect="fadeInUp"
+        onClickAway={() =>
+          setEditModalInfo({ visible: false, row: [], rowIndex: -1 })
+        }
+      >
+        <div>
+          <ExpandedDetails
+            row={editingModalInfo.row}
+            cols={cols}
+            printAllFields={true}
+          />
+        </div>
+      </Modal>
     </div>
   );
 }

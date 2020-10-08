@@ -5,19 +5,21 @@ import Header from "../header/header.js";
 import ProminentAppBar from "../header_ui/header_ui.js";
 import Logo from "../logo/logo.js";
 import Participants from "../participants/participants";
+import Registeration from "../registeration/registeration";
 
 function Homepage() {
   return (
     <div>
       <ProminentAppBar />
       <Logo />
-      <Participants />
-      {/*<Router>
-        <Switch>
-          <Route exactpath="/" Component={Participants} />
-          <Route path="/par" Component={Participants} />
-        </Switch>
-      </Router>*/}
+      <Router>
+        <div>
+          <Switch>
+            <Route path="/participants" component={Participants} />
+            <Route path="/register" component={Registeration} />
+          </Switch>
+        </div>
+      </Router>
     </div>
   );
 }

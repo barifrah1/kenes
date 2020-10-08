@@ -14,16 +14,21 @@ app.get("/api/hello", (req, res) => {
   res.send({ express: "Hello From Express" });
 });
 
-/*return all UserData for participants table*/
+/*returns  UserData for participants table*/
 app.post("/api/getdata", (req, res) =>
   execQuery(all_queries.participantsTable, req, res)
 );
 
-/*return  UserSadnaot for specific user participants table - expanded part */
+/*returns  UserSadnaot for specific user participants table - expanded part */
 app.post("/api/get_user_sadnaot", (req, res) => {
   const params = [req.phone];
   execQuery(all_queries.userSadnaot, req, res);
 });
+
+/*returns all sadnaot details by rang for sadnaotForm component */
+app.post("/api/getSadnaot", (req, res) =>
+  execQuery(all_queries.sadnaotByRang, req, res)
+);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 

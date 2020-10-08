@@ -7,10 +7,10 @@ const ExpandedDetails = (props) => {
   return (
     <ul>
       {props.cols.map((col) => {
-        if (col.hidden == true) {
+        if (col.hidden == true || props.printAllFields) {
           if (col.type != "date") {
             return (
-              <li>
+              <li key={col.dataField}>
                 <label>
                   <b>{col.text + ":"}</b>
                 </label>

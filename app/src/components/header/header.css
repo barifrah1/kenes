@@ -1,5 +1,11 @@
 .headbar {
-    background-color: rgb(194, 129, 255);
-    min-height: 10vh;
-    min-width: 100vw;
+  background-color: rgb(194, 129, 255);
+  min-height: 10vh;
+  min-width: 100vw;
+}
+
+.headbar {
+  background-color: rgb(194, 129, 255);
+  min-height: 10vh;
+  min-width: inherit;
 }
