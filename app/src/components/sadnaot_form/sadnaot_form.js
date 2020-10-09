@@ -16,24 +16,29 @@ const SadnaotForm = (props) => {
             <label>{"סדנה סבב - " + round}</label>
             {
               <Field
-                name={"f_rang" + round}
+                name={"userSadnaot.f_rang" + round}
                 key={"f_rang" + round}
                 component={({ field, form }) => (
-                  <Select
-                    key={"s_rang" + round}
-                    options={options}
-                    className="select_container"
-                    classNamePrefix="react_select"
-                    value={
-                      options
-                        ? options.find((option) => option.value === field.value)
-                        : ""
-                    }
-                    onChange={(option) =>
-                      form.setFieldValue(field.name, option.value)
-                    }
-                    onBlur={field.onBlur}
-                  />
+                  <>
+                    <Select
+                      key={"s_rang" + round}
+                      options={options}
+                      className="select_container_sad"
+                      classNamePrefix="react_select"
+                      value={
+                        options
+                          ? options.find(
+                              (option) => option.value === field.value
+                            )
+                          : ""
+                      }
+                      onChange={(option) =>
+                        form.setFieldValue(field.name, option.value)
+                      }
+                      onBlur={field.onBlur}
+                    />
+                    <hr />
+                  </>
                 )}
               />
             }

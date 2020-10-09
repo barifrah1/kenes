@@ -8,7 +8,26 @@
   direction: rtl;
   box-shadow: 0 0 0px rgba(0, 0, 0, 0.3);
   margin-bottom: 3vh;
-  width: 32vw;
+  margin-left: 10px;
+  width: 15vw;
+  border: none;
+  outline: none;
+}
+
+.select_container_sad {
+  /*position: relative;
+  width: 240px;
+  display: inline-block;
+  background-color: #fff;
+  border-radius: 3px;*/
+  display: inline-block;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+  text-align: right;
+  direction: rtl;
+  box-shadow: 0 0 0px rgba(0, 0, 0, 0.3);
+  margin-bottom: 3vh;
+  margin-left: 10px;
+  width: 25vw;
   border: none;
   outline: none;
 }

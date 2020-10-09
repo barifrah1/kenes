@@ -5,7 +5,7 @@ const mysql = require("mysql");
 const cs = require("./connectionString");
 const app = express();
 const port = process.env.PORT || 5000;
-const { execQuery } = require("./dbHandler/dbhandler");
+const { execQuery, transaction } = require("./dbHandler/dbhandler");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,6 +29,12 @@ app.post("/api/get_user_sadnaot", (req, res) => {
 app.post("/api/getSadnaot", (req, res) =>
   execQuery(all_queries.sadnaotByRang, req, res)
 );
+
+/*Insert NewUser and his Sadnaot*/
+app.post("/api/InsertUserAndSadnaot", (req, res) => {
+  debugger;
+  //transaction([all_queries.InsertNewUser,InsertUserSadnaot],[]);
+});
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 

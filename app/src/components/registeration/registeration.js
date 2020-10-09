@@ -1,27 +1,16 @@
-import React, { Component } from "react";
+import React from "react";
 import { useState, useEffect } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
 import "./registeration.css";
-import moment from "moment";
-import Expanded from "../expanded/expanded";
 import Modal from "react-awesome-modal";
-import { makeStyles } from "@material-ui/core/styles";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
 import LinearStepper from "../stepper/stepper";
 import Header from "../header/header";
 import Select from "react-select";
 import SadnaotForm from "../sadnaot_form/sadnaot_form";
-
-{
-  /*import Header from "../header/header.js";
-import ProminentAppBar from "../header_ui/header_ui.js";
-import Logo from "../logo/logo.js";*/
-}
-
+import Swal from "sweetalert2";
+import OtherDetails from "../other_details_form/other_details_form";
+require("yup-phone");
 function Registeration() {
   const [isSubmitting, setSubmitting] = useState(false);
   const [values, setValues] = useState({
@@ -31,17 +20,51 @@ function Registeration() {
     email: "",
     phone: "",
     city: "",
-    bdika: "",
-    f_rang1: "",
-    f_rang2: "",
-    f_rang3: "",
+    vegan: "",
+    way: "",
+    photos: "1",
+    takanon: "0",
+    userSadnaot: {},
   });
-  const [lev, setLev] = useState("");
   const [activeStep, setActiveStep] = React.useState(0);
   const [sadnaot, setSadnaot] = useState({});
-
-  const updateActiveStep = (activeStep, change) =>
+  const updateActiveStep = async (activeStep, change, errors, touched) => {
+    if (change == 1) {
+      for (let i = 0; i < fieldsByStep[activeStep].length; i++) {
+        if (errors[fieldsByStep[activeStep][i]] != undefined) {
+          console.log("error in field " + fieldsByStep[activeStep][i]);
+          await Swal.fire({
+            title: "שגיאה",
+            text: "קיימים שדות לא תקינים",
+            icon: "error",
+            customClass: {
+              container: "my-swal",
+            },
+          });
+          return;
+        }
+      }
+      if (Object.keys(touched).length == 0) {
+        console.log("touched errors");
+        await Swal.fire({
+          title: "Oops...",
+          text: "שדות לא תקינים",
+          icon: "error",
+          customClass: {
+            container: "my-swal",
+          },
+        });
+        return;
+      }
+    }
+    console.log("no errors");
     setActiveStep(activeStep + change);
+  };
+  const [fieldsByStep, setFieldBystep] = useState([
+    ["Fname", "Lname", "nlplevel", "email", "phone", "city"],
+    ["userSadnaot"],
+    ["vegan", "way", "photos", "takanon"],
+  ]);
 
   const nlpLevelOptions = [
     { value: "Student", label: "Student" },
@@ -66,6 +89,14 @@ function Registeration() {
           rangs = rangs
             .filter((value, index, self) => self.indexOf(value) === index)
             .sort();
+          let mapper = rangs.map((rang) => "f_rang" + rang);
+          let newUserSadnaot = {};
+          for (let j = 0; j < rangs.length; j++) {
+            newUserSadnaot[mapper[j]] = "";
+          }
+          let newVal = values;
+          newVal.userSadnaot = newUserSadnaot;
+          setValues(newVal);
           let sadnaByrangs = [];
           for (let i = 1; i <= rangs.length; i++) {
             sadnaByrangs[i - 1] = result.filter((row) => row.rang == i);
@@ -82,101 +113,141 @@ function Registeration() {
       );
   }, []);
 
+  const validationSchema = Yup.object().shape({
+    Fname: Yup.string().required("שדה חובה"),
+    Lname: Yup.string().required("שדה חובה"),
+    nlplevel: Yup.string().required("לא נבחרה רמת נ.ל.פ"),
+    email: Yup.string().email("אימייל לא תקין").required("אימייל לא תקין"),
+    phone: Yup.string()
+      .phone("IL")
+      .required("טלפון לא תקין - שימוש בספרות בלבד"),
+    city: Yup.string().required("יישוב לא תקין"),
+    userSadnaot: Yup.object().shape({
+      f_rang1: Yup.string().required("לא נבחרה סדנה"),
+      f_rang2: Yup.string().required("לא נבחרה סדנה"),
+      f_rang3: Yup.string().required("לא נבחרה סדנה"),
+    }),
+    vegan: Yup.string().required("שדה חסר"),
+    way: Yup.string().required("שדה חסר"),
+    photos: Yup.string().required("שדה חסר"),
+    takanon: Yup.number().required("לא אישרת את תנאי התקנון"),
+  });
+
+  const handleSubmit = (values, { setSubmitting }) => {
+    setTimeout(() => {
+      setActiveStep(1);
+      alert(JSON.stringify(values, null, 2));
+      setSubmitting(false);
+    }, 400);
+  };
   return (
     <div>
       <Modal visible={true} width="700" height="700">
         <Header type="modal" />
-        <div className="div_steps">
-          <LinearStepper
-            activeStep={activeStep}
-            updateActiveStep={updateActiveStep}
-          />
-        </div>
+
         <div className="regis_form">
           <Formik
-            initialValues={{
-              Fname: "",
-              Lname: "",
-              nlplevel: "",
-              email: "",
-              phone: "",
-              city: "",
-              bdika: "",
-              f_rang1: "",
-              f_rang2: "",
-              f_rang3: "",
-            }}
-            onSubmit={(values, { setSubmitting }) => {
-              setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-                setSubmitting(false);
-              }, 400);
-            }}
+            initialValues={values}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
           >
-            <Form>
-              {activeStep === 0 && (
-                <>
-                  <label>שם פרטי :</label>
-                  <Field type="text" name="Fname" />
-                  <hr />
-                  <label>שם משפחה :</label>
-                  <Field type="text" name="Lname" />
-                  <hr />
-                  <label>רמת NLP : </label>
-                  <Field
-                    name="nlplevel"
-                    component={({ field, form }) => (
-                      <Select
-                        options={nlpLevelOptions}
-                        className="select_container"
-                        classNamePrefix="react_select"
-                        value={
-                          nlpLevelOptions
-                            ? nlpLevelOptions.find(
-                                (option) => option.value === field.value
-                              )
-                            : ""
-                        }
-                        onChange={(option) =>
-                          form.setFieldValue(field.name, option.value)
-                        }
-                        onBlur={field.onBlur}
-                      />
-                    )}
+            {({
+              handleSubmit,
+              handleChange,
+              handleBlur,
+              values,
+              errors,
+              touched,
+            }) => (
+              <Form>
+                <div className="div_steps">
+                  <LinearStepper
+                    activeStep={activeStep}
+                    updateActiveStep={updateActiveStep}
+                    form_errors={errors}
+                    touched_form={touched}
                   />
-                  <hr />
-                  <label>אימייל :</label>
-                  <Field type="email" name="email" />
-                  <ErrorMessage name="email" component="div" />
-                  <hr />
-                  <label>סלולרי :</label>
-                  <Field type="text" name="phone" />
-                  <ErrorMessage name="phone" component="div" />
-                  <hr />
-                  <label>יישוב :</label>
-                  <Field type="text" name="city" />
-                </>
-              )}
-              {activeStep === 1 && (
-                <>
-                  <SadnaotForm sadnaotData={sadnaot} />
-                </>
-              )}
-              {activeStep === 2 && (
-                <>
-                  <label>בדיקה :</label>
-                  <Field type="text" name="bdika" />
-                  <hr />
-                </>
-              )}
-              {activeStep === 3 && (
-                <>
-                  <button type="submit" disabled={isSubmitting}>
-                    להשלמת הרשמה ומעבר לתשלום
-                  </button>
-                </>
-              )}
-            </Form>
+                </div>
+                <div className="formDiv">
+                  {activeStep === 0 && (
+                    <>
+                      <label>שם פרטי :</label>
+                      <Field type="text" name="Fname" />
+                      {touched.Fname && errors.Fname ? (
+                        <div className="error_div">{errors.Fname}</div>
+                      ) : null}
+                      <hr />
+                      <label>שם משפחה :</label>
+                      <Field type="text" name="Lname" />
+                      {touched.Lname && errors.Lname ? (
+                        <div className="error_div">{errors.Lname}</div>
+                      ) : null}
+                      <hr />
+                      <label>רמת NLP : </label>
+                      <Field
+                        name="nlplevel"
+                        component={({ field, form }) => (
+                          <Select
+                            options={nlpLevelOptions}
+                            className="select_container"
+                            classNamePrefix="react_select"
+                            value={
+                              nlpLevelOptions
+                                ? nlpLevelOptions.find(
+                                    (option) => option.value === field.value
+                                  )
+                                : ""
+                            }
+                            onChange={(option) =>
+                              form.setFieldValue(field.name, option.value)
+                            }
+                            onBlur={field.onBlur}
+                          />
+                        )}
+                      />
+                      {errors.nlplevel ? (
+                        <div className="error_div">{errors.nlplevel}</div>
+                      ) : null}
+                      <hr />
+                      <label>אימייל :</label>
+                      <Field type="email" name="email" />
+                      {touched.email && errors.email ? (
+                        <div className="error_div">{errors.email}</div>
+                      ) : null}
+                      <hr />
+                      <label>סלולרי :</label>
+                      <Field type="text" name="phone" />
+                      {touched.phone && errors.phone ? (
+                        <div className="error_div">{errors.phone}</div>
+                      ) : null}
+                      <hr />
+                      <label>יישוב :</label>
+                      <Field type="text" name="city" />
+                      {touched.city && errors.city ? (
+                        <div className="error_div">{errors.city}</div>
+                      ) : null}
+                    </>
+                  )}
+                  {activeStep === 1 && (
+                    <>
+                      <SadnaotForm sadnaotData={sadnaot} />
+                    </>
+                  )}
+                  {activeStep === 2 && (
+                    <>
+                      <OtherDetails errors={errors} touched={touched} />
+                    </>
+                  )}
+                  {activeStep === 3 && (
+                    <>
+                      <button type="submit" disabled={isSubmitting}>
+                        להשלמת הרשמה ומעבר לתשלום
+                      </button>
+                    </>
+                  )}
+                </div>
+              </Form>
+            )}
           </Formik>
         </div>
       </Modal>

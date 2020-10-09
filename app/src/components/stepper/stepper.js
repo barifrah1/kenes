@@ -75,13 +75,22 @@ const LinearStepper = (props) => {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(props.activeStep);
     }
-
-    updateActiveStep(props.activeStep, 1);
+    updateActiveStep(
+      props.activeStep,
+      1,
+      props.form_errors,
+      props.touched_form
+    );
     setSkipped(newSkipped);
   };
 
   const handleBack = () => {
-    updateActiveStep(props.activeStep, -1);
+    updateActiveStep(
+      props.activeStep,
+      -1,
+      props.form_errors,
+      props.touched_form
+    );
   };
 
   const handleSkip = () => {
@@ -91,7 +100,12 @@ const LinearStepper = (props) => {
       throw new Error("לא ניתן לדלג על שלב");
     }
 
-    updateActiveStep(props.activeStep, 1);
+    updateActiveStep(
+      props.activeStep,
+      1,
+      props.form_errors,
+      props.touched_form
+    );
     setSkipped((prevSkipped) => {
       const newSkipped = new Set(prevSkipped.values());
       newSkipped.add(props.activeStep);
@@ -100,7 +114,7 @@ const LinearStepper = (props) => {
   };
 
   const handleReset = () => {
-    updateActiveStep(0, 0);
+    updateActiveStep(0, 0, {}, {});
   };
 
   return (

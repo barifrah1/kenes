@@ -1,23 +1,5 @@
-.regis_form {
-  float: right;
-  margin-top: 5%;
-  margin-right: 5%;
-}
-
 .buttuns_instr {
   text-align: center;
-}
-
-.regis_form label {
-  margin-left: 2vw;
-  margin-bottom: 10px;
-  text-align: right;
-  float: right;
-}
-.regis_form input,
-select {
-  margin-bottom: 5px;
-  text-align: right;
 }
 
 .div_steps {

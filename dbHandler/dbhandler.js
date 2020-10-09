@@ -1,8 +1,8 @@
-const mysql = require("mysql");
+const mysql = require("mysql2/promise");
 const cs = require("../connectionString");
 const { all_queries } = require("../queries/queries");
 
-function createConnection() {
+async function createConnection() {
   const connection = mysql.createConnection({
     host: cs.host,
     user: cs.user,
@@ -25,4 +25,30 @@ function execQuery(q, req, res) {
   connection.end();
 }
 
+async function transaction(queries, queryValues) {
+  if (queries.length !== queryValues.length) {
+    return Promise.reject(
+      "Number of provided queries did not match the number of provided query values arrays"
+    );
+  }
+  const connection = await createConnection();
+  try {
+    await connection.beginTransaction();
+    const queryPromises = [];
+
+    queries.forEach((query, index) => {
+      queryPromises.push(connection.query(query, queryValues[index]));
+    });
+    const results = await Promise.all(queryPromises);
+    await connection.commit();
+    await connection.end();
+    return results;
+  } catch (err) {
+    await connection.rollback();
+    await connection.end();
+    return Promise.reject(err);
+  }
+}
+
 exports.execQuery = execQuery;
+exports.transaction = transaction;

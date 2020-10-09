@@ -4,10 +4,16 @@
 body {
   font-family: "Open Sans Hebrew", serif;
 }
+.formDiv {
+  width: 100%;
+  direction: rtl;
+  text-align: right;
+}
+
 .regis_form {
   float: right;
   margin: 0 auto;
-  margin-top: 1vh;
+  margin-top: 0.3vh;
   margin-right: 3%;
   min-width: 90%;
 }
@@ -17,20 +23,21 @@ body {
   margin-bottom: 5vh;
 }
 .regis_form label {
+  display: inline-block;
   margin-left: 2vw;
   margin-bottom: 10px;
   text-align: right;
-  float: right;
   width: 12vw;
 }
 .regis_form input,
 select {
-  display: block;
+  display: inline-block;
+  box-sizing: content-box;
   margin-bottom: 5px;
+  margin-left: 30px;
   text-align: right;
   border: none;
   border-bottom: solid 1px rgba(128, 128, 128, 0.5);
-  /*opacity: 0.5;*/
   -webkit-box-shadow: 0 4px 3px -3px rgba(128, 128, 128, 0.5);
   -moz-box-shadow: 0 8px 6px -6px rgba(128, 128, 128, 0.5);
   box-shadow: 0 4px 4px -3px rgba(128, 128, 128, 0.5);
@@ -46,10 +53,10 @@ select {
 }
 
 .select_container {
-  display: block;
+  display: inline-block;
   text-align: right;
   direction: rtl;
-  width: 32vw;
+  width: 20vw;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
 }
 
@@ -62,4 +69,13 @@ select {
   position: absolute;
   bottom: 1px;
   left: 1px;
+}
+.error_div {
+  display: inline-block;
+  direction: rtl;
+  color: red;
+}
+
+.my-swal {
+  z-index: 10001 !important;
 }
