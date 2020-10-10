@@ -11,6 +11,7 @@ import SadnaotForm from "../sadnaot_form/sadnaot_form";
 import Swal from "sweetalert2";
 import OtherDetails from "../other_details_form/other_details_form";
 require("yup-phone");
+
 function Registeration() {
   const [isSubmitting, setSubmitting] = useState(false);
   const [values, setValues] = useState({
@@ -28,6 +29,7 @@ function Registeration() {
   });
   const [activeStep, setActiveStep] = React.useState(0);
   const [sadnaot, setSadnaot] = useState({});
+  /*used in stepper component*/
   const updateActiveStep = async (activeStep, change, errors, touched) => {
     if (change == 1) {
       for (let i = 0; i < fieldsByStep[activeStep].length; i++) {
@@ -60,12 +62,13 @@ function Registeration() {
     console.log("no errors");
     setActiveStep(activeStep + change);
   };
+  /*list of fields by step used for validation part and for stepping logic*/
   const [fieldsByStep, setFieldBystep] = useState([
     ["Fname", "Lname", "nlplevel", "email", "phone", "city"],
     ["userSadnaot"],
     ["vegan", "way", "photos", "takanon"],
   ]);
-
+  /*options of nlplevel field*/
   const nlpLevelOptions = [
     { value: "Student", label: "Student" },
     { value: "NLP Practitioner", label: "NLP Practitioner" },
@@ -75,6 +78,7 @@ function Registeration() {
   ];
 
   useEffect(() => {
+    /*get all sadnaot by rang*/
     fetch("http://localhost:3000/api/getSadnaot", {
       method: "post",
       headers: {
@@ -85,6 +89,7 @@ function Registeration() {
       .then((res) => res.json())
       .then(
         (result) => {
+          /*rearange rsults by rang in order to save it by rangs in state*/
           let rangs = result.map((sadna) => sadna.rang);
           rangs = rangs
             .filter((value, index, self) => self.indexOf(value) === index)
@@ -112,7 +117,7 @@ function Registeration() {
         }
       );
   }, []);
-
+  /*yup validation schema for formik*/
   const validationSchema = Yup.object().shape({
     Fname: Yup.string().required("שדה חובה"),
     Lname: Yup.string().required("שדה חובה"),
@@ -130,16 +135,81 @@ function Registeration() {
     vegan: Yup.string().required("שדה חסר"),
     way: Yup.string().required("שדה חסר"),
     photos: Yup.string().required("שדה חסר"),
-    takanon: Yup.number().required("לא אישרת את תנאי התקנון"),
+    takanon: Yup.number()
+      .min(1, "לא אישרת את תנאי התקנון")
+      .max(1, "לא אישרת את תנאי התקנון")
+      .required("לא אישרת את תנאי התקנון"),
   });
+  /*formik submmiting function*/
+  const handleSubmit = async (values, { setSubmitting }) => {
+    const userSadnaotParams = Object.values(values.userSadnaot).map((sad) => [
+      sad,
+      values["phone"],
+    ]);
+    let id = -1;
+    /*first we get new id*/
+    await fetch("http://localhost:3000/api/getMaxId", {
+      method: "post",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json; charset=utf-8",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        id = res[0].id;
+      });
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    setTimeout(() => {
-      setActiveStep(1);
-      alert(JSON.stringify(values, null, 2));
-      setSubmitting(false);
-    }, 400);
+    const newUserParams = [
+      id,
+      values["Fname"],
+      values["Lname"],
+      values["email"],
+      values["city"],
+      values["phone"],
+      parseInt(values["photos"]),
+      "code",
+      parseInt(values["vegan"]),
+      values["way"],
+      values["nlplevel"],
+    ];
+    /*add user and his sadnaot ajax call*/
+    await fetch("http://localhost:3000/api/InsertUserAndSadnaot", {
+      method: "post",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify({
+        user: newUserParams,
+        sadnaot: [userSadnaotParams],
+        takanon: [values["phone"], values["takanon"]],
+      }),
+    }).then(
+      (result) => {
+        console.log("registeration succeussfull");
+      },
+      // Note: it's important to handle errors here
+      // instead of a catch() block so that we don't swallow
+      // exceptions from actual bugs in components.
+      (error) => {
+        console.log("error when fetching");
+        throw error;
+      }
+    );
+    await Swal.fire({
+      title: "הפרטים נקלטו!",
+      text: "הפרטים נקלטו מיד תועבר לעמוד התשלום",
+      icon: "success",
+      customClass: {
+        container: "my-swal",
+      },
+    });
+    alert(JSON.stringify(values, null, 2));
+    setSubmitting(false);
   };
+
+  /*rendering*/
   return (
     <div>
       <Modal visible={true} width="700" height="700">

@@ -64,8 +64,8 @@ const OtherDetails = (props) => {
             <label>אני מאשר את תנאי התקנון</label>
             <Checkbox
               checked={parseInt(form.values.takanon) === 1 ? true : false}
+              value={1}
               onClick={(event) => {
-                debugger;
                 form.setFieldValue(
                   field.name,
                   form.values.takanon === 1 ? 0 : 1
@@ -76,6 +76,9 @@ const OtherDetails = (props) => {
           </>
         )}
       />
+      {errors.takanon ? (
+        <div className="error_div">{errors.takanon}</div>
+      ) : null}
     </>
   );
 };
