@@ -305,7 +305,11 @@ function Registeration() {
                   )}
                   {activeStep === 2 && (
                     <>
-                      <OtherDetails errors={errors} touched={touched} />
+                      <OtherDetails
+                        errors={errors}
+                        touched={touched}
+                        editMode={false}
+                      />
                     </>
                   )}
                   {activeStep === 3 && (

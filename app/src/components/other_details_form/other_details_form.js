@@ -4,6 +4,7 @@ import Select, { Option, ReactSelectProps } from "react-select";
 import { Formik, Form, Field, FieldProps } from "formik";
 import RadioButtonsGroup from "../radio_buttons_group/radio_buttons_group";
 import Checkbox from "@material-ui/core/Checkbox";
+import { string } from "yup";
 
 const OtherDetails = (props) => {
   const options = [
@@ -57,28 +58,47 @@ const OtherDetails = (props) => {
         )}
       />
       <hr />
-      <Field
-        name="takanon"
-        component={({ field, form }) => (
-          <>
-            <label>אני מאשר את תנאי התקנון</label>
-            <Checkbox
-              checked={parseInt(form.values.takanon) === 1 ? true : false}
-              value={1}
-              onClick={(event) => {
-                form.setFieldValue(
-                  field.name,
-                  form.values.takanon === 1 ? 0 : 1
-                );
-              }}
-              inputProps={{ "aria-label": "primary checkbox" }}
-            />
-          </>
-        )}
-      />
-      {errors.takanon ? (
-        <div className="error_div">{errors.takanon}</div>
-      ) : null}
+      {props.editMode === true && (
+        <>
+          <label className="invAndSumLabel">חשבונית : </label>
+          <Field type="text" name="inv" className="invAndSum" />
+          {touched.inv && errors.inv ? (
+            <div className="error_div">{errors.inv}</div>
+          ) : null}
+          <label className="invAndSumLabel"> סכום ששולם :</label>
+          <Field type="text" name="sum" className="invAndSum" />
+          {touched.sum && errors.sum ? (
+            <div className="error_div">{errors.sum}</div>
+          ) : null}
+        </>
+      )}
+      {props.editMode === false && (
+        <>
+          <Field
+            name="takanon"
+            component={({ field, form }) => (
+              <>
+                <label>אני מאשר את תנאי התקנון</label>
+                <Checkbox
+                  checked={parseInt(form.values.takanon) === 1 ? true : false}
+                  value={1}
+                  onClick={(event) => {
+                    form.setFieldValue(
+                      field.name,
+                      form.values.takanon === 1 ? 0 : 1
+                    );
+                  }}
+                  inputProps={{ "aria-label": "primary checkbox" }}
+                />
+              </>
+            )}
+          />
+          {errors.takanon ? (
+            <div className="error_div">{errors.takanon}</div>
+          ) : null}
+        </>
+      )}
+      <hr />
     </>
   );
 };

@@ -11,3 +11,16 @@
   height: auto;
   border-radius: 35%;
 }
+.logo_centered {
+  z-index: 1;
+  position: absolute;
+  top: 7px;
+  left: 10px;
+  /*width: 7vw;
+  height: 14vh;*/
+  max-width: 130px;
+  max-height: 65px;
+  width: auto;
+  height: auto;
+  border-radius: 35%;
+}

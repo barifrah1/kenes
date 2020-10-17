@@ -22,7 +22,7 @@ app.post("/api/getdata", (req, res) =>
 
 /*returns  UserSadnaot for specific user participants table - expanded part */
 app.post("/api/get_user_sadnaot", (req, res) => {
-  const params = [req.phone];
+  const params = [req.body.phone];
   execQuery(all_queries.userSadnaot, params, req, res, true);
 });
 
@@ -43,6 +43,18 @@ app.post("/api/InsertUserAndSadnaot", (req, res) => {
 
   //let result = insertUserAndSadnaot(req, res);
   res.send("user added succeussfully");
+});
+
+/*Update User details and his Sadnaot*/
+app.post("/api/UpdateUserAndSadnaot", (req, res) => {
+  let queries = [all_queries.UpdateUser];
+  let params = [req.body.user];
+  for (let i = 0; i < req.body.sadnaot[0].length; i++) {
+    queries.push(all_queries.UpdatetUserSadnaot);
+    params.push(req.body.sadnaot[0][i]);
+  }
+  transaction(queries, params);
+  res.send("user details were updated succeussfully");
 });
 
 /*get max id of UserKenes table*/

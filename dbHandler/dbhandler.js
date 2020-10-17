@@ -32,6 +32,7 @@ async function execQuery(q, params, req, res, send_res) {
     connection.query(q, params, (err, rows) => {
       if (err) throw err;
       if (send_res == true) {
+        console.log(connection.format(q, params));
         res.send(rows);
         return true;
       } else {

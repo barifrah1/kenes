@@ -11,6 +11,7 @@ import moment from "moment";
 import Expanded from "../expanded/expanded";
 import Modal from "react-awesome-modal";
 import ExpandedDetails from "../expandeddetails/expandeddetails";
+import EditForm from "../edit_form/edit_form";
 
 const { SearchBar } = Search;
 
@@ -20,6 +21,11 @@ function ParticipantsTable() {
     row: [],
     rowIndex: -1,
   });
+  let editModal_initialState = {
+    visible: false,
+    row: [],
+    rowIndex: -1,
+  };
   const [data, setData] = useState([{ id: 1, name: "yosi", price: 10 }]);
   const [cols, setCols] = useState([
     {
@@ -49,7 +55,7 @@ function ParticipantsTable() {
       sort: true,
     },
     {
-      dataField: "mail",
+      dataField: "email",
       text: "מייל",
       type: "string",
       sort: true,
@@ -86,6 +92,15 @@ function ParticipantsTable() {
       type: "string",
       sort: true,
       hidden: true,
+      formatter: (cell, row) => (row.vegan === 1 ? "כן" : "לא"),
+    },
+    {
+      dataField: "photos",
+      text: "מעוניין להצטלם",
+      type: "string",
+      sort: true,
+      hidden: true,
+      formatter: (cell, row) => (row.photos === 1 ? "כן" : "לא"),
     },
     {
       dataField: "way",
@@ -101,7 +116,42 @@ function ParticipantsTable() {
       sort: true,
       hidden: true,
     },
+    {
+      dataField: "cardcom_inv",
+      text: "קארדקום - חשבונית",
+      type: "number",
+      sort: true,
+      hidden: true,
+    },
+    {
+      dataField: "sum",
+      text: "סכום ששולם",
+      type: "number",
+      sort: true,
+      hidden: true,
+    },
+    {
+      dataField: "cardcom_payment",
+      text: "קארדקום - תשלום",
+      type: "number",
+      sort: true,
+      hidden: true,
+    },
   ]);
+
+  const handleEdit = (newRow) => {
+    let index = data.findIndex((el) => el.phone === newRow.phone);
+    let newData = data;
+    setData([]);
+    newData[index] = newRow;
+    //newData.push(newRow);
+    //delete newData[index];
+    //newData.push(newRow);
+    /* Object.keys(newData[index]).map(
+      (attr) => (newData[index][attr] = newRow[attr])
+    );*/
+    setData(newData);
+  };
 
   useEffect(() => {
     fetch("http://localhost:3000/api/getdata", {
@@ -160,6 +210,7 @@ function ParticipantsTable() {
               data={data}
               columns={cols}
               bootstrap4={true}
+              cellEdit={true}
               headerClasses="headerRow"
               rowClasses="rows"
               pagination={paginationFactory()}
@@ -174,18 +225,21 @@ function ParticipantsTable() {
       </ToolkitProvider>
       <Modal
         visible={editingModalInfo.visible}
-        width="400"
-        height="80%"
+        width="700"
+        height="700"
         effect="fadeInUp"
         onClickAway={() =>
           setEditModalInfo({ visible: false, row: [], rowIndex: -1 })
         }
       >
         <div>
-          <ExpandedDetails
-            row={editingModalInfo.row}
-            cols={cols}
-            printAllFields={true}
+          <EditForm
+            rowData={editingModalInfo.row}
+            closeModal={() => {
+              setEditModalInfo(editModal_initialState);
+              setData(data);
+            }}
+            handleEdit={handleEdit}
           />
         </div>
       </Modal>
