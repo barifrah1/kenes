@@ -3,13 +3,15 @@ import { useState, useEffect, useRef } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import "./edit_form.css";
-import Modal from "react-awesome-modal";
 import LinearStepper from "../stepper/stepper";
 import Header from "../header/header";
 import Select from "react-select";
 import SadnaotForm from "../sadnaot_form/sadnaot_form";
 import Swal from "sweetalert2";
 import OtherDetails from "../other_details_form/other_details_form";
+import Button from "@material-ui/core/Button";
+import SendIcon from "@material-ui/icons/Send";
+
 require("yup-phone");
 
 const EditForm = (props) => {
@@ -24,6 +26,7 @@ const EditForm = (props) => {
     vegan: "",
     way: "",
     photos: "",
+    payment: "",
     inv: "",
     sum: "",
     userSadnaot: {},
@@ -31,6 +34,7 @@ const EditForm = (props) => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [sadnaot, setSadnaot] = useState({});
   const formikRef = useRef();
+
   /*used in stepper component*/
   const updateActiveStep = async (activeStep, change, errors, touched) => {
     if (change == 1) {
@@ -87,7 +91,7 @@ const EditForm = (props) => {
       .then((res) => res.json())
       .then(
         (result) => {
-          /*rearange rsults by rang in order to save it by rangs in state*/
+          /*rearange results by round in order to save it by round in state*/
           let rangs = result.map((sadna) => sadna.rang);
           rangs = rangs
             .filter((value, index, self) => self.indexOf(value) === index)
@@ -156,8 +160,6 @@ const EditForm = (props) => {
           throw error;
         }
       );
-
-    //formikRef.current.setFieldValue("Fname", "מוני");
   }, [props.rowData]);
 
   /*yup validation schema for formik*/
@@ -192,6 +194,7 @@ const EditForm = (props) => {
       values["Fname"],
       values["Lname"],
       values["email"],
+      values["payment"],
       parseInt(values["photos"]),
       parseInt(values["vegan"]),
       values["way"],
@@ -225,6 +228,7 @@ const EditForm = (props) => {
           },
         });
         await setSubmitting(false);
+        await setActiveStep(0);
         await props.closeModal();
         console.log("update succeussfull");
       },
@@ -373,9 +377,27 @@ const EditForm = (props) => {
                 )}
                 {activeStep === 3 && (
                   <>
-                    <button type="submit" disabled={isSubmitting}>
-                      עדכן פרטים
-                    </button>
+                    <div className="send_button">
+                      <Button
+                        disabled={isSubmitting}
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        fontSize="large"
+                        /*className={classes.button}*/
+                        endIcon={
+                          <SendIcon
+                            fontSize="large"
+                            style={{ marginRight: 15 }}
+                          />
+                        }
+                        onClick={(values, setSubmitting) =>
+                          handleSubmit(values, setSubmitting)
+                        }
+                      >
+                        Send
+                      </Button>
+                    </div>
                   </>
                 )}
               </div>

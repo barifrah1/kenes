@@ -13,7 +13,7 @@ body {
 .regis_form {
   float: right;
   margin: 0 auto;
-  margin-top: 0.3vh;
+  margin-top: 1vh;
   margin-right: 3%;
   min-width: 90%;
 }
@@ -78,4 +78,8 @@ select {
 
 .my-swal {
   z-index: 10001 !important;
+}
+
+.send_button {
+  text-align: center;
 }

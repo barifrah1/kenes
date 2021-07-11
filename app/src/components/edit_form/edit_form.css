@@ -93,3 +93,7 @@ select {
 .my-swal {
   z-index: 10001 !important;
 }
+
+.send_button {
+  text-align: center;
+}

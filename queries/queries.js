@@ -8,8 +8,9 @@ tel as phone,reg_date,payment,sug,nlplevel,city,photo as photos,vegan,way,inv,su
   InsertNewUser: `INSERT INTO UserKenes VALUES(?,"משתתף",?,?,?,?,?,CURDATE(),0,?,2,?,?,?,0,0,0,0,?);`,
   InsertUserSadnaot: `INSERT INTO UserKenes_sadna VALUES ? ;`,
   InsertTakanonConfirm: `INSERT INTO takanon VALUES (?,?) ;`,
-  UpdateUser: `Update UserKenes set level=?,Fname=?,Lname=?,mail=?,photo=?,vegan=?,way=?,inv=?,sum=?,nlplevel=? where tel=?;`,
+  UpdateUser: `Update UserKenes set level=?,Fname=?,Lname=?,mail=?,payment=?,photo=?,vegan=?,way=?,inv=?,sum=?,nlplevel=? where tel=?;`,
   UpdatetUserSadnaot: `Update UserKenes_sadna U join Sadna S on S.id=U.sadna_id set U.sadna_id=? where U.tel=? and S.rang=? ;`,
+  UpdatePayment: `update UserKenes set payment=? where tel=?;`,
 };
 
 exports.all_queries = all_queries;

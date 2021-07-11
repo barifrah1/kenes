@@ -1,9 +1,10 @@
 {
-  "name": "kenes",
+  "name": "kenesapi",
   "version": "1.0.0",
   "scripts": {
+    "start": "node server.js",
     "client": "cd app && yarn start",
-    "server": "nodemon appp.js",
+    "server": "nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   },
   "dependencies": {

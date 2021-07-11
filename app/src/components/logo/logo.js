@@ -5,7 +5,7 @@ const Logo = (style) => {
   return (
     <img
       className={style.className === "logo_centered" ? "logo_centered" : "Logo"}
-      src="/images/logonlp.png"
+      src="public/images/logonlp.png"
     ></img>
   );
 };

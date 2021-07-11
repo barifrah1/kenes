@@ -6,16 +6,19 @@ import "./react-bootstrap-table2.css";
 import "./react-bootstrap-table2-paginator.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 import "./participantstable.css";
 import moment from "moment";
 import Expanded from "../expanded/expanded";
 import Modal from "react-awesome-modal";
 import ExpandedDetails from "../expandeddetails/expandeddetails";
 import EditForm from "../edit_form/edit_form";
-
+import Swal from "sweetalert2";
 const { SearchBar } = Search;
-
+const isDev = window.location.href.includes('localhost')?true:false;
+const baseUrl = isDev?'http://localhost:3000':'https://mecreativenlp.com/kenesklafim/';
 function ParticipantsTable() {
+  /*a use state hook that tells us if we are in edit mode or not and gives the data to edit form*/
   const [editingModalInfo, setEditModalInfo] = useState({
     visible: false,
     row: [],
@@ -27,6 +30,8 @@ function ParticipantsTable() {
     rowIndex: -1,
   };
   const [data, setData] = useState([{ id: 1, name: "yosi", price: 10 }]);
+
+  /*table's columns definition*/
   const [cols, setCols] = useState([
     {
       dataField: "id",
@@ -76,8 +81,13 @@ function ParticipantsTable() {
     {
       dataField: "payment",
       text: "תשלום",
-      type: "bool",
+      type: "number",
       sort: true,
+      editable: true,
+      editor: {
+        type: Type.CHECKBOX,
+        value: "1:0",
+      },
     },
     {
       dataField: "city",
@@ -144,17 +154,11 @@ function ParticipantsTable() {
     let newData = data;
     setData([]);
     newData[index] = newRow;
-    //newData.push(newRow);
-    //delete newData[index];
-    //newData.push(newRow);
-    /* Object.keys(newData[index]).map(
-      (attr) => (newData[index][attr] = newRow[attr])
-    );*/
     setData(newData);
   };
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/getdata", {
+    fetch(baseUrl+"api/getdata", {
       method: "post",
       headers: {
         Accept: "application/json",
@@ -174,6 +178,69 @@ function ParticipantsTable() {
         }
       );
   }, []);
+
+  /* updat payment function is called every time the user uses the option to update payment culomn from the table itself*/
+  const updatePayment = async (cellValue, cellName, row) => {
+    await Swal.fire({
+      title: "האם את/ה בטוח/ה?",
+      text: "האם את/ה בטוח/ה שברצונך לעדכן את פרטי התשלום?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "כן",
+      cancelButtonText: "לא",
+    }).then((result) => {
+      console.log(4);
+      if (result.isConfirmed) {
+        fetch(baseUrl+"/api/UpdatePayment", {
+          method: "post",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phone: row["phone"],
+            payment: row["payment"],
+          }),
+        }).then(
+          (result) => {
+            Swal.fire({
+              title: "תשלום עודכן בהצלחה!",
+              text: "העדכון הושלם בהצלחה",
+              icon: "success",
+              customClass: {
+                container: "my-swal",
+              },
+            });
+          },
+          // Note: it's important to handle errors here
+          // instead of a catch() block so that we don't swallow
+          // exceptions from actual bugs in components.
+          (error) => {
+            console.log("error when updating payment");
+            throw error;
+          }
+        );
+        Swal.fire("העדכון הושלם בהצלחה!", "success");
+      } else {
+        let index = data.findIndex((el) => el.phone === row.phone);
+        let d = [...data];
+        d[index]["payment"] = cellValue;
+        const newData = d;
+        setData([]);
+        setData(newData);
+        Swal.fire({
+          title: "השינוי בוטל בהצלחה",
+          text: "השינוי בוטל בהצלחה!",
+          icon: "success",
+          customClass: {
+            container: "my-swal",
+          },
+        });
+      }
+    });
+  };
 
   const expandRow = {
     renderer: (row) => <Expanded row={row} cols={cols} />,
@@ -210,7 +277,12 @@ function ParticipantsTable() {
               data={data}
               columns={cols}
               bootstrap4={true}
-              cellEdit={true}
+              cellEdit={cellEditFactory({
+                mode: "dbclick",
+                blurToSave: true,
+                afterSaveCell: (cellValue, cellName, row) =>
+                  updatePayment(cellValue, cellName, row),
+              })}
               headerClasses="headerRow"
               rowClasses="rows"
               pagination={paginationFactory()}

@@ -6,11 +6,11 @@ import ProminentAppBar from "../header_ui/header_ui.js";
 import Logo from "../logo/logo.js";
 import Participants from "../participants/participants";
 import Registeration from "../registeration/registeration";
-
+import Main from '../Main/Main'
 function Homepage() {
   return (
     <div>
-      <ProminentAppBar />
+      {/*<ProminentAppBar />
       <Logo />
       <Router>
         <div>
@@ -19,7 +19,10 @@ function Homepage() {
             <Route path="/register" component={Registeration} />
           </Switch>
         </div>
-      </Router>
+      </Router>*/}
+      checkdsdsfdf
+      fdfdfdf
+      fdfd
     </div>
   );
 }

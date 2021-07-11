@@ -10,6 +10,8 @@ import Select from "react-select";
 import SadnaotForm from "../sadnaot_form/sadnaot_form";
 import Swal from "sweetalert2";
 import OtherDetails from "../other_details_form/other_details_form";
+import Button from "@material-ui/core/Button";
+import SendIcon from "@material-ui/icons/Send";
 require("yup-phone");
 
 function Registeration() {
@@ -205,8 +207,9 @@ function Registeration() {
         container: "my-swal",
       },
     });
-    alert(JSON.stringify(values, null, 2));
-    setSubmitting(false);
+    await alert(JSON.stringify(values, null, 2));
+    await setSubmitting(false);
+    await window.location.replace("http://www.google.com");
   };
 
   /*rendering*/
@@ -314,9 +317,27 @@ function Registeration() {
                   )}
                   {activeStep === 3 && (
                     <>
-                      <button type="submit" disabled={isSubmitting}>
-                        להשלמת הרשמה ומעבר לתשלום
-                      </button>
+                      <div className="send_button">
+                        <Button
+                          disabled={isSubmitting}
+                          variant="contained"
+                          color="primary"
+                          size="large"
+                          fontSize="large"
+                          /*className={classes.button}*/
+                          endIcon={
+                            <SendIcon
+                              fontSize="large"
+                              style={{ marginRight: 15 }}
+                            />
+                          }
+                          onClick={(values, setSubmitting) =>
+                            handleSubmit(values, setSubmitting)
+                          }
+                        >
+                          Send
+                        </Button>
+                      </div>
                     </>
                   )}
                 </div>

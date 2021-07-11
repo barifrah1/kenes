@@ -60,6 +60,28 @@ const OtherDetails = (props) => {
       <hr />
       {props.editMode === true && (
         <>
+          <>
+            <Field
+              name="payment"
+              component={({ field, form }) => (
+                <>
+                  <label className="invAndSumLabel">תשלום :</label>
+                  <Checkbox
+                    checked={parseInt(form.values.payment) === 1 ? true : false}
+                    value={1}
+                    onClick={(event) => {
+                      form.setFieldValue(
+                        field.name,
+                        form.values.payment === 1 ? 0 : 1
+                      );
+                    }}
+                    inputProps={{ "aria-label": "primary checkbox" }}
+                  />
+                </>
+              )}
+            />
+          </>
+          <hr />
           <label className="invAndSumLabel">חשבונית : </label>
           <Field type="text" name="inv" className="invAndSum" />
           {touched.inv && errors.inv ? (

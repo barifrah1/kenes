@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const mysql = require("mysql");
 const cs = require("./connectionString");
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 7000;
 const { execQuery, transaction } = require("./dbHandler/dbhandler");
 const { insertUserAndSadnaot } = require("./utils");
 
@@ -55,6 +55,15 @@ app.post("/api/UpdateUserAndSadnaot", (req, res) => {
   }
   transaction(queries, params);
   res.send("user details were updated succeussfully");
+});
+
+app.post("/api/UpdatePayment", (req, res) => {
+  console.log(req.body);
+  transaction(
+    [all_queries.UpdatePayment],
+    [[req.body.payment, req.body.phone]]
+  );
+  res.send("payment was updated succeussfully");
 });
 
 /*get max id of UserKenes table*/
