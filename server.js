@@ -4,6 +4,7 @@ var router = express.Router();
 const bodyParser = require("body-parser");
 const Constants = require("./Constants");
 const mysql = require("mysql");
+const mailSender = require("./mailService");
 const cs = require("./connectionString");
 const app = express();
 const port = process.env.PORT || 7000;
@@ -94,6 +95,32 @@ app.post("/api/getMaxId", (req, res) =>
 
 app.post("/api/getPaymentOptions", (req, res) => {
   execQuerySync(all_queries.getPaymentOptions, [], req, res, true);
+});
+
+app.get("/api/sendMail", (req, res) => {
+  const toReplace = {
+    _kenesdate_: "20/10/2021",
+    _firstname_: "בר",
+    _lastname_: "יפרח",
+    _email_: "barifrah2@gmail.com",
+    _tel_: "0525774334",
+    _city_: "תל אביב-יפו",
+    _vegen_: "לא",
+    _mirimail_: "nlpmiri@gmail.com",
+    _paymentlink_: "www.google.co.il",
+    _sad1_: "חרטא ברטה בפיתה עם ירון הלוי המלך",
+    _sad2_: "בדיקה בדיקה עם עדי המלכה",
+    _sad3_: "הסוני פלייסטין קורס מתקדמים",
+    _gift_: "אין",
+  };
+  mailSender
+    .sendMail(
+      "הרשמתך לכנס הושלמה בהצלחה",
+      "barifrah2@gmail.com",
+      Constants.registerationMailTemplatePath,
+      toReplace
+    )
+    .catch(console.error);
 });
 
 /* final catch-all route to index.html defined last */
