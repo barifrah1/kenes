@@ -1,18 +1,39 @@
 const { all_queries } = require("./queries/queries");
 const express = require("express");
+var router = express.Router();
 const bodyParser = require("body-parser");
+const Constants = require("./Constants");
 const mysql = require("mysql");
 const cs = require("./connectionString");
 const app = express();
 const port = process.env.PORT || 7000;
-const { execQuery, transaction } = require("./dbHandler/dbhandler");
+const {
+  execQuery,
+  execQuerySync,
+  transaction,
+} = require("./dbHandler/dbhandler");
 const { insertUserAndSadnaot } = require("./utils");
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/api/hello", (req, res) => {
-  res.send({ express: "Hello From Express" });
+  //res.send({ express: "Hello From Express", bla: Constants.BASENAME });
+  res.send({ express: Constants.BASENAME, port: port });
+});
+
+app.post("/api/check", (req, res) => {
+  res.send({ express: "fireee on fire" });
+});
+
+app.post("/api/checkPermissions", (req, res) => {
+  const params = [req.body.userMail];
+  const result = execQuery(
+    all_queries.checkPermissions,
+    params,
+    req,
+    res,
+    true
+  );
 });
 
 /*returns  UserData for participants table*/
@@ -71,12 +92,13 @@ app.post("/api/getMaxId", (req, res) =>
   execQuery(all_queries.userKenesNextId, [], req, res, true)
 );
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.post("/api/getPaymentOptions", (req, res) => {
+  execQuerySync(all_queries.getPaymentOptions, [], req, res, true);
+});
 
-/*
-app.post("/api/world", (req, res) => {
-  console.log(req.body);
-  res.send(
-    `I received your POST request. This is what you sent me: ${req.body.post}`
-  );
-});*/
+/* final catch-all route to index.html defined last */
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
+});
+
+app.listen(port, () => console.log(`Listening on port ${port}`));

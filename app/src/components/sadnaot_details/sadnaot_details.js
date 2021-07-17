@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { useState, useEffect } from "react";
 import "./sadnaot_details.css";
+import Utils from "../../Utils";
 const SadnaotDetails = (props) => {
   const [sadnaot, setSadnaot] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:3000/api/get_user_sadnaot", {
+    fetch(Utils.resolvePath() + "api/get_user_sadnaot", {
       method: "post",
       headers: {
         Accept: "application/json",

@@ -1,13 +1,9 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import styles from "./homepage.css";
-import Header from "../header/header.js";
-import ProminentAppBar from "../header_ui/header_ui.js";
-import Logo from "../logo/logo.js";
-import Participants from "../participants/participants";
-import Registeration from "../registeration/registeration";
-import Main from '../Main/Main'
+import { useAuth0 } from "@auth0/auth0-react";
+import LoginButton from "../LoginButton/LoginButton";
+import LogoutButton from "../LogoutButton/LogoutButton";
 function Homepage() {
+  const { isAuthenticated } = useAuth0();
   return (
     <div>
       {/*<ProminentAppBar />
@@ -20,9 +16,13 @@ function Homepage() {
           </Switch>
         </div>
       </Router>*/}
-      checkdsdsfdf
-      fdfdfdf
-      fdfd
+      checkdsdsfdf fdfdfdf fdfd
+      <div>
+        <LoginButton />
+      </div>
+      <div>
+        <LogoutButton />
+      </div>
     </div>
   );
 }

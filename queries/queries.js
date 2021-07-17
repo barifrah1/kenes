@@ -11,6 +11,8 @@ tel as phone,reg_date,payment,sug,nlplevel,city,photo as photos,vegan,way,inv,su
   UpdateUser: `Update UserKenes set level=?,Fname=?,Lname=?,mail=?,payment=?,photo=?,vegan=?,way=?,inv=?,sum=?,nlplevel=? where tel=?;`,
   UpdatetUserSadnaot: `Update UserKenes_sadna U join Sadna S on S.id=U.sadna_id set U.sadna_id=? where U.tel=? and S.rang=? ;`,
   UpdatePayment: `update UserKenes set payment=? where tel=?;`,
+  checkPermissions: `select * from Permissions where mail=?`,
+  getPaymentOptions: `select * from Payment;`,
 };
 
 exports.all_queries = all_queries;

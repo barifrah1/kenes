@@ -7,16 +7,18 @@ import "./react-bootstrap-table2-paginator.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
-import "./participantstable.css";
+import "./Participantstable.css";
 import moment from "moment";
 import Expanded from "../expanded/expanded";
 import Modal from "react-awesome-modal";
 import ExpandedDetails from "../expandeddetails/expandeddetails";
 import EditForm from "../edit_form/edit_form";
 import Swal from "sweetalert2";
+import Utils from "../../Utils";
+import LogoutButton from "../LogoutButton/LogoutButton";
+import TableColumns from "./TableColumns";
 const { SearchBar } = Search;
-const isDev = window.location.href.includes('localhost')?true:false;
-const baseUrl = isDev?'http://localhost:3000':'https://mecreativenlp.com/kenesklafim/';
+
 function ParticipantsTable() {
   /*a use state hook that tells us if we are in edit mode or not and gives the data to edit form*/
   const [editingModalInfo, setEditModalInfo] = useState({
@@ -24,130 +26,15 @@ function ParticipantsTable() {
     row: [],
     rowIndex: -1,
   });
-  let editModal_initialState = {
+  const editModal_initialState = {
     visible: false,
     row: [],
     rowIndex: -1,
   };
-  const [data, setData] = useState([{ id: 1, name: "yosi", price: 10 }]);
+  const [data, setData] = useState([]);
 
   /*table's columns definition*/
-  const [cols, setCols] = useState([
-    {
-      dataField: "id",
-      text: "#",
-      type: "number",
-      sort: true,
-    },
-
-    {
-      dataField: "name",
-      text: "שם",
-      type: "string",
-      sort: true,
-      formatter: (cell, row) => row.Fname + " " + row.Lname,
-    },
-    {
-      dataField: "category",
-      text: "קטגוריה",
-      type: "string",
-      sort: true,
-    },
-    {
-      dataField: "phone",
-      text: "טלפון",
-      type: "string",
-      sort: true,
-    },
-    {
-      dataField: "email",
-      text: "מייל",
-      type: "string",
-      sort: true,
-    },
-    {
-      dataField: "sug",
-      text: "סוג כרטיס",
-      type: "number",
-      sort: true,
-    },
-    {
-      dataField: "reg_date",
-      text: "תאריך הרשמה",
-      type: "date",
-      sort: true,
-      formatter: (cell, row) => moment(cell).format("DD/MM/yyyy"),
-    },
-    {
-      dataField: "payment",
-      text: "תשלום",
-      type: "number",
-      sort: true,
-      editable: true,
-      editor: {
-        type: Type.CHECKBOX,
-        value: "1:0",
-      },
-    },
-    {
-      dataField: "city",
-      text: "יישוב",
-      type: "string",
-      sort: true,
-      hidden: true,
-    },
-    {
-      dataField: "vegan",
-      text: "צמחוני",
-      type: "string",
-      sort: true,
-      hidden: true,
-      formatter: (cell, row) => (row.vegan === 1 ? "כן" : "לא"),
-    },
-    {
-      dataField: "photos",
-      text: "מעוניין להצטלם",
-      type: "string",
-      sort: true,
-      hidden: true,
-      formatter: (cell, row) => (row.photos === 1 ? "כן" : "לא"),
-    },
-    {
-      dataField: "way",
-      text: "דרך הגעה",
-      type: "string",
-      sort: true,
-      hidden: true,
-    },
-    {
-      dataField: "inv",
-      text: "חשבונית",
-      type: "number",
-      sort: true,
-      hidden: true,
-    },
-    {
-      dataField: "cardcom_inv",
-      text: "קארדקום - חשבונית",
-      type: "number",
-      sort: true,
-      hidden: true,
-    },
-    {
-      dataField: "sum",
-      text: "סכום ששולם",
-      type: "number",
-      sort: true,
-      hidden: true,
-    },
-    {
-      dataField: "cardcom_payment",
-      text: "קארדקום - תשלום",
-      type: "number",
-      sort: true,
-      hidden: true,
-    },
-  ]);
+  const [cols, setCols] = useState(TableColumns);
 
   const handleEdit = (newRow) => {
     let index = data.findIndex((el) => el.phone === newRow.phone);
@@ -158,7 +45,8 @@ function ParticipantsTable() {
   };
 
   useEffect(() => {
-    fetch(baseUrl+"api/getdata", {
+    setCols(TableColumns);
+    fetch(Utils.resolvePath() + "api/getdata", {
       method: "post",
       headers: {
         Accept: "application/json",
@@ -193,7 +81,7 @@ function ParticipantsTable() {
     }).then((result) => {
       console.log(4);
       if (result.isConfirmed) {
-        fetch(baseUrl+"/api/UpdatePayment", {
+        fetch(Utils.resolvePath() + "api/UpdatePayment", {
           method: "post",
           headers: {
             Accept: "application/json",
@@ -203,25 +91,27 @@ function ParticipantsTable() {
             phone: row["phone"],
             payment: row["payment"],
           }),
-        }).then(
-          (result) => {
-            Swal.fire({
-              title: "תשלום עודכן בהצלחה!",
-              text: "העדכון הושלם בהצלחה",
-              icon: "success",
-              customClass: {
-                container: "my-swal",
-              },
-            });
-          },
-          // Note: it's important to handle errors here
-          // instead of a catch() block so that we don't swallow
-          // exceptions from actual bugs in components.
-          (error) => {
-            console.log("error when updating payment");
-            throw error;
-          }
-        );
+        })
+          .then(
+            (result) => {
+              Swal.fire({
+                title: "תשלום עודכן בהצלחה!",
+                text: "העדכון הושלם בהצלחה",
+                icon: "success",
+                customClass: {
+                  container: "my-swal",
+                },
+              });
+            },
+            // Note: it's important to handle errors here
+            // instead of a catch() block so that we don't swallow
+            // exceptions from actual bugs in components.
+            (error) => {
+              console.log("error when updating payment");
+              throw error;
+            }
+          )
+          .catch((error) => error);
         Swal.fire("העדכון הושלם בהצלחה!", "success");
       } else {
         let index = data.findIndex((el) => el.phone === row.phone);
@@ -270,6 +160,7 @@ function ParticipantsTable() {
               placeholder="חיפוש"
               className="searching"
             />
+            <LogoutButton />
             <hr />
             <BootstrapTable
               {...props.baseProps}
@@ -305,14 +196,16 @@ function ParticipantsTable() {
         }
       >
         <div>
-          <EditForm
-            rowData={editingModalInfo.row}
-            closeModal={() => {
-              setEditModalInfo(editModal_initialState);
-              setData(data);
-            }}
-            handleEdit={handleEdit}
-          />
+          {editingModalInfo.row && (
+            <EditForm
+              rowData={editingModalInfo.row}
+              closeModal={() => {
+                setEditModalInfo(editModal_initialState);
+                setData(data);
+              }}
+              handleEdit={handleEdit}
+            />
+          )}
         </div>
       </Modal>
     </div>

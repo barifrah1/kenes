@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 import "./Main.css";
 function Main() {
-  return (
-    <>
-    </>
-  );
+  return <></>;
 }
 export default Main;

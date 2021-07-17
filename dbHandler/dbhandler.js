@@ -43,6 +43,33 @@ async function execQuery(q, params, req, res, send_res) {
   connection.end();
 }
 
+function execQuerySync(q, params, req, res, send_res) {
+  const connection = createConnection();
+  if (params.length == 0) {
+    connection.query(q, (err, rows) => {
+      if (err) throw err;
+      if (send_res == true) {
+        res.send(JSON.stringify(rows));
+        return true;
+      } else {
+        return JSON.stringify(rows);
+      }
+    });
+  } else {
+    connection.query(q, params, (err, rows) => {
+      if (err) throw err;
+      if (send_res == true) {
+        console.log(connection.format(q, params));
+        res.send(rows);
+        return true;
+      } else {
+        return JSON.stringify(rows);
+      }
+    });
+  }
+  connection.end();
+}
+
 async function transaction(queries, queryValues) {
   if (queries.length !== queryValues.length) {
     return Promise.reject(
@@ -75,4 +102,5 @@ async function transaction(queries, queryValues) {
 }
 exports.createConnection = createConnection;
 exports.execQuery = execQuery;
+exports.execQuerySync = execQuerySync;
 exports.transaction = transaction;

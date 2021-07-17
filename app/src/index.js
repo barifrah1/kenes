@@ -1,12 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import { Auth0Provider } from "@auth0/auth0-react";
 import App from "./App";
+import Constants from "./Constants";
+import ErrorBoundary from "./ErrorBoundary";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
   <React.Fragment>
-    <App />
+    <ErrorBoundary>
+      <Auth0Provider
+        domain={Constants.authDomain}
+        clientId={Constants.authClientId}
+        redirectUri={window.location.origin}
+      >
+        <App />
+      </Auth0Provider>
+    </ErrorBoundary>
   </React.Fragment>,
   document.getElementById("root")
 );

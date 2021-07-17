@@ -1,22 +1,23 @@
-import React, { Component } from "react";
-import "./other_details_form.css";
+import React, { Component, useState } from "react";
+import "./OtherDetailsForm.css";
 import Select, { Option, ReactSelectProps } from "react-select";
 import { Formik, Form, Field, FieldProps } from "formik";
 import RadioButtonsGroup from "../radio_buttons_group/radio_buttons_group";
 import Checkbox from "@material-ui/core/Checkbox";
 import { string } from "yup";
+import Takanon from "../Takanon/Takanon";
 
 const OtherDetails = (props) => {
   const options = [
     { value: "1", label: "כן", id: 1 },
     { value: "0", label: "לא", id: 0 },
   ];
-
+  const [open, setOpen] = useState(false); //for takanon
   const errors = props.errors;
   const touched = props.touched;
 
   return (
-    <>
+    <div className="other_details">
       <label>טבעוני :</label>
       <Field
         name="vegan"
@@ -100,7 +101,20 @@ const OtherDetails = (props) => {
             name="takanon"
             component={({ field, form }) => (
               <>
-                <label>אני מאשר את תנאי התקנון</label>
+                <label>
+                  <span>אני מאשר את תנאי </span>
+                  <span>
+                    <a
+                      href="/"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        setOpen(true);
+                      }}
+                    >
+                      התקנון
+                    </a>
+                  </span>
+                </label>
                 <Checkbox
                   checked={parseInt(form.values.takanon) === 1 ? true : false}
                   value={1}
@@ -112,16 +126,18 @@ const OtherDetails = (props) => {
                   }}
                   inputProps={{ "aria-label": "primary checkbox" }}
                 />
+                {open && <Takanon open={open} setOpen={setOpen} />}
               </>
             )}
           />
+
           {errors.takanon ? (
             <div className="error_div">{errors.takanon}</div>
           ) : null}
         </>
       )}
       <hr />
-    </>
+    </div>
   );
 };
 

@@ -1,3 +1,7 @@
+.other_details {
+  margin-bottom: 5vh;
+}
+
 .select_container {
   text-align: right;
   direction: rtl;
@@ -14,4 +18,9 @@
   margin-bottom: 10px;
   text-align: right;
   width: 6vw !important;
+}
+@media (max-width: 768px) {
+  .takanon_checkbox {
+    margin-right: -20vw;
+  }
 }

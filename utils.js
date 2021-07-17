@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const mysql = require("mysql");
 const cs = require("./connectionString");
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 7000;
 const {
   execQuery,
   transaction,

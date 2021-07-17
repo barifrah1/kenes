@@ -6,12 +6,12 @@ import "./edit_form.css";
 import LinearStepper from "../stepper/stepper";
 import Header from "../header/header";
 import Select from "react-select";
-import SadnaotForm from "../sadnaot_form/sadnaot_form";
+import SadnaotForm from "../SadnaotForm/SadnaotForm";
 import Swal from "sweetalert2";
-import OtherDetails from "../other_details_form/other_details_form";
+import OtherDetails from "../OtherDetailsForm/OtherDetailsForm";
 import Button from "@material-ui/core/Button";
 import SendIcon from "@material-ui/icons/Send";
-
+import Utils from "../../Utils";
 require("yup-phone");
 
 const EditForm = (props) => {
@@ -81,7 +81,7 @@ const EditForm = (props) => {
 
   useEffect(() => {
     /*get all sadnaot by rang*/
-    fetch("http://localhost:3000/api/getSadnaot", {
+    fetch(Utils.resolvePath() + "api/getSadnaot", {
       method: "post",
       headers: {
         Accept: "application/json",
@@ -127,7 +127,7 @@ const EditForm = (props) => {
 
   useEffect(() => {
     var rowDataWithSadnaot = props.rowData;
-    fetch("http://localhost:3000/api/get_user_sadnaot", {
+    fetch(Utils.resolvePath() + "api/get_user_sadnaot", {
       method: "post",
       headers: {
         Accept: "application/json",
@@ -143,14 +143,16 @@ const EditForm = (props) => {
             rowDataWithSadnaot.userSadnaot["f_rang" + i] = result[i - 1].id;
 
           setValues(rowDataWithSadnaot);
-          Object.keys(rowDataWithSadnaot).map((attr) =>
-            formikRef.current.setFieldValue(
-              attr,
-              attr != "photos"
-                ? rowDataWithSadnaot[attr]
-                : String(rowDataWithSadnaot[attr])
-            )
-          );
+          if (Object.keys(rowDataWithSadnaot.userSadnaot).length > 0) {
+            Object.keys(rowDataWithSadnaot).map((attr) =>
+              formikRef.current.setFieldValue(
+                attr,
+                attr != "photos"
+                  ? rowDataWithSadnaot[attr]
+                  : String(rowDataWithSadnaot[attr])
+              )
+            );
+          }
         },
         // Note: it's important to handle errors here
         // instead of a catch() block so that we don't swallow
@@ -185,9 +187,9 @@ const EditForm = (props) => {
   });
   /*formik submmiting function*/
   const handleSubmit = async (values, { setSubmitting }) => {
-    const userSadnaotParams = Object.values(
-      values.userSadnaot
-    ).map((sad, index) => [sad, values["phone"], index + 1]);
+    const userSadnaotParams = Object.values(values.userSadnaot).map(
+      (sad, index) => [sad, values["phone"], index + 1]
+    );
 
     const newUserParams = [
       values["category"],
@@ -204,7 +206,7 @@ const EditForm = (props) => {
       values["phone"],
     ];
     /*add user and his sadnaot ajax call*/
-    await fetch("http://localhost:3000/api/UpdateUserAndSadnaot", {
+    await fetch(Utils.resolvePath() + "api/UpdateUserAndSadnaot", {
       method: "post",
       headers: {
         Accept: "application/json",
