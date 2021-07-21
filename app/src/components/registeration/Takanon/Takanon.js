@@ -1,40 +1,16 @@
 import React, { Component, useState, useEffect, useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-awesome-modal";
-import useWindow from "../useWindow/useWindow";
-import Utils from "../../Utils";
+import useWindow from "../../useWindow/useWindow";
+import Utils from "../../../Utils";
+import { fecthingPrices } from "../RegisterationHelpers";
 import "./Takanon.css";
 
 const Takanon = (props) => {
-  const [prices, setPrices] = useState({
-    early: "",
-    regular: "",
-    cancel: "",
-  });
   const { height, width } = useWindow();
   const open = props.open;
   const setOpen = props.setOpen;
-
-  useEffect(() => {
-    fecthingPrices();
-    console.log(prices);
-  }, []);
-
-  const fecthingPrices = async () => {
-    const data = {};
-    await fetch(Utils.resolvePath() + "api/getPaymentOptions", {
-      method: "post",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json; charset=utf-8",
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        res.map((row) => (data[row.name] = row.price));
-        setPrices(data);
-      });
-  };
+  const prices = props.prices;
 
   return (
     <Modal
@@ -70,10 +46,13 @@ const Takanon = (props) => {
           <li>
             עלולים להיות שינויים בתכנית הכנס שאינם תלויים בצוות ההפקה של הכנס
           </li>
-          <li>עלות הכנס הרשמה מוקדמת : {prices.early} ש"ח</li>
-          <li>עלות הכנס לאחר סיום ההרשמה המוקדמת : {prices.regular} ש"ח</li>
+          <li>עלות הכנס הרשמה מוקדמת : {prices.early["price"]} ש"ח</li>
           <li>
-            עלות ביטול הרשמה לאדם במידה והתבצע תשלום : {prices.cancel} ש"ח{" "}
+            עלות הכנס לאחר סיום ההרשמה המוקדמת : {prices.regular["price"]} ש"ח
+          </li>
+          <li>
+            עלות ביטול הרשמה לאדם במידה והתבצע תשלום : {prices.cancel["price"]}{" "}
+            ש"ח{" "}
           </li>
           <li>
             <b>

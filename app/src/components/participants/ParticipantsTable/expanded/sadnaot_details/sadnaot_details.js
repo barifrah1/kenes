@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { useState, useEffect } from "react";
 import "./sadnaot_details.css";
-import Utils from "../../Utils";
+import Utils from "../../../../../Utils";
 const SadnaotDetails = (props) => {
   const [sadnaot, setSadnaot] = useState([]);
   useEffect(() => {

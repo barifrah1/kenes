@@ -5,12 +5,11 @@ const bodyParser = require("body-parser");
 const Constants = require("./Constants");
 const mysql = require("mysql");
 const mailSender = require("./mailService");
-const cs = require("./connectionString");
 const app = express();
 const port = process.env.PORT || 7000;
 const {
   execQuery,
-  execQuerySync,
+  execQueryNew,
   transaction,
 } = require("./dbHandler/dbhandler");
 const { insertUserAndSadnaot } = require("./utils");
@@ -20,10 +19,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/api/hello", (req, res) => {
   //res.send({ express: "Hello From Express", bla: Constants.BASENAME });
   res.send({ express: Constants.BASENAME, port: port });
-});
-
-app.post("/api/check", (req, res) => {
-  res.send({ express: "fireee on fire" });
 });
 
 app.post("/api/checkPermissions", (req, res) => {
@@ -54,17 +49,26 @@ app.post("/api/getSadnaot", (req, res) =>
 );
 
 /*Insert NewUser and his Sadnaot*/
-app.post("/api/InsertUserAndSadnaot", (req, res) => {
+app.post("/api/InsertUserAndSadnaot", async (req, res) => {
   const queries = [
     all_queries.InsertNewUser,
     all_queries.InsertUserSadnaot,
     all_queries.InsertTakanonConfirm,
   ];
   const params = [req.body.user, req.body.sadnaot, req.body.takanon];
-  transaction(queries, params);
-
-  //let result = insertUserAndSadnaot(req, res);
-  res.send("user added succeussfully");
+  const userMail = req.body.email;
+  console.log(req.body.takanon[0]);
+  await transaction(queries, params).catch((error) => {
+    throw error;
+  });
+  /*return data about sadnaot to registeration mail*/
+  const result = await execQueryNew(
+    all_queries.userSadnaot,
+    [req.body.takanon[0]],
+    req
+  );
+  const sadnaotJson = await JSON.stringify(result);
+  res.send(sadnaotJson);
 });
 
 /*Update User details and his Sadnaot*/
@@ -93,12 +97,20 @@ app.post("/api/getMaxId", (req, res) =>
   execQuery(all_queries.userKenesNextId, [], req, res, true)
 );
 
-app.post("/api/getPaymentOptions", (req, res) => {
-  execQuerySync(all_queries.getPaymentOptions, [], req, res, true);
+app.post("/api/getPaymentOptions", async (req, res) => {
+  const result = await execQueryNew(all_queries.getPaymentOptions, [], req);
+  res.send(JSON.stringify(result));
 });
 
-app.get("/api/sendMail", (req, res) => {
-  const toReplace = {
+app.post("/api/getAllPhones", async (req, res) => {
+  const result = await execQueryNew(all_queries.getAllPhones, [], req);
+  res.send(JSON.stringify(result));
+});
+
+app.post("/api/sendMail", async (req, res) => {
+  const toReplace = req.body.toReplace;
+  const userMail = req.body.toReplace._email_;
+  /*const toReplace = {
     _kenesdate_: "20/10/2021",
     _firstname_: "בר",
     _lastname_: "יפרח",
@@ -112,15 +124,19 @@ app.get("/api/sendMail", (req, res) => {
     _sad2_: "בדיקה בדיקה עם עדי המלכה",
     _sad3_: "הסוני פלייסטין קורס מתקדמים",
     _gift_: "אין",
-  };
-  mailSender
-    .sendMail(
-      "הרשמתך לכנס הושלמה בהצלחה",
-      "barifrah2@gmail.com",
-      Constants.registerationMailTemplatePath,
+  };*/
+  const result = await mailSender
+    .customMailSender(
+      Constants.REGISTERATION_MAIL_SUBJECT,
+      userMail,
+      Constants.TEMPLATE_PATH,
       toReplace
     )
-    .catch(console.error);
+    .catch((error) => {
+      console.error();
+      res.send(error);
+    });
+  res.send(result);
 });
 
 /* final catch-all route to index.html defined last */

@@ -13,6 +13,7 @@ tel as phone,reg_date,payment,sug,nlplevel,city,photo as photos,vegan,way,inv,su
   UpdatePayment: `update UserKenes set payment=? where tel=?;`,
   checkPermissions: `select * from Permissions where mail=?`,
   getPaymentOptions: `select * from Payment;`,
+  getAllPhones: `select tel from UserKenes;`,
 };
 
 exports.all_queries = all_queries;

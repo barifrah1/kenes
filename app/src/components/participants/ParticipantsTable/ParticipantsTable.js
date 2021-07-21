@@ -9,13 +9,13 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 import "./Participantstable.css";
 import moment from "moment";
-import Expanded from "../expanded/expanded";
+import Expanded from "./expanded/expanded";
 import Modal from "react-awesome-modal";
-import ExpandedDetails from "../expandeddetails/expandeddetails";
-import EditForm from "../edit_form/edit_form";
+//import ExpandedDetails from "./expanded/expandeddetails/expandeddetails";
+import EditForm from "../../Registeration/EditForm/EditForm";
 import Swal from "sweetalert2";
-import Utils from "../../Utils";
-import LogoutButton from "../LogoutButton/LogoutButton";
+import Utils from "../../../Utils";
+import LogoutButton from "../../LogoutButton/LogoutButton";
 import TableColumns from "./TableColumns";
 const { SearchBar } = Search;
 

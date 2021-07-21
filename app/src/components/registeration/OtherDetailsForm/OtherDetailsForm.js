@@ -2,7 +2,7 @@ import React, { Component, useState } from "react";
 import "./OtherDetailsForm.css";
 import Select, { Option, ReactSelectProps } from "react-select";
 import { Formik, Form, Field, FieldProps } from "formik";
-import RadioButtonsGroup from "../radio_buttons_group/radio_buttons_group";
+import RadioButtonsGroup from "./../../radio_buttons_group/radio_buttons_group";
 import Checkbox from "@material-ui/core/Checkbox";
 import { string } from "yup";
 import Takanon from "../Takanon/Takanon";
@@ -116,6 +116,7 @@ const OtherDetails = (props) => {
                   </span>
                 </label>
                 <Checkbox
+                  className="takanon_checkbox"
                   checked={parseInt(form.values.takanon) === 1 ? true : false}
                   value={1}
                   onClick={(event) => {
@@ -126,7 +127,13 @@ const OtherDetails = (props) => {
                   }}
                   inputProps={{ "aria-label": "primary checkbox" }}
                 />
-                {open && <Takanon open={open} setOpen={setOpen} />}
+                {open && (
+                  <Takanon
+                    prices={props.prices}
+                    open={open}
+                    setOpen={setOpen}
+                  />
+                )}
               </>
             )}
           />

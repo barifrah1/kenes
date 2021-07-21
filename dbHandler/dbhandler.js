@@ -16,6 +16,17 @@ function createConnection() {
   });
   return connection;
 }
+
+async function createConnectionWithPromise() {
+  const connection = await mysql2.createConnection({
+    host: cs.host,
+    user: cs.user,
+    password: cs.password,
+    database: cs.database,
+  });
+  return connection;
+}
+
 async function execQuery(q, params, req, res, send_res) {
   const connection = await createConnection();
   if (params.length == 0) {
@@ -43,31 +54,23 @@ async function execQuery(q, params, req, res, send_res) {
   connection.end();
 }
 
-function execQuerySync(q, params, req, res, send_res) {
-  const connection = createConnection();
-  if (params.length == 0) {
-    connection.query(q, (err, rows) => {
-      if (err) throw err;
-      if (send_res == true) {
-        res.send(JSON.stringify(rows));
-        return true;
-      } else {
-        return JSON.stringify(rows);
-      }
-    });
-  } else {
-    connection.query(q, params, (err, rows) => {
-      if (err) throw err;
-      if (send_res == true) {
-        console.log(connection.format(q, params));
-        res.send(rows);
-        return true;
-      } else {
-        return JSON.stringify(rows);
-      }
-    });
+async function execQueryNew(q, params, req) {
+  let rows;
+  let fields;
+  const connection = await createConnectionWithPromise();
+  try {
+    if (params.length == 0) {
+      [rows, fields] = await connection.execute(q);
+    } else {
+      [rows, fields] = await connection.execute(q, params);
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
+  } finally {
+    connection.end();
+    return rows;
   }
-  connection.end();
 }
 
 async function transaction(queries, queryValues) {
@@ -102,5 +105,5 @@ async function transaction(queries, queryValues) {
 }
 exports.createConnection = createConnection;
 exports.execQuery = execQuery;
-exports.execQuerySync = execQuerySync;
+exports.execQueryNew = execQueryNew;
 exports.transaction = transaction;

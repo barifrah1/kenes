@@ -2,16 +2,16 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import "./edit_form.css";
-import LinearStepper from "../stepper/stepper";
-import Header from "../header/header";
+import "./EditForm.css";
+import LinearStepper from "../../stepper/stepper";
+import Header from "../../header/header";
 import Select from "react-select";
 import SadnaotForm from "../SadnaotForm/SadnaotForm";
 import Swal from "sweetalert2";
 import OtherDetails from "../OtherDetailsForm/OtherDetailsForm";
 import Button from "@material-ui/core/Button";
 import SendIcon from "@material-ui/icons/Send";
-import Utils from "../../Utils";
+import Utils from "../../../Utils";
 require("yup-phone");
 
 const EditForm = (props) => {

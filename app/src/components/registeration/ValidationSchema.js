@@ -1,11 +1,19 @@
+import React from "react";
 import * as Yup from "yup";
+import { fetchingPhones } from "./RegisterationHelpers";
 require("yup-phone");
+
 const ValidationSchema = Yup.object().shape({
   Fname: Yup.string().required("שדה חובה"),
   Lname: Yup.string().required("שדה חובה"),
   nlplevel: Yup.string().required("לא נבחרה רמת נ.ל.פ"),
   email: Yup.string().email("אימייל לא תקין").required("אימייל לא תקין"),
-  phone: Yup.string().phone("IL").required("טלפון לא תקין - שימוש בספרות בלבד"),
+  phone: Yup.string()
+    .phone("IL")
+    .required("טלפון לא תקין - שימוש בספרות בלבד")
+    .test("primaryKey", "מישהו אחר נרשם כבר עם מספר זה", (value) => {
+      return fetchingPhones().then((result) => !result.includes(value));
+    }),
   city: Yup.string().required("יישוב לא תקין"),
   userSadnaot: Yup.object().shape({
     f_rang1: Yup.string().required("לא נבחרה סדנה"),
