@@ -81,8 +81,8 @@ const EditForm = (props) => {
 
   useEffect(() => {
     /*get all sadnaot by rang*/
-    fetch(Utils.resolvePath() + "api/getSadnaot", {
-      method: "post",
+    fetch(Utils.resolvePath() + "api/sadnaot", {
+      method: "get",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -127,14 +127,17 @@ const EditForm = (props) => {
 
   useEffect(() => {
     var rowDataWithSadnaot = props.rowData;
-    fetch(Utils.resolvePath() + "api/get_user_sadnaot", {
-      method: "post",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ phone: props.rowData.phone }),
-    })
+    fetch(
+      Utils.resolvePath() + `api/participant/${props.rowData.phone}/sadnaot/`,
+      {
+        method: "get",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        //body: JSON.stringify({ phone: props.rowData.phone }),
+      }
+    )
       .then((res) => res.json())
       .then(
         (result) => {

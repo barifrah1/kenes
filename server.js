@@ -7,46 +7,40 @@ const mysql = require("mysql");
 const mailSender = require("./mailService");
 const app = express();
 const port = process.env.PORT || 7000;
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 const {
   execQuery,
   execQueryNew,
   transaction,
 } = require("./dbHandler/dbhandler");
+const { Permission } = require("./functions/Permission");
+const { Participant } = require("./functions/Participant");
+const { Sadna } = require("./functions/Sadna");
 const { insertUserAndSadnaot } = require("./utils");
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/api/hello", (req, res) => {
   //res.send({ express: "Hello From Express", bla: Constants.BASENAME });
   res.send({ express: Constants.BASENAME, port: port });
 });
 
-app.post("/api/checkPermissions", (req, res) => {
-  const params = [req.body.userMail];
-  const result = execQuery(
-    all_queries.checkPermissions,
-    params,
-    req,
-    res,
-    true
-  );
-});
+//*****permisison routes*****
+app.get("/api/permission/:mail", Permission.checkPermission);
+
+//****participants routes*****
 
 /*returns  UserData for participants table*/
-app.post("/api/getdata", (req, res) =>
-  execQuery(all_queries.participantsTable, [], req, res, true)
+app.get("/api/participants/", async (req, res) =>
+  Participant.getParticipants(req, res)
 );
 
 /*returns  UserSadnaot for specific user participants table - expanded part */
-app.post("/api/get_user_sadnaot", (req, res) => {
-  const params = [req.body.phone];
-  execQuery(all_queries.userSadnaot, params, req, res, true);
-});
+app.get("/api/participant/:tel/sadnaot/", Participant.getSadnaotByTel);
+
+/*****sadnaot routes*****/
 
 /*returns all sadnaot details by rang for sadnaotForm component */
-app.post("/api/getSadnaot", (req, res) =>
-  execQuery(all_queries.sadnaotByRang, [], req, res, true)
-);
+app.get("/api/sadnaot", Sadna.getSadnaot);
 
 /*Insert NewUser and his Sadnaot*/
 app.post("/api/InsertUserAndSadnaot", async (req, res) => {

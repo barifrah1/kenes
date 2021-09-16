@@ -30,9 +30,11 @@ async function createConnectionWithPromise() {
 async function execQuery(q, params, req, res, send_res) {
   const connection = await createConnection();
   if (params.length == 0) {
+    console.log(q);
     connection.query(q, (err, rows) => {
       if (err) throw err;
       if (send_res == true) {
+        console.log(rows);
         res.send(rows);
         return true;
       } else {

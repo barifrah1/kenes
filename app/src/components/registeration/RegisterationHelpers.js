@@ -3,20 +3,20 @@ import AsyncAjax from "../../AsyncAjax";
 import Swal from "sweetalert2";
 
 export const fetchingPhones = async () => {
-  const res = await AsyncAjax("getAllPhones");
+  const res = await AsyncAjax.post("getAllPhones");
   const phones = res.map((row) => row.tel);
   return phones;
 };
 
 export const fecthingPrices = async () => {
-  const res = await AsyncAjax("getPaymentOptions");
+  const res = await AsyncAjax.post("getPaymentOptions");
   return res;
 };
 
 export const getSadnaot = async (values) => {
   /*get all sadnaot by rang*/
-  const result = await AsyncAjax("getSadnaot");
-  /*rearange rsults by rang in order to save it by rangs in state*/
+  const result = await AsyncAjax.get("sadnaot");
+  /*rearange results by rang in order to save it by rangs in state*/
   let rangs = result.map((sadna) => sadna.rang);
   rangs = rangs
     .filter((value, index, self) => self.indexOf(value) === index)
@@ -101,7 +101,7 @@ export const handleSubmit = async (values, prices, { setSubmitting }) => {
         paymentLink,
         userSadnaot
       );
-      const res = await AsyncAjax("sendMail", {
+      const res = await AsyncAjax.post("sendMail", {
         toReplace: toReplace,
       });
       console.log(res);

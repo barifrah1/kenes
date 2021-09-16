@@ -46,8 +46,8 @@ function ParticipantsTable() {
 
   useEffect(() => {
     setCols(TableColumns);
-    fetch(Utils.resolvePath() + "api/getdata", {
-      method: "post",
+    fetch(Utils.resolvePath() + "api/participants/", {
+      method: "get",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

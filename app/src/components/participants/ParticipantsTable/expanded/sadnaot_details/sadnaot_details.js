@@ -5,13 +5,13 @@ import Utils from "../../../../../Utils";
 const SadnaotDetails = (props) => {
   const [sadnaot, setSadnaot] = useState([]);
   useEffect(() => {
-    fetch(Utils.resolvePath() + "api/get_user_sadnaot", {
-      method: "post",
+    fetch(Utils.resolvePath() + `api/participant/${props.row.phone}/sadnaot/`, {
+      method: "get",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ phone: props.row.phone }),
+      //body: JSON.stringify({ phone: props.row.phone }),
     })
       .then((res) => res.json())
       .then(

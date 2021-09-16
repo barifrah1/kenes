@@ -10,16 +10,19 @@ const Utils = {
   },
 
   checkPermissions: async function (userMail) {
-    const result = await fetch(Utils.resolvePath() + "api/checkPermissions", {
-      method: "post",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userMail: userMail,
-      }),
-    }).then((res) => res.json());
+    const result = await fetch(
+      Utils.resolvePath() + `api/permission/${userMail}`,
+      {
+        method: "get",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        // body: JSON.stringify({
+        //   userMail: userMail,
+        // }),
+      }
+    ).then((res) => res.json());
     return result.length > 0;
   },
   getActivePaymentLink: function (prices) {
