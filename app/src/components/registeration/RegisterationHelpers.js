@@ -37,7 +37,7 @@ export const getSadnaot = async (values) => {
   return { newVal, sadnaByrangs };
 };
 
-export const handleSubmit = async (values, prices, { setSubmitting }) => {
+export const handleSubmit = async (values, prices, setSubmitting) => {
   const userSadnaotParams = Object.values(values.userSadnaot).map((sad) => [
     sad,
     values["phone"],
@@ -78,7 +78,7 @@ export const handleSubmit = async (values, prices, { setSubmitting }) => {
       takanon: [values["phone"], values["takanon"]],
     });
     const insertResult = await AsyncAjax("InsertUserAndSadnaot",dataToSend);*/
-  await fetch(Utils.resolvePath() + "api/InsertUserAndSadnaot", {
+  await fetch(Utils.resolvePath() + "api/participant", {
     method: "post",
     headers: {
       Accept: "application/json",

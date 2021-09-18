@@ -30,52 +30,21 @@ app.get("/api/permission/:mail", Permission.checkPermission);
 //****participants routes*****
 
 /*returns  UserData for participants table*/
-app.get("/api/participants/", async (req, res) =>
-  Participant.getParticipants(req, res)
-);
+app.get("/api/participants/", Participant.getParticipants);
 
-/*returns  UserSadnaot for specific user participants table - expanded part */
+/*returns  UserSadnaot for specific user in participants table - expanded part */
 app.get("/api/participant/:tel/sadnaot/", Participant.getSadnaotByTel);
+
+/*Insert NewUser and his Sadnaot*/
+app.post("/api/participant", Participant.postParticipant);
+
+/*Update User details and his Sadnaot*/
+app.put("/api/participant", Participant.putParticipant);
 
 /*****sadnaot routes*****/
 
 /*returns all sadnaot details by rang for sadnaotForm component */
 app.get("/api/sadnaot", Sadna.getSadnaot);
-
-/*Insert NewUser and his Sadnaot*/
-app.post("/api/InsertUserAndSadnaot", async (req, res) => {
-  const queries = [
-    all_queries.InsertNewUser,
-    all_queries.InsertUserSadnaot,
-    all_queries.InsertTakanonConfirm,
-  ];
-  const params = [req.body.user, req.body.sadnaot, req.body.takanon];
-  const userMail = req.body.email;
-  console.log(req.body.takanon[0]);
-  await transaction(queries, params).catch((error) => {
-    throw error;
-  });
-  /*return data about sadnaot to registeration mail*/
-  const result = await execQueryNew(
-    all_queries.userSadnaot,
-    [req.body.takanon[0]],
-    req
-  );
-  const sadnaotJson = await JSON.stringify(result);
-  res.send(sadnaotJson);
-});
-
-/*Update User details and his Sadnaot*/
-app.post("/api/UpdateUserAndSadnaot", (req, res) => {
-  let queries = [all_queries.UpdateUser];
-  let params = [req.body.user];
-  for (let i = 0; i < req.body.sadnaot[0].length; i++) {
-    queries.push(all_queries.UpdatetUserSadnaot);
-    params.push(req.body.sadnaot[0][i]);
-  }
-  transaction(queries, params);
-  res.send("user details were updated succeussfully");
-});
 
 app.post("/api/UpdatePayment", (req, res) => {
   console.log(req.body);

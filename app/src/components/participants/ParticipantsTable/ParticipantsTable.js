@@ -23,12 +23,12 @@ function ParticipantsTable() {
   /*a use state hook that tells us if we are in edit mode or not and gives the data to edit form*/
   const [editingModalInfo, setEditModalInfo] = useState({
     visible: false,
-    row: [],
+    row: {},
     rowIndex: -1,
   });
   const editModal_initialState = {
     visible: false,
-    row: [],
+    row: {},
     rowIndex: -1,
   };
   const [data, setData] = useState([]);
@@ -192,11 +192,11 @@ function ParticipantsTable() {
         height="700"
         effect="fadeInUp"
         onClickAway={() =>
-          setEditModalInfo({ visible: false, row: [], rowIndex: -1 })
+          setEditModalInfo({ visible: false, row: {}, rowIndex: -1 })
         }
       >
         <div>
-          {editingModalInfo.row && (
+          {Object.keys(editingModalInfo.row) && (
             <EditForm
               rowData={editingModalInfo.row}
               closeModal={() => {

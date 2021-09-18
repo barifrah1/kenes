@@ -209,8 +209,8 @@ const EditForm = (props) => {
       values["phone"],
     ];
     /*add user and his sadnaot ajax call*/
-    await fetch(Utils.resolvePath() + "api/UpdateUserAndSadnaot", {
-      method: "post",
+    await fetch(Utils.resolvePath() + "api/participant", {
+      method: "put",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json; charset=utf-8",
@@ -235,7 +235,7 @@ const EditForm = (props) => {
         await setSubmitting(false);
         await setActiveStep(0);
         await props.closeModal();
-        console.log("update succeussfull");
+        console.log(result);
       },
       // Note: it's important to handle errors here
       // instead of a catch() block so that we don't swallow

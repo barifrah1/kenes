@@ -1,5 +1,5 @@
-import React, { Component, useEffect, useState } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import React from "react";
+import { useEffect, useState } from "react";
 import "./Participants.css";
 import ParticipantsTable from "./ParticipantsTable/ParticipantsTable";
 import { Redirect } from "react-router-dom";

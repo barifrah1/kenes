@@ -25,6 +25,29 @@ const AsyncAjax = {
     const d = await res.json();
     return d;
   },
+  put: async (route, data = {}) => {
+    const res = await fetch(Utils.resolvePath() + "api/" + route, {
+      method: "put",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify(data),
+    }).catch(console.error());
+    const d = await res.json();
+    return d;
+  },
+  delete: async (route, data = {}) => {
+    const res = await fetch(Utils.resolvePath() + "api/" + route, {
+      method: "put",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json; charset=utf-8",
+      },
+    }).catch(console.error());
+    const d = await res.json();
+    return d;
+  },
 };
 
 export default AsyncAjax;

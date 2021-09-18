@@ -89,7 +89,7 @@ function Registeration() {
   };
 
   useEffect(() => {
-    isSubmitting ? setLoading(true) : setLoading(false);
+    //isSubmitting ? setLoading(true) : setLoading(false);
   }, isSubmitting);
 
   useEffect(async () => {
@@ -216,14 +216,14 @@ function Registeration() {
                     {activeStep === 3 && (
                       <>
                         <div className="send_button">
-                          <div className="loading">
+                          {/* <div className="loading">
                             <Loading />
-                          </div>
+                          </div> */}
                           <Button
                             variant="secondary"
                             size="lg"
                             disabled={isSubmitting}
-                            onClick={(values, setSubmitting) => {
+                            onClick={(values) => {
                               setLoading(true);
                               handleSubmit(values, prices, setSubmitting);
                             }}

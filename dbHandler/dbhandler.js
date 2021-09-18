@@ -34,7 +34,6 @@ async function execQuery(q, params, req, res, send_res) {
     connection.query(q, (err, rows) => {
       if (err) throw err;
       if (send_res == true) {
-        console.log(rows);
         res.send(rows);
         return true;
       } else {
@@ -96,13 +95,15 @@ async function transaction(queries, queryValues) {
       queryPromises.push(connection.query(query, queryValues[index]));
     });
     const results = await Promise.all(queryPromises);
+    console.log(results);
     await connection.commit();
     await connection.end();
     return results;
   } catch (err) {
     await connection.rollback();
     await connection.end();
-    return Promise.reject(err);
+    throw err;
+    //return Promise.reject(err);
   }
 }
 exports.createConnection = createConnection;
