@@ -1,9 +1,17 @@
 import React, { Component } from "react";
 import { useState, useEffect } from "react";
-import "./expandeddetails.css";
+import "./ExpandedDetails.css";
 import moment from "moment";
 
 const ExpandedDetails = (props) => {
+  const booleanMapper = (col, value) => {
+    console.log(col.type, value);
+    if (col.type == "bool") {
+      return value == 0 ? "לא" : "כן";
+    }
+    return value;
+  };
+
   return (
     <ul>
       {props.cols.map((col) => {
@@ -14,7 +22,9 @@ const ExpandedDetails = (props) => {
                 <label>
                   <b>{col.text + ":"}</b>
                 </label>
-                <span>{" " + props.row[col.dataField]}</span>
+                <span>
+                  {" " + booleanMapper(col, props.row[col.dataField])}
+                </span>
               </li>
             );
           } else {

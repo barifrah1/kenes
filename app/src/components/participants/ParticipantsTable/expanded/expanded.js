@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { useState, useEffect } from "react";
-import "./expanded.css";
+import "./Expanded.css";
 import moment from "moment";
 import smartSearch from "smart-search";
-import ExpandedDetails from "./expandeddetails/expandeddetails";
+import ExpandedDetails from "./ExpandedDetails/ExpandedDetails";
 import SadnaotDetails from "./sadnaot_details/sadnaot_details";
 
 const Expanded = (props) => {

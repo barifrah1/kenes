@@ -9,7 +9,7 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 import "./Participantstable.css";
 import moment from "moment";
-import Expanded from "./expanded/expanded";
+import Expanded from "./Expanded/Expanded";
 import Modal from "react-awesome-modal";
 //import ExpandedDetails from "./expanded/expandeddetails/expandeddetails";
 import EditForm from "../../Registeration/EditForm/EditForm";
@@ -81,14 +81,13 @@ function ParticipantsTable() {
     }).then((result) => {
       console.log(4);
       if (result.isConfirmed) {
-        fetch(Utils.resolvePath() + "api/UpdatePayment", {
-          method: "post",
+        fetch(Utils.resolvePath() + `api/participant/${row["phone"]}/payment`, {
+          method: "put",
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            phone: row["phone"],
             payment: row["payment"],
           }),
         })

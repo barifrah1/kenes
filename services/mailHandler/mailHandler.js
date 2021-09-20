@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const config = require("./config/config");
+const config = require("./mailConfiguration/mailConfiguration");
 const fs = require("fs");
 const path = require("path");
 const {
@@ -8,8 +8,8 @@ const {
   MAIL_USER,
   FROM_MAIL,
   TEMPLATE_PATH,
-} = require("./Constants");
-const Constants = require("./Constants");
+} = require("../../Constants");
+const Constants = require("../../Constants");
 
 async function customMailSender(subject, sendTo, templatePath, replaceObject) {
   if (Constants.SEND_MAILS == true) {
@@ -34,7 +34,6 @@ async function customMailSender(subject, sendTo, templatePath, replaceObject) {
         from: FROM_MAIL, // sender address
         to: sendTo, // list of receivers
         subject: subject, // Subject line
-        //text: "הרשמתך לכנס הקלפים ביצירה הישראלית נקלטה", // plain text body
         html: replacedHtml, // html body
         attachments: [
           {

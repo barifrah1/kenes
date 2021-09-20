@@ -1,7 +1,7 @@
+const e = require("express");
 const mysql = require("mysql");
 const mysql2 = require("mysql2/promise");
-const cs = require("../connectionString");
-const { all_queries } = require("../queries/queries");
+const cs = require("./connectionString");
 
 function createConnection() {
   const connection = mysql.createConnection({
@@ -55,22 +55,26 @@ async function execQuery(q, params, req, res, send_res) {
   connection.end();
 }
 
-async function execQueryNew(q, params, req) {
+async function execQueryNew(q, params) {
   let rows;
   let fields;
   const connection = await createConnectionWithPromise();
   try {
     if (params.length == 0) {
-      [rows, fields] = await connection.execute(q);
+      [rows, fields] = await connection.execute(q).catch((e) => {
+        throw e;
+      });
+      return rows;
     } else {
       [rows, fields] = await connection.execute(q, params);
+      return rows;
     }
   } catch (error) {
     console.log(error);
     throw error;
+    //throw error;
   } finally {
     connection.end();
-    return rows;
   }
 }
 

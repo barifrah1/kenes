@@ -69,7 +69,7 @@ const TableColumns = [
   {
     dataField: "vegan",
     text: "צמחוני",
-    type: "string",
+    type: "bool",
     sort: true,
     hidden: true,
     formatter: (cell, row) => (row.vegan === 1 ? "כן" : "לא"),
@@ -77,7 +77,7 @@ const TableColumns = [
   {
     dataField: "photos",
     text: "מעוניין להצטלם",
-    type: "string",
+    type: "bool",
     sort: true,
     hidden: true,
     formatter: (cell, row) => (row.photos === 1 ? "כן" : "לא"),

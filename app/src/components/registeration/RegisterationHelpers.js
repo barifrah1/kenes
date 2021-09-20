@@ -3,19 +3,20 @@ import AsyncAjax from "../../AsyncAjax";
 import Swal from "sweetalert2";
 
 export const fetchingPhones = async () => {
-  const res = await AsyncAjax.post("getAllPhones");
+  const res = await AsyncAjax.get("participants/phone");
   const phones = res.map((row) => row.tel);
   return phones;
 };
 
 export const fecthingPrices = async () => {
-  const res = await AsyncAjax.post("getPaymentOptions");
+  const res = await AsyncAjax.get("payments");
   return res;
 };
 
 export const getSadnaot = async (values) => {
   /*get all sadnaot by rang*/
-  const result = await AsyncAjax.get("sadnaot");
+  const result = await AsyncAjax.get("sadnaot?available=true");
+  if (result.error) throw result.error;
   /*rearange results by rang in order to save it by rangs in state*/
   let rangs = result.map((sadna) => sadna.rang);
   rangs = rangs
@@ -44,8 +45,8 @@ export const handleSubmit = async (values, prices, setSubmitting) => {
   ]);
   let id = -1;
   /*first we get new id*/
-  await fetch(Utils.resolvePath() + "api/getMaxId", {
-    method: "post",
+  await fetch(Utils.resolvePath() + "api/participants/ids/max", {
+    method: "get",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json; charset=utf-8",
@@ -101,7 +102,7 @@ export const handleSubmit = async (values, prices, setSubmitting) => {
         paymentLink,
         userSadnaot
       );
-      const res = await AsyncAjax.post("sendMail", {
+      const res = await AsyncAjax.post("mail", {
         toReplace: toReplace,
       });
       console.log(res);
@@ -133,6 +134,7 @@ export const handleSubmit = async (values, prices, setSubmitting) => {
   });
   await alert(JSON.stringify(values, null, 2));
   await setSubmitting(false);
-  const paymentUrlRow = await Utils.getActivePaymentLink(prices.clone());
+  const paymentUrlRow = await Utils.getActivePaymentLink({ ...prices });
+
   await window.location.replace(paymentUrlRow);
 };

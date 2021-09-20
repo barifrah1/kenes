@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useMemo } from "react";
 import { Formik, Form, Field } from "formik";
 import Button from "react-bootstrap/Button";
 import "./Registeration.css";
@@ -22,9 +22,10 @@ import {
   getSadnaot,
   handleSubmit,
 } from "./RegisterationHelpers";
+import useSubmit from "./useSubmit";
 import useLoading from "../useLoading/useLoading";
 function Registeration() {
-  const [isSubmitting, setSubmitting] = useState(false);
+  //const [isSubmitting, setSubmitting] = useState(false);
   const [values, setValues] = useState({
     Fname: "",
     Lname: "",
@@ -54,6 +55,8 @@ function Registeration() {
   const [phones, setPhones] = useState([]);
   const { height, width } = useWindow();
   const { Loading, setLoading } = useLoading();
+
+  const { isSubmitting, setSubmitting, handleSubmit } = useSubmit();
   /*used in stepper component*/
   const updateActiveStep = async (activeStep, change, errors, touched) => {
     if (change == 1) {
@@ -92,9 +95,8 @@ function Registeration() {
     //isSubmitting ? setLoading(true) : setLoading(false);
   }, isSubmitting);
 
-  useEffect(async () => {
+  useMemo(async () => {
     const res = await fetchingPhones();
-
     setPhones(res);
     const pricesRes = await fecthingPrices();
     const pricesObj = {};
@@ -223,9 +225,9 @@ function Registeration() {
                             variant="secondary"
                             size="lg"
                             disabled={isSubmitting}
-                            onClick={(values) => {
+                            onClick={async (values) => {
                               setLoading(true);
-                              handleSubmit(values, prices, setSubmitting);
+                              await handleSubmit(values, prices);
                             }}
                           >
                             שלח

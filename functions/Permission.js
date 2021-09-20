@@ -1,4 +1,4 @@
-const { execQuery } = require("../dbHandler/dbhandler");
+const { execQuery } = require("../services/dbHandler/dbHandler");
 
 const Permission = {
   checkPermission: (req, res) => {
@@ -11,6 +11,10 @@ const Permission = {
       true
     );
   },
+};
+
+const queries = {
+  checkPermissions: `select * from Permissions where mail=?`,
 };
 
 exports.Permission = Permission;
