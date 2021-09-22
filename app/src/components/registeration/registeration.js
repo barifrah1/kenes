@@ -106,8 +106,6 @@ function Registeration() {
     setValues(sadnaotResult.newVal);
     setSadnaot(sadnaotResult.sadnaByrangs);
   }, []);
-
-  /*rendering*/
   return (
     <div>
       <Modal

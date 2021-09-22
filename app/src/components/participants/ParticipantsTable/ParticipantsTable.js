@@ -17,6 +17,7 @@ import Swal from "sweetalert2";
 import Utils from "../../../Utils";
 import LogoutButton from "../../LogoutButton/LogoutButton";
 import TableColumns from "./TableColumns";
+import { useAuth0 } from "@auth0/auth0-react";
 const { SearchBar } = Search;
 
 function ParticipantsTable() {
@@ -35,7 +36,7 @@ function ParticipantsTable() {
 
   /*table's columns definition*/
   const [cols, setCols] = useState(TableColumns);
-
+  const { getAccessTokenSilently } = useAuth0();
   const handleEdit = (newRow) => {
     let index = data.findIndex((el) => el.phone === newRow.phone);
     let newData = data;
@@ -46,13 +47,22 @@ function ParticipantsTable() {
 
   useEffect(() => {
     setCols(TableColumns);
-    fetch(Utils.resolvePath() + "api/participants/", {
-      method: "get",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
+
+    getAccessTokenSilently({
+      audience: "https://klafim.mecreativenlp.com/",
+      scope: "admin:admin",
     })
+      .then((token) => {
+        console.log(token);
+        fetch(Utils.resolvePath() + "api/participants/", {
+          method: "get",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+      })
       .then((res) => res.json())
       .then(
         (result) => {

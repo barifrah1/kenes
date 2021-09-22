@@ -10,61 +10,7 @@ import Registeration from "./components/Registeration/Registeration";
 import LoginButton from "./components/LoginButton/LoginButton";
 import Login from "./components/Login/Login";
 import useWindow from "./components/useWindow/useWindow";
-{
-  /*class App extends Component {
-  state = {
-    response: "",
-    post: "",
-    responseToPost: "",
-  };
-
-  componentDidMount() {
-    this.callApi()
-      .then((res) => this.setState({ response: res.express }))
-      .catch((err) => console.log(err));
-  }
-
-  callApi = async () => {
-    const response = await fetch("/api/hello");
-    const body = await response.json();
-    console.log("xxx", body);
-    if (response.status !== 200) throw Error(body.message);
-
-    return body;
-  };
-
-  render() {
-    return (
-      <>
-        <ProminentAppBar />
-        <Logo />
-        <BrowserRouter>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/participants">Will Match</Link>
-            </li>
-            <li>
-              <Link to="/register">Will Not Match</Link>
-            </li>
-            <li>
-              <Link to="/kenesklafim">Also Will Not Match</Link>
-            </li>
-          </ul>
-          <Switch>
-            <Route path="/participants" component={Participants} />
-            <Route path="/register" component={Registeration} />
-            <Route exact path="/" component={Homepage} />
-          </Switch>
-        </BrowserRouter>
-      </>
-    );
-  }
-}*/
-}
-
+import { withAuthenticationRequired } from "@auth0/auth0-react";
 const callApi = async () => {
   const response = await fetch("/api/hello");
   const body = await response.json();
@@ -94,18 +40,14 @@ const App = (props) => {
   const [responseToPost, setResponseToPost] = useState("");
   const { height, width } = useWindow();
   useEffect(() => {
-    /*(
-      {
-        height: window.screen.height,
-        width: window.screen.width,
-      },
-      windows.WindowSizes
-    );*/
     callApi()
       .then((res) => setResponse(res.express))
       .catch((err) => console.log(err));
   }, []);
-
+  const AuthParticipants = withAuthenticationRequired(Participants, {
+    // Show a message while the user waits to be redirected to the login page.
+    onRedirecting: () => <div>Redirecting you to the login page...</div>,
+  });
   return (
     <>
       <ProminentAppBar />
@@ -126,7 +68,8 @@ const App = (props) => {
           </li>
         </ul>
         <Switch>
-          <Route path="/participants" component={Participants} />
+          <Route path="/participants" component={AuthParticipants} />
+
           <Route path="/register" component={Registeration} />
           <Route exact path="/" component={Homepage} />
         </Switch>

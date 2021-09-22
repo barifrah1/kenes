@@ -6,6 +6,7 @@ const {
 
 const Participant = {
   getParticipants: async (req, res) => {
+    console.log(req.headers["authorization"]);
     const result = await execQueryNew(queries.participants, [], req).catch(
       (e) => {
         res.status(400).json({ error: e.message });

@@ -3,13 +3,7 @@ const { execQuery } = require("../services/dbHandler/dbHandler");
 const Permission = {
   checkPermission: (req, res) => {
     const params = [req.body.userMail];
-    const result = execQuery(
-      all_queries.checkPermissions,
-      params,
-      req,
-      res,
-      true
-    );
+    const result = execQuery(queries.checkPermissions, params, req, res, true);
   },
 };
 

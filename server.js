@@ -7,6 +7,23 @@ const port = process.env.PORT || 7000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const jwt = require("express-jwt");
+const jwks = require("jwks-rsa");
+
+var jwtCheck = jwt({
+  secret: jwks.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: "https://kenesklafim.us.auth0.com/.well-known/jwks.json",
+  }),
+  audience: "https://klafim.mecreativenlp.com/",
+  issuer: "https://kenesklafim.us.auth0.com/",
+  algorithms: ["RS256"],
+});
+
+app.use(jwtCheck);
+
 const { ParticipantRoutes } = require("./routes/ParticipantRoutes");
 const { SadnaRoutes } = require("./routes/SadnaRoutes");
 const { PaymentRoutes } = require("./routes/PaymentRoutes");
