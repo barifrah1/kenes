@@ -6,14 +6,11 @@ const {
 
 const Participant = {
   getParticipants: async (req, res) => {
-    console.log(req.headers["authorization"]);
-    const result = await execQueryNew(queries.participants, [], req).catch(
-      (e) => {
-        res.status(400).json({ error: e.message });
-        res.send();
-      }
-    );
-    console.log("xx", result);
+    const result = await execQueryNew(queries.participants, []).catch((e) => {
+      res.status(400).json({ error: e.message });
+      res.send();
+    });
+    console.log("xxx", result[0]);
     res.send(JSON.stringify(result));
   },
   getParticipantsPhones: async (req, res) => {
@@ -21,7 +18,19 @@ const Participant = {
       res.status(400).json({ error: e.message });
       res.send();
     });
+
     res.send(JSON.stringify(result));
+  },
+  checkPhoneInUse: async (req, res) => {
+    const result = await execQueryNew(queries.phones, [], req).catch((e) => {
+      res.status(400).json({ error: e.message });
+      res.send();
+    });
+    const { phone } = req.params;
+    const filtered = result.filter((row) => row.tel == phone);
+
+    if (filtered.length) res.send(JSON.stringify(true));
+    else res.send(JSON.stringify(false));
   },
   getSadnaotByTel: async (req, res) => {
     const params = [req.params.tel];

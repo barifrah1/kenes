@@ -1,20 +1,23 @@
 import React, { Component } from "react";
 import * as Constants from "./Constants";
-import { useAuth0 } from "@auth0/auth0-react";
 import Utils from "./Utils";
+const headers = {
+  Accept: "application/json",
+  "Content-Type": "application/json; charset=utf-8",
+};
+
 const AsyncAjax = {
-  get: async (route, data = {}) => {
+  get: async (route, data = {}, jwt = null) => {
+    const customHeaders = { ...headers };
+    if (jwt) customHeaders["Authorization"] = `Bearer ${jwt}`;
     const res = await fetch(Utils.resolvePath() + "api/" + route, {
       method: "get",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json; charset=utf-8",
-      },
+      headers: customHeaders,
     }).catch(console.error());
     const d = await res.json();
     return d;
   },
-  post: async (route, data = {}) => {
+  post: async (route, data = {}, jwt = null) => {
     const res = await fetch(Utils.resolvePath() + "api/" + route, {
       method: "post",
       headers: {
@@ -26,19 +29,18 @@ const AsyncAjax = {
     const d = await res.json();
     return d;
   },
-  put: async (route, data = {}) => {
+  put: async (route, data = {}, jwt = null) => {
+    const customHeaders = { ...headers };
+    if (jwt) customHeaders["Authorization"] = `Bearer ${jwt}`;
     const res = await fetch(Utils.resolvePath() + "api/" + route, {
       method: "put",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json; charset=utf-8",
-      },
+      headers: customHeaders,
       body: JSON.stringify(data),
     }).catch(console.error());
     const d = await res.json();
     return d;
   },
-  delete: async (route, data = {}) => {
+  delete: async (route, data = {}, jwt = null) => {
     const res = await fetch(Utils.resolvePath() + "api/" + route, {
       method: "put",
       headers: {

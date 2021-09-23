@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect, useContext, useMemo } from "react";
 import { Formik, Form, Field } from "formik";
+import { useAuth0 } from "@auth0/auth0-react";
 import Button from "react-bootstrap/Button";
 import "./Registeration.css";
 import Modal from "react-awesome-modal";
@@ -55,7 +56,7 @@ function Registeration() {
   const [phones, setPhones] = useState([]);
   const { height, width } = useWindow();
   const { Loading, setLoading } = useLoading();
-
+  const { getAccessTokenSilently } = useAuth0();
   const { isSubmitting, setSubmitting, handleSubmit } = useSubmit();
   /*used in stepper component*/
   const updateActiveStep = async (activeStep, change, errors, touched) => {
@@ -95,8 +96,10 @@ function Registeration() {
     //isSubmitting ? setLoading(true) : setLoading(false);
   }, isSubmitting);
 
-  useMemo(async () => {
-    const res = await fetchingPhones();
+  useEffect(async () => {
+    const jwt = await getAccessTokenSilently();
+    console.log(jwt);
+    const res = await fetchingPhones(jwt);
     setPhones(res);
     const pricesRes = await fecthingPrices();
     const pricesObj = {};

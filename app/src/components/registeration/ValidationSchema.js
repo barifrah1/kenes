@@ -1,6 +1,6 @@
 import React from "react";
 import * as Yup from "yup";
-import { fetchingPhones } from "./RegisterationHelpers";
+import { fetchingPhones, isPhoneInUse } from "./RegisterationHelpers";
 require("yup-phone");
 
 const ValidationSchema = Yup.object().shape({
@@ -12,7 +12,9 @@ const ValidationSchema = Yup.object().shape({
     .phone("IL")
     .required("טלפון לא תקין - שימוש בספרות בלבד")
     .test("primaryKey", "מישהו אחר נרשם כבר עם מספר זה", (value) => {
-      return fetchingPhones().then((result) => !result.includes(value));
+      if (value) {
+        return isPhoneInUse(value).then((result) => !result);
+      } else return false;
     }),
   city: Yup.string().required("יישוב לא תקין"),
   userSadnaot: Yup.object().shape({

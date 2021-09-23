@@ -13,6 +13,7 @@ ReactDOM.render(
       <Auth0Provider
         domain={Constants.authDomain}
         clientId={Constants.authClientId}
+        audience={"https://klafim.mecreativenlp.com/"}
         redirectUri={window.location.origin}
       >
         <App />

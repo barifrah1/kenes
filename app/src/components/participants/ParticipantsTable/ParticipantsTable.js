@@ -18,6 +18,8 @@ import Utils from "../../../Utils";
 import LogoutButton from "../../LogoutButton/LogoutButton";
 import TableColumns from "./TableColumns";
 import { useAuth0 } from "@auth0/auth0-react";
+import AsyncAjax from "../../../AsyncAjax";
+
 const { SearchBar } = Search;
 
 function ParticipantsTable() {
@@ -48,33 +50,12 @@ function ParticipantsTable() {
   useEffect(() => {
     setCols(TableColumns);
 
-    getAccessTokenSilently({
-      audience: "https://klafim.mecreativenlp.com/",
-      scope: "admin:admin",
-    })
-      .then((token) => {
-        console.log(token);
-        fetch(Utils.resolvePath() + "api/participants/", {
-          method: "get",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+    getAccessTokenSilently()
+      .then(async (token) => {
+        const res = await AsyncAjax.get("participants/", {}, token);
+        setData(res);
       })
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          setData(result);
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          console.log("error when fetching");
-        }
-      );
+      .catch((error) => console.log(error));
   }, []);
 
   /* updat payment function is called every time the user uses the option to update payment culomn from the table itself*/
@@ -88,58 +69,72 @@ function ParticipantsTable() {
       cancelButtonColor: "#d33",
       confirmButtonText: "כן",
       cancelButtonText: "לא",
-    }).then((result) => {
-      console.log(4);
-      if (result.isConfirmed) {
-        fetch(Utils.resolvePath() + `api/participant/${row["phone"]}/payment`, {
-          method: "put",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            payment: row["payment"],
-          }),
-        })
-          .then(
-            (result) => {
-              Swal.fire({
-                title: "תשלום עודכן בהצלחה!",
-                text: "העדכון הושלם בהצלחה",
-                icon: "success",
-                customClass: {
-                  container: "my-swal",
-                },
-              });
+    })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          const token = await getAccessTokenSilently();
+          const res = await AsyncAjax.put(
+            `participant/${row["phone"]}/payment`,
+            { payment: row["payment"] },
+            token
+          );
+          await Swal.fire({
+            title: "תשלום עודכן בהצלחה!",
+            text: "העדכון הושלם בהצלחה",
+            icon: "success",
+            customClass: {
+              container: "my-swal",
             },
-            // Note: it's important to handle errors here
-            // instead of a catch() block so that we don't swallow
-            // exceptions from actual bugs in components.
-            (error) => {
-              console.log("error when updating payment");
-              throw error;
-            }
-          )
-          .catch((error) => error);
-        Swal.fire("העדכון הושלם בהצלחה!", "success");
-      } else {
-        let index = data.findIndex((el) => el.phone === row.phone);
-        let d = [...data];
-        d[index]["payment"] = cellValue;
-        const newData = d;
-        setData([]);
-        setData(newData);
-        Swal.fire({
-          title: "השינוי בוטל בהצלחה",
-          text: "השינוי בוטל בהצלחה!",
-          icon: "success",
-          customClass: {
-            container: "my-swal",
-          },
-        });
-      }
-    });
+          });
+        }
+      })
+      .catch((error) => {
+        console.log("error when updating payment");
+        throw error;
+      });
   };
+  //       fetch(Utils.resolvePath() + `api/participant/${row["phone"]}/payment`, {
+  //         method: "put",
+  //         headers: {
+  //           Accept: "application/json",
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           ,
+  //         }),
+  //       })
+  //         .then(
+  //           (result) => {
+
+  //           },
+  //           // Note: it's important to handle errors here
+  //           // instead of a catch() block so that we don't swallow
+  //           // exceptions from actual bugs in components.
+  //           (error) => {
+  //             console.log("error when updating payment");
+  //             throw error;
+  //           }
+  //         )
+  //         .catch((error) => error);
+  //       Swal.fire("העדכון הושלם בהצלחה!", "success");
+  //     } else {
+  //       let index = data.findIndex((el) => el.phone === row.phone);
+  //       let d = [...data];
+  //       d[index]["payment"] = cellValue;
+  //       const newData = d;
+  //       setData([]);
+  //       setData(newData);
+  //       Swal.fire({
+  //         title: "השינוי בוטל בהצלחה",
+  //         text: "השינוי בוטל בהצלחה!",
+  //         icon: "success",
+  //         customClass: {
+  //           container: "my-swal",
+  //         },
+  //       });
+  //     }
+  //   });
+  // };
 
   const expandRow = {
     renderer: (row) => <Expanded row={row} cols={cols} />,
