@@ -1,0 +1,99 @@
+@import (reference) "../../theme.less";
+.homepage {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("../../images/woman.jpg");
+  background-color: #cccccc;
+  // background-color: green;
+  opacity: 0.8;
+  margin: auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+
+  .titles {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 3vh;
+    .main_title {
+      color: rgba(255, 255, 255, 0.8) !important;
+    }
+    .secondary_title {
+      color: rgba(255, 255, 255, 0.8) !important;
+      word-spacing: 0.3vw;
+      text-align: right !important;
+      color: @primary-color !important;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+  }
+  .buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 5vh;
+
+    .registeration_button {
+      width: 15vw !important;
+      height: 7vh !important;
+      font-size: 1.3rem !important;
+      margin-left: 1vw;
+
+      &:hover {
+        background: @btn-primary-bg-hover;
+      }
+    }
+    .ghost_button {
+      margin-right: 1vw;
+      color: white !important;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.6);
+      }
+    }
+  }
+
+  .footer {
+    position: fixed;
+    bottom: 0;
+    height: 3vh;
+    width: 100%;
+    opacity: 0.8;
+    //background-color: rgba(255, 255, 255, 0.7);
+    background: @btn-primary-bg; //linear-gradient(45deg, #fba039c9, #fba039, #f305cbad),
+    border-top: 1px solid white;
+    .title {
+      text-align: right !important;
+    }
+    .login_button {
+      position: absolute;
+      bottom: 1.5vh;
+      left: 1vw;
+      .login {
+        display: flex;
+        justify-content: right;
+      }
+    }
+  }
+}
+//mobile
+@media (max-width: 768px) {
+  .homepage {
+    background-position: 80% 20%;
+    .titles {
+      .main_title {
+        text-align: center !important;
+      }
+    }
+    .buttons {
+      .registeration_button {
+        width: 40vw !important;
+        height: 7vh !important;
+      }
+      .ghost_button {
+        width: 40vw !important;
+        height: 7vh !important;
+      }
+    }
+  }
+}

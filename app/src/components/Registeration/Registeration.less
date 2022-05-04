@@ -1,0 +1,221 @@
+@import url(https://fonts.googleapis.com/earlyaccess/opensanshebrew.css);
+@import url(https://fonts.googleapis.com/earlyaccess/opensanshebrewcondensed.css);
+@import (reference) "../../theme.less";
+/*desktop*/
+@media (min-width: 768px) {
+  body {
+    font-family: "Open Sans Hebrew", serif;
+  }
+
+  .formDiv {
+    width: 100%;
+    direction: rtl;
+    text-align: right;
+  }
+
+  .regis_form {
+    float: right;
+    margin: 0 auto;
+    margin-top: 1vh;
+    margin-right: 3%;
+    min-width: 90%;
+  }
+
+  .regis_form h1 {
+    text-align: center;
+    margin-bottom: 5vh;
+  }
+  .regis_form label {
+    display: inline-block;
+    margin-left: 2vw;
+    margin-bottom: 10px;
+    text-align: right;
+    width: 12vw;
+  }
+  .regis_form input,
+  select {
+    display: inline-block;
+    box-sizing: content-box;
+    margin-bottom: 5px;
+    text-align: right;
+    border: none;
+    border-bottom: solid 1px rgba(128, 128, 128, 0.5);
+    -webkit-box-shadow: 0 4px 3px -3px rgba(128, 128, 128, 0.5);
+    -moz-box-shadow: 0 8px 6px -6px rgba(128, 128, 128, 0.5);
+    box-shadow: 0 4px 4px -3px rgba(128, 128, 128, 0.5);
+  }
+  .regis_form input:focus {
+    outline: none;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: solid 1px black;
+    opacity: 1;
+    transition: 400ms ease 0ms;
+  }
+
+  .select_container {
+    display: inline-block;
+    text-align: right;
+    direction: rtl;
+    width: 20vw;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .select_container .div_steps {
+    margin-bottom: 3vh;
+    width: 100%;
+  }
+
+  .credit {
+    position: absolute;
+    bottom: 1px;
+    left: 1px;
+  }
+  .error_div {
+    display: inline-block;
+    direction: rtl;
+    color: red;
+  }
+
+  .my-swal {
+    z-index: 10001 !important;
+  }
+  .loading {
+    position: relative;
+    right: 35%;
+  }
+
+  .send_button {
+    text-align: center;
+    .header_sadnaot{
+      font-size: 1.1rem;
+      text-align: right;
+      font-weight: 600;
+      margin: 10px 0%;
+    }
+    .chosen_sadnas{
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 5%;
+      .sadna_row{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+         .label_row{
+          font-weight: 600;
+          margin-left: 5%;
+          min-width:fit-content;
+  
+        }
+      }
+
+    }
+  }
+}
+
+/*mobile*/
+@media (max-width: 768px) {
+  body {
+    font-family: "Open Sans Hebrew", serif;
+  }
+  .modal_container {
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+  }
+
+  .formDiv {
+    width: 100%;
+    height: 100%;
+
+    direction: rtl;
+    text-align: right;
+  }
+
+  .regis_form {
+    float: right;
+    margin: 0 auto;
+    margin-top: 1vh;
+    margin-right: 10vw;
+    min-width: 90%;
+    height: 100%;
+  }
+
+  .div_steps {
+    margin-right: -15vw;
+    width: 80% !important;
+  }
+
+  .regis_form h1 {
+    text-align: center;
+    margin-bottom: 5vh;
+  }
+  .regis_form label {
+    display: inline-block;
+    margin-left: 4vw;
+    margin-bottom: 10px;
+    text-align: right;
+    width: 60vw;
+  }
+  .regis_form input,
+  select {
+    display: inline-block;
+    box-sizing: content-box;
+    margin-bottom: 5px;
+    margin-left: 30px;
+    text-align: right;
+    border: none;
+    border-bottom: solid 1px rgba(128, 128, 128, 0.5);
+    -webkit-box-shadow: 0 4px 3px -3px rgba(128, 128, 128, 0.5);
+    -moz-box-shadow: 0 8px 6px -6px rgba(128, 128, 128, 0.5);
+    box-shadow: 0 4px 4px -3px rgba(128, 128, 128, 0.5);
+  }
+
+  .regis_form input:last-child {
+    margin-bottom: 5vh;
+  }
+  .regis_form input:focus {
+    outline: none;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: solid 1px black;
+    opacity: 1;
+    transition: 400ms ease 0ms;
+  }
+
+  .select_container {
+    // display: inline-block;
+    text-align: right !important;
+    direction: rtl !important;
+    width: 60vw !important;
+    // box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .select_container .div_steps {
+    margin-bottom: 3vh;
+    width: 100%;
+  }
+
+  .credit {
+    position: absolute;
+    bottom: 1px;
+    left: 1px;
+  }
+  .error_div {
+    display: inline-block;
+    direction: rtl;
+    color: red;
+  }
+
+  .my-swal {
+    z-index: 10001 !important;
+  }
+
+  .loading {
+    position: relative;
+    right: 35%;
+  }
+}
