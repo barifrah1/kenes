@@ -28,7 +28,7 @@ describe("Tests for calculate round",()=>{
     expect(calculateRounds(sadnaotMocks["case1"])).toStrictEqual([1,2,3])
   })
   test("simple case2",()=>{
-    expect(calculateRounds(sadnaotMocks["case2"])).toStrictEqual([1,2])
+    expect(calculateRounds(sadnaotMocks["case2"])).toStrictEqual([])
   })
   test("simple case3",()=>{
     expect(calculateRounds(sadnaotMocks["case3"])).toStrictEqual([1,2])
