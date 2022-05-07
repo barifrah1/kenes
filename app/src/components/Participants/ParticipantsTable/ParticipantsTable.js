@@ -55,7 +55,7 @@ function ParticipantsTable() {
   }, []);
 
   /* updat payment function is called every time the user uses the option to update payment culomn from the table itself*/
-  const updatePayment = async (cellValue, cellName, row) => {
+  const updatePayment = async (_cellValue, _cellName, row) => {
     await Swal.fire({
       title: "האם את/ה בטוח/ה?",
       text: "האם את/ה בטוח/ה שברצונך לעדכן את פרטי התשלום?",
@@ -70,7 +70,7 @@ function ParticipantsTable() {
         if (result.isConfirmed) {
           const token = await getAccessTokenSilently();
           const res = await AsyncAjax.put(
-            `participant/${row["phone"]}/payment`,
+            `participant/${row["id"]}/payment`,
             { payment: row["payment"] },
             token
           );
@@ -114,13 +114,16 @@ function ParticipantsTable() {
       >
         {(props) => (
           <div className="table_frame">
+            <div className="top_frame">
             <SearchBar
               {...props.searchProps}
               placeholder="חיפוש"
               className="searching_box"
             />
             <LogoutButton className="logout_button"/>
+            </div>
             <hr />
+            <div className="bottom_frame">
             <BootstrapTable
               {...props.baseProps}
               keyField="id"
@@ -142,6 +145,7 @@ function ParticipantsTable() {
               bordered
               hover
             />
+          </div>
           </div>
         )}
       </ToolkitProvider>

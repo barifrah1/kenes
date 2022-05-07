@@ -22,8 +22,8 @@ const Sadna = {
 
 const queries = {
   sadnaot: `select distinct S.id,S.rang,S.descr from Sadna S  order by S.rang;`,
-  sadnaotAvailable: `select distinct S.id,S.rang,S.descr from Sadna S join UserKenes_sadna U on S.id=U.sadna_id group by S.id,S.rang,S.descr,S.amount having S.amount>count(U.tel)  
-  ORDER BY S.rang ASC, COUNT(tel) ASC;`,
+  sadnaotAvailable: `select distinct S.id,S.rang,S.descr from Sadna S join UserKenes_sadna U on S.id=U.sadna_id group by S.id,S.rang,S.descr,S.amount having S.amount>count(U.user_id)  
+  ORDER BY S.rang ASC, COUNT(user_id) ASC;`,
 };
 
 exports.Sadna = Sadna;

@@ -16,9 +16,9 @@ const { Participant } = require("../functions/participant");
   //Participant.getParticipants
   /*returns  UserSadnaot for specific user in participants table - expanded part */
   router.get(
-    "/api/participant/:tel/sadnaot/",
+    "/:id/sadnaot/",
     jwtCheck,
-    Participant.getSadnaotByTel
+    Participant.getSadnaotById
   );
 
   /*get all phones*/
@@ -38,7 +38,7 @@ const { Participant } = require("../functions/participant");
   router.put("/", jwtCheck, Participant.putParticipant);
 
   router.put(
-    "/:tel/payment",
+    "/:id/payment",
     jwtCheck,
     Participant.putPaymentByTel
   );

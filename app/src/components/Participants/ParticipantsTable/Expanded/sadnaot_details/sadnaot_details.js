@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./sadnaot_details.css";
+import "./sadnaot_details.less";
 import { useAuth0 } from "@auth0/auth0-react";
 import AsyncAjax from "../../../../../AsyncAjax";
 const SadnaotDetails = (props) => {
@@ -9,7 +9,7 @@ const SadnaotDetails = (props) => {
     getAccessTokenSilently()
       .then(async (token) => {
         const result = await AsyncAjax.get(
-          `participant/${props.row.phone}/sadnaot`,
+          `participant/${props.row.id}/sadnaot`,
           {},
           token
         );

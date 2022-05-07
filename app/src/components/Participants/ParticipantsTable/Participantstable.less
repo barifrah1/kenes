@@ -4,8 +4,20 @@
   direction: rtl;
   margin-bottom: 10vh;
   background-color: whitesmoke !important;
-  .logout_button{
-    margin-left:2vw;
+  .top_frame{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 2% 2% 0% 2%;
+
+  }
+  .bottom_frame{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .react-bootstrap-table-pagination{
+      align-self: baseline;
+    }
   }
 }
 .header_row {
@@ -15,11 +27,4 @@
   text-align: center;
 }
 
-.searching_box {
-  display: block;
-  width: 20vw;
-  direction: rtl;
-  margin-left: 55vw;
-  margin-top: 2vh;
-}
 

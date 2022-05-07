@@ -34,7 +34,10 @@ const AsyncAjax = {
       method: "put",
       headers: customHeaders,
       body: JSON.stringify(data),
-    }).catch(console.error());
+    }).catch(e=>{
+      console.error();
+      throw e;
+    });
     const d = await res.json();
     return d;
   },

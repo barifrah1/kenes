@@ -9,7 +9,7 @@ const useSubmit = () => {
   const handleSubmit = async (values, prices) => {
     const userSadnaotParams = Object.values(values.userSadnaot).map((sad) => [
       sad,
-      values["phone"],
+      values["id"],
     ]);
     let id = -1;
     const newUserParams = [
@@ -31,7 +31,7 @@ const useSubmit = () => {
       user: newUserParams,
       email: values["email"],
       sadnaot: [userSadnaotParams],
-      takanon: [values["phone"], values["takanon"]],
+      takanon: [values["id"], values["takanon"]],
       paymentLink: paymentLink,
       allValues: values,
     };
@@ -68,7 +68,7 @@ const useSubmit = () => {
     const { handleEdit, setSubmitting, closeModal, setActiveStep } = callbacks;
     const userSadnaotParams = Object.values(
       values.userSadnaot
-    ).map((sad, index) => [sad, values["phone"], index + 1]);
+    ).map((sad, index) => [sad, values["id"], index + 1]);
 
     const newUserParams = [
       values["category"],
@@ -82,7 +82,7 @@ const useSubmit = () => {
       values["inv"],
       values["sum"],
       values["nlplevel"],
-      values["phone"],
+      values["id"],
     ];
     /*add user and his sadnaot ajax call*/
     try {
@@ -93,7 +93,7 @@ const useSubmit = () => {
         token
       );
 
-      const newRow = await { ...rowData, ...values };
+      const newRow = { ...rowData, ...values };
       await handleEdit(values);
       await Swal.fire({
         title: "הפרטים נקלטו!",
@@ -103,9 +103,9 @@ const useSubmit = () => {
           container: "my-swal",
         },
       });
-      await setSubmitting(false);
-      await setActiveStep(0);
-      await closeModal();
+      setSubmitting(false);
+      setActiveStep(0);
+      closeModal();
       console.log(result);
     } catch (e) {
       console.log("error when updating user details");
@@ -137,7 +137,7 @@ const useSubmit = () => {
     getAccessTokenSilently()
       .then(async (token) => {
         const result = await AsyncAjax.get(
-          `participant/${rowData.phone}/sadnaot/`,
+          `participant/${rowData.id}/sadnaot/`,
           {},
           token
         );
