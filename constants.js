@@ -10,6 +10,6 @@ module.exports = {
   AUDIENCE: "https://klafim.mecreativenlp.com/",
   //AUDIENCE: "http://localhost:3000/",
   JWT_ISSUER: "https://kenesklafim.us.auth0.com/",
-  KENES_DATE: "20/10/2021",
+  KENES_DATE: "01/06/2023",
   HELP_MAIL: "nlpmiri@gmail.com",
 };

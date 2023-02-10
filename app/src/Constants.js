@@ -7,8 +7,7 @@ const authClientId = "u1BFPSsZrPpqPP3FaTFPBkV4Lwe2Qd80";
 const redirectUri = "klafim.mecreativenlp.com";
 const facebookLink =
   "https://www.facebook.com/%D7%9B%D7%A0%D7%A1-%D7%A7%D7%9C%D7%A4%D7%99%D7%9D-%D7%91%D7%99%D7%A6%D7%99%D7%A8%D7%94-%D7%99%D7%A9%D7%A8%D7%90%D7%9C%D7%99%D7%AA-123753627695376";
-const instgramLink =
-  "https://www.facebook.com/%D7%9B%D7%A0%D7%A1-%D7%A7%D7%9C%D7%A4%D7%99%D7%9D-%D7%91%D7%99%D7%A6%D7%99%D7%A8%D7%94-%D7%99%D7%A9%D7%A8%D7%90%D7%9C%D7%99%D7%AA-123753627695376";
+const instgramLink = "https://www.instagram.com/nlpcreative/";
 const nlpLevelOptions = [
   { value: "Student", label: "Student" },
   { value: "NLP Practitioner", label: "NLP Practitioner" },

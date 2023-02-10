@@ -25,7 +25,7 @@ const BasicDataForm = (props, value) => {
         <div className="error_div">{errors.Lname}</div>
       ) : null}
       <hr />
-      <label>רמת NLP : </label>
+      {/* <label>רמת NLP : </label>
       <Field
         name="nlplevel"
         component={({ field, form }) => (
@@ -51,7 +51,7 @@ const BasicDataForm = (props, value) => {
       {errors.nlplevel ? (
         <div className="error_div">{errors.nlplevel}</div>
       ) : null}
-      <hr />
+      <hr /> */}
       {rowData && (
         <>
           <label>קטגוריה: </label>

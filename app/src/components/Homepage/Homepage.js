@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import LoginButton from "../Login/LoginButton/LoginButton";
 import LogoutButton from "../Login/LogoutButton/LogoutButton";
+import ManagmentButton from "../Login/ManagmentButton/ManagmentButton";
+
 import { Layout, Button, Typography, Space } from "antd";
 import KenesLogo from "./Header/KenesLogo/KenesLogo";
 import PhotoCredit from "./PhotoCredit/PhotoCredit";
@@ -17,14 +19,17 @@ function Homepage(props) {
       <Content className="content_div">
         <div className="login_button">
           <LoginButton className="login" />
-          <LogoutButton className="logout" />
+          <div className="buttons_when_login">
+            <LogoutButton className="logout" />
+            <ManagmentButton />
+          </div>
         </div>
         {!showRegisteration && (
           <>
             <KenesLogo />
             <Space direction="horizontal" className="titles">
               <Title level={4} className="secondary_title">
-                27.10.22 מלון עדן אין, זכרון יעקב
+                01.06.23 מלון עדן אין, זכרון יעקב
               </Title>
               <Title level={1} className="main_title">
                 כנס קלפים ביצירה ישראלית

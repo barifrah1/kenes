@@ -129,7 +129,7 @@ const useSubmit = () => {
   ) => {
     //set fields by step for edit mode
     setFieldBystep([
-      ["Fname", "Lname", "category", "nlplevel", "email", "phone", "city"],
+      ["Fname", "Lname", "category" /*, "nlplevel"*/, "email", "phone", "city"],
       ["userSadnaot"],
       ["vegan", "way", "photos", "inv", "sum"],
     ]);

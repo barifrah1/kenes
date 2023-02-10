@@ -5,7 +5,7 @@ import { string } from "yup";
 export const ValidationSchema = Yup.object().shape({
   Fname: Yup.string().required("שדה חובה"),
   Lname: Yup.string().required("שדה חובה"),
-  nlplevel: Yup.string().required("לא נבחרה רמת נ.ל.פ"),
+  // nlplevel: Yup.string().required("לא נבחרה רמת נ.ל.פ"),
   email: Yup.string().email("אימייל לא תקין").required("אימייל לא תקין"),
   phone: Yup.string()
     .phone("IL")
@@ -33,7 +33,7 @@ export const ValidationSchema = Yup.object().shape({
 export const ValidationSchemaEdit = Yup.object().shape({
   Fname: Yup.string().required("שדה חובה"),
   Lname: Yup.string().required("שדה חובה"),
-  nlplevel: Yup.string().required("לא נבחרה רמת נ.ל.פ"),
+  // nlplevel: Yup.string().required("לא נבחרה רמת נ.ל.פ"),
   category: Yup.string().required("קטגוריה לא תקינה"),
   email: Yup.string().email("אימייל לא תקין").required("אימייל לא תקין"),
   phone: Yup.string().phone("IL").required("טלפון לא תקין - שימוש בספרות בלבד"),

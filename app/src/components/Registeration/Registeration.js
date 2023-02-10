@@ -23,7 +23,7 @@ function Registeration(props) {
     Fname: "",
     Lname: "",
     category: "",
-    nlplevel: "",
+    // nlplevel: "",
     email: "",
     phone: "",
     city: "",
@@ -37,7 +37,7 @@ function Registeration(props) {
   const [sadnaot, setSadnaot] = useState({});
   /*list of fields by step used for validation part and for stepping logic*/
   const [fieldsByStep, setFieldBystep] = useState([
-    ["Fname", "Lname", "nlplevel", "email", "phone", "city"],
+    ["Fname", "Lname" /*"nlplevel"*/, , "email", "phone", "city"],
     ["userSadnaot"],
     ["vegan", "way", "photos", "takanon"],
   ]);
@@ -212,30 +212,32 @@ function Registeration(props) {
                               <span>{userSadnaot[2][0]["descr"]}</span>
                             </span>
                           </div>
-                          <Button
-                            className="=send_button"
-                            type="primary"
-                            size="large"
-                            disabled={isSubmitting}
-                            onClick={async (e) => {
-                              setLoading(true);
-                              if (props.rowData) {
-                                const callbacks = {
-                                  setSubmitting,
-                                  setActiveStep,
-                                  handleEdit: props.handleEdit,
-                                  onClose: props.onClose,
-                                };
-                                await handleEditSubmit(
-                                  values,
-                                  props.rowData,
-                                  callbacks
-                                );
-                              } else await handleSubmit(values, prices);
-                            }}
-                          >
-                            שלח
-                          </Button>
+                          {!Loading && (
+                            <Button
+                              className="send_button"
+                              type="primary"
+                              size="large"
+                              disabled={isSubmitting}
+                              onClick={async (e) => {
+                                setLoading(true);
+                                if (props.rowData) {
+                                  const callbacks = {
+                                    setSubmitting,
+                                    setActiveStep,
+                                    handleEdit: props.handleEdit,
+                                    onClose: props.onClose,
+                                  };
+                                  await handleEditSubmit(
+                                    values,
+                                    props.rowData,
+                                    callbacks
+                                  );
+                                } else await handleSubmit(values, prices);
+                              }}
+                            >
+                              שלח
+                            </Button>
+                          )}
                         </div>
                       </>
                     )}
