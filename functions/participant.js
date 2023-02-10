@@ -97,7 +97,7 @@ const Participant = {
   putPaymentByTel: async (req, res) => {
     const result = await transaction(
       [queries.updatePayment],
-      [[req.body.payment, req.params.tel]]
+      [[req.body.payment, req.params.idk]]
     ).catch((e) => {
       res.status(400).json({ error: e.message });
       res.send();

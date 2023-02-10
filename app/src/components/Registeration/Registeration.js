@@ -115,13 +115,17 @@ function Registeration(props) {
   const modelHeight = width <= 768 ? "100% " : "700px";
   const modalStylePC = { position: "absolute", top: "5vh", left: "25%" };
   const modalStyleMobile = { position: "absolute", top: "8px", left: "8px" };
-  const userSadnaot = useMemo(()=>
-  {
-    const selectedSadnas = formikRef.current?.values?.userSadnaot?Object.values(formikRef.current?.values?.userSadnaot):undefined;
+  const userSadnaot = useMemo(() => {
+    const selectedSadnas = formikRef.current?.values?.userSadnaot
+      ? Object.values(formikRef.current?.values?.userSadnaot)
+      : undefined;
     console.log("cala");
-    return selectedSadnas && selectedSadnas.length>0?sadnaot.map(sadnaotForRangeArray=>sadnaotForRangeArray.filter(sad=> selectedSadnas.includes(sad.id))):[];
-  }
-  ,[activeStep]);
+    return selectedSadnas && selectedSadnas.length > 0
+      ? sadnaot.map((sadnaotForRangeArray) =>
+          sadnaotForRangeArray.filter((sad) => selectedSadnas.includes(sad.id))
+        )
+      : [];
+  }, [activeStep]);
   return (
     <div className="main_container">
       <Modal
@@ -131,7 +135,7 @@ function Registeration(props) {
         style={width < 768 ? modalStyleMobile : modalStylePC}
         footer={<div></div>}
         // confirmLoading={confirmLoading}
-        onCancel={() => history.push("/")}
+        onCancel={() => props.onClose() /*history.push("/")*/}
         className="modal_container"
       >
         <div className="modal_container">
@@ -191,11 +195,22 @@ function Registeration(props) {
                           <div className="loading">
                             <Loading />
                           </div>
-                          <div className="header_sadnaot">בחרת להירשם לסדנאות הבאות:</div>
+                          <div className="header_sadnaot">
+                            בחרת להירשם לסדנאות הבאות:
+                          </div>
                           <div className="chosen_sadnas">
-                            <span className="sadna_row"><span className="label_row">סדנה 1: </span><span>{userSadnaot[0][0]["descr"]}</span></span>
-                            <span className="sadna_row"><span className="label_row">סדנה 2:</span><span>{userSadnaot[1][0]["descr"]}</span></span>
-                            <span className="sadna_row"><span className="label_row">סדנה 3:</span><span>{userSadnaot[2][0]["descr"]}</span></span>
+                            <span className="sadna_row">
+                              <span className="label_row">סדנה 1: </span>
+                              <span>{userSadnaot[0][0]["descr"]}</span>
+                            </span>
+                            <span className="sadna_row">
+                              <span className="label_row">סדנה 2:</span>
+                              <span>{userSadnaot[1][0]["descr"]}</span>
+                            </span>
+                            <span className="sadna_row">
+                              <span className="label_row">סדנה 3:</span>
+                              <span>{userSadnaot[2][0]["descr"]}</span>
+                            </span>
                           </div>
                           <Button
                             className="=send_button"
@@ -209,7 +224,7 @@ function Registeration(props) {
                                   setSubmitting,
                                   setActiveStep,
                                   handleEdit: props.handleEdit,
-                                  closeModal: props.closeModal,
+                                  onClose: props.onClose,
                                 };
                                 await handleEditSubmit(
                                   values,

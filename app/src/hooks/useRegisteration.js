@@ -65,10 +65,10 @@ const useSubmit = () => {
   };
 
   const handleEditSubmit = async (values, rowData, callbacks) => {
-    const { handleEdit, setSubmitting, closeModal, setActiveStep } = callbacks;
-    const userSadnaotParams = Object.values(
-      values.userSadnaot
-    ).map((sad, index) => [sad, values["id"], index + 1]);
+    const { handleEdit, setSubmitting, onClose, setActiveStep } = callbacks;
+    const userSadnaotParams = Object.values(values.userSadnaot).map(
+      (sad, index) => [sad, values["id"], index + 1]
+    );
 
     const newUserParams = [
       values["category"],
@@ -81,7 +81,7 @@ const useSubmit = () => {
       values["way"],
       values["inv"],
       values["sum"],
-      values["nlplevel"],
+      values["nlplevel"].value,
       values["id"],
     ];
     /*add user and his sadnaot ajax call*/
@@ -105,7 +105,7 @@ const useSubmit = () => {
       });
       setSubmitting(false);
       setActiveStep(0);
-      closeModal();
+      onClose();
       console.log(result);
     } catch (e) {
       console.log("error when updating user details");

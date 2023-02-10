@@ -11,7 +11,24 @@
   background-repeat: no-repeat;
   background-size: cover;
   position: relative;
-
+  .login_button {
+    position: absolute;
+    top: 1vh;
+    left: 0.5vw;
+    .login {
+      display: flex;
+      justify-content: right;
+    }
+  }
+  .logout_button {
+    position: absolute;
+    top: 1vh;
+    left: 0.5vw;
+    .logout {
+      display: flex;
+      justify-content: right;
+    }
+  }
   .titles {
     display: flex;
     flex-direction: column;
@@ -64,15 +81,6 @@
     border-top: 1px solid white;
     .title {
       text-align: right !important;
-    }
-    .login_button {
-      position: absolute;
-      bottom: 1.5vh;
-      left: 1vw;
-      .login {
-        display: flex;
-        justify-content: right;
-      }
     }
   }
 }

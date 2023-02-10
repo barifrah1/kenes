@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import { isPhoneInUse } from "./RegisterationHelpers";
-require("yup-phone");
-
+import "yup-phone";
+import { string } from "yup";
 export const ValidationSchema = Yup.object().shape({
   Fname: Yup.string().required("שדה חובה"),
   Lname: Yup.string().required("שדה חובה"),

@@ -1,28 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import LoginButton from "../Login/LoginButton/LoginButton";
 import LogoutButton from "../Login/LogoutButton/LogoutButton";
-import "./Homepage.less";
 import { Layout, Button, Typography, Space } from "antd";
-// import CounterDown from "../CounterDown/CounterDown";
 import KenesLogo from "./Header/KenesLogo/KenesLogo";
 import PhotoCredit from "./PhotoCredit/PhotoCredit";
 import SocialMedia from "./SocialMedia/SocialMedia";
 import Registeration from "../Registeration/Registeration";
+import "./Homepage.less";
 function Homepage(props) {
+  const [showRegisteration, setShowRegisteration] = useState(false);
   const { Content, Footer } = Layout;
   const { Title } = Typography;
-  const history = useHistory();
-
-  const routeChange = (path) => {
-    history.push(path);
-  };
-  const { path } = props;
-
   return (
     <div className="homepage">
       <Content className="content_div">
-        {path === "/" && (
+        <div className="login_button">
+          <LoginButton className="login" />
+          <LogoutButton className="logout" />
+        </div>
+        {!showRegisteration && (
           <>
             <KenesLogo />
             <Space direction="horizontal" className="titles">
@@ -38,7 +35,9 @@ function Homepage(props) {
                 className="registeration_button"
                 type="primary"
                 shape="round"
-                onClick={() => routeChange("register")}
+                onClick={
+                  () => setShowRegisteration(true) /*routeChange("register")*/
+                }
               >
                 הרשמה
               </Button>
@@ -53,13 +52,11 @@ function Homepage(props) {
             <PhotoCredit />
           </>
         )}
-        {path === "/register" && <Registeration />}
+        {showRegisteration && (
+          <Registeration onClose={() => setShowRegisteration(false)} />
+        )}
       </Content>
       <Footer className="footer">
-        <div className="login_button">
-          <LoginButton className="login" />
-          <LogoutButton className="logout" />
-        </div>
         {/* <CounterDown /> */}
         <SocialMedia />
       </Footer>

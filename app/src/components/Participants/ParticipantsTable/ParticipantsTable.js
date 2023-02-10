@@ -15,7 +15,6 @@ import TableColumns from "./TableColumns";
 import { useAuth0 } from "@auth0/auth0-react";
 import AsyncAjax from "../../../AsyncAjax";
 import Registeration from "../../Registeration/Registeration";
-
 const { SearchBar } = Search;
 
 function ParticipantsTable() {
@@ -36,16 +35,13 @@ function ParticipantsTable() {
   const [cols, setCols] = useState(TableColumns);
   const { getAccessTokenSilently } = useAuth0();
   const handleEdit = (newRow) => {
-    let index = data.findIndex((el) => el.phone === newRow.phone);
-    let newData = data;
-    setData([]);
-    newData[index] = newRow;
+    const index = data.findIndex((el) => el.id === newRow.id);
+    const newData = data.splice(index, 1, newRow);
     setData(newData);
   };
 
   useEffect(() => {
     setCols(TableColumns);
-
     getAccessTokenSilently()
       .then(async (token) => {
         const res = await AsyncAjax.get("participant/", {}, token);
@@ -115,37 +111,37 @@ function ParticipantsTable() {
         {(props) => (
           <div className="table_frame">
             <div className="top_frame">
-            <SearchBar
-              {...props.searchProps}
-              placeholder="חיפוש"
-              className="searching_box"
-            />
-            <LogoutButton className="logout_button"/>
+              <SearchBar
+                {...props.searchProps}
+                placeholder="חיפוש"
+                className="searching_box"
+              />
+              <LogoutButton className="logout_button" />
             </div>
             <hr />
             <div className="bottom_frame">
-            <BootstrapTable
-              {...props.baseProps}
-              keyField="id"
-              data={data}
-              columns={cols}
-              bootstrap4={true}
-              cellEdit={cellEditFactory({
-                mode: "dbclick",
-                blurToSave: true,
-                afterSaveCell: (cellValue, cellName, row) =>
-                  updatePayment(cellValue, cellName, row),
-              })}
-              headerClasses="header_row"
-              rowClasses="rows"
-              pagination={paginationFactory()}
-              expandRow={expandRow}
-              selectRow={selectRow}
-              striped
-              bordered
-              hover
-            />
-          </div>
+              <BootstrapTable
+                {...props.baseProps}
+                keyField="id"
+                data={data}
+                columns={cols}
+                bootstrap4={true}
+                cellEdit={cellEditFactory({
+                  mode: "dbclick",
+                  blurToSave: true,
+                  afterSaveCell: (cellValue, cellName, row) =>
+                    updatePayment(cellValue, cellName, row),
+                })}
+                headerClasses="header_row"
+                rowClasses="rows"
+                pagination={paginationFactory()}
+                expandRow={expandRow}
+                selectRow={selectRow}
+                striped
+                bordered
+                hover
+              />
+            </div>
           </div>
         )}
       </ToolkitProvider>
@@ -153,8 +149,8 @@ function ParticipantsTable() {
         {editingModalInfo.visible && (
           <Registeration
             rowData={editingModalInfo.row}
-            closeModal={() => {
-              setEditModalInfo(editModal_initialState);
+            onClose={() => {
+              setEditModalInfo({ ...editModal_initialState });
               setData(data);
             }}
             handleEdit={handleEdit}

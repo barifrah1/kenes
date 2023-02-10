@@ -1,0 +1,53 @@
+@import (reference) "../../theme.less";
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-image: url("../../images/woman.jpg");
+  background-color: #cccccca2;
+  margin: auto;
+  background-position: center;
+  background-repeat: no-repeat !important;
+  background-size: cover;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: 1;
+  .search_container {
+    align-self: flex-start;
+    margin-right: 10vw;
+    margin-top: 10vh;
+  }
+  .all_cards {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5vw;
+    margin: 5vh 10vw 0 10vw;
+    .card_style {
+      width: 10vw !important;
+      height: 30vh !important;
+    }
+    .catergory_part {
+      font-weight: 900 !important;
+    }
+    .id_part {
+      font-weight: 600;
+    }
+    .payment_part {
+      width: 20%;
+      svg {
+        fill: rgba(4, 231, 98, 0.814);
+      }
+    }
+  }
+  .pagination_container {
+    width: fit-content;
+    align-self: flex-start !important;
+    margin-right: 10vw;
+    margin-top: 2%;
+  }
+}

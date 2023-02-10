@@ -64,7 +64,8 @@ const OtherDetails = (props) => {
             <Field
               name="payment"
               component={({ field, form }) => (
-                <>
+
+                <div className="payment_row">
                   <label className="invAndSumLabel">תשלום :</label>
                   <Checkbox
                     checked={parseInt(form.values.payment) === 1 ? true : false}
@@ -76,7 +77,7 @@ const OtherDetails = (props) => {
                       );
                     }}
                   />
-                </>
+                </div> 
               )}
             />
           </>
@@ -99,6 +100,7 @@ const OtherDetails = (props) => {
             name="takanon"
             component={({ field, form }) => (
               <>
+              <div className="takanon_row">
                 <label>
                   <span>אני מאשר את תנאי </span>
                   <span>
@@ -125,6 +127,7 @@ const OtherDetails = (props) => {
                     }}
                   />
                 </span>
+                </div>
                 {open && (
                   <Takanon
                     prices={props.prices}
@@ -139,6 +142,7 @@ const OtherDetails = (props) => {
           {errors.takanon ? (
             <div className="error_div">{errors.takanon}</div>
           ) : null}
+          
         </>
       )}
       <hr />

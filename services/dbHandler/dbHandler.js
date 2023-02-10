@@ -71,14 +71,13 @@ async function transaction(queries, queryValues) {
       queryPromises.push(connection.query(query, queryValues[index]));
     });
     const results = await Promise.all(queryPromises);
-    console.log(results);
     await connection.commit();
     await connection.end();
     return results;
   } catch (err) {
     await connection.rollback();
     await connection.end();
-    throw err;
+    return Promise.reject(err);
     //return Promise.reject(err);
   }
 }

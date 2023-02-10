@@ -4,7 +4,9 @@ import Homepage from "./components/Homepage/Homepage.js";
 import "./App.less";
 import Participants from "./components/Participants/Participants";
 import { withAuthenticationRequired } from "@auth0/auth0-react";
-
+import CheckIn from "./components/CheckIn/CheckIn.js";
+import Example from "./components/Example";
+import { string } from "yup";
 // const callApi = async () => {
 //   const response = await fetch("/api/hello");
 //   const body = await response.json();
@@ -14,17 +16,15 @@ import { withAuthenticationRequired } from "@auth0/auth0-react";
 //   return body;
 // };
 
-const App = (props) => {
+const App = () => {
   return (
     <>
       <BrowserRouter>
         <Switch>
+          <Route path="/example" component={Example} />
           <PrivateRoute path="/participants" component={Participants} />
-          <Route
-            path="/register"
-            render={() => <Homepage path="/register" />}
-          />
-          <Route exact path="/" render={() => <Homepage path="/" />} />
+          <PrivateRoute path="/checkin" component={CheckIn} />
+          <Route exact path="/" render={() => <Homepage />} />
         </Switch>
       </BrowserRouter>
     </>

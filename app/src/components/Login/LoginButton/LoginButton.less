@@ -1,11 +1,19 @@
 @import (reference) "../../../theme.less";
-.login_icon {
-  svg {
-    font-size: 2rem !important;
-    color: whitesmoke;
-    &:hover {
-      font-size: 2.3rem !important;
-      color: lightgray;
+.login_button {
+  color: whitesmoke !important;
+  .login_icon {
+    svg {
+      font-size: 1rem !important;
+      color: whitesmoke;
+      &:hover {
+        font-size: 1.1rem !important;
+        color: lightgray;
+      }
     }
+  }
+  &:hover {
+    font-size: 1.1rem !important;
+    color: lightgray;
+    border-color: @primary-color;
   }
 }

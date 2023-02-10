@@ -1,8 +1,19 @@
 @import (reference) "../../../theme.less";
-.logout_icon {
-  margin-left: 5% !important;
-  svg {
-    font-size: 2rem !important;
-    color: @primary-color;
+.logout_button {
+  color: whitesmoke !important;
+  .logout_icon {
+    margin-left: 5% !important;
+    svg {
+      font-size: 1rem !important;
+      color: whitesmoke;
+      &:hover {
+        font-size: 1.1rem !important;
+        color: lightgray;
+      }
+    }
+  }
+  &:hover {
+    color: lightgray;
+    border-color: @primary-color;
   }
 }

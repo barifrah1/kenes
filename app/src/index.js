@@ -5,7 +5,7 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import App from "./App";
 import Constants from "./Constants";
 import ErrorBoundary from "./ErrorBoundary";
-import * as serviceWorker from "./serviceWorker";
+// import * as serviceWorker from "./serviceWorker";
 import { ConfigProvider } from "antd";
 import heIL from "antd/lib/locale/he_IL";
 import { prodPath } from "./Constants";
@@ -30,4 +30,4 @@ ReactDOM.render(
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+// serviceWorker.unregister();

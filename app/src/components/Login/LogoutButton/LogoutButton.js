@@ -15,13 +15,15 @@ function LogoutButton() {
         placement="bottom"
       >
         <Button
-          className="logout"
-          type="link"
+          className="logout_button"
+          type="ghost"
           icon={<LogoutOutlined className="logout_icon" />}
           onClick={() => {
             logout({ returnTo: window.location.origin });
           }}
-        />
+        >
+          התנתק
+        </Button>
       </Tooltip>
     )
   );
