@@ -15,6 +15,7 @@
     "email-templates": "^8.0.7",
     "express": "^4.17.1",
     "express-jwt": "^6.1.0",
+    "express-winston": "^4.2.0",
     "jwks-rsa": "^2.0.4",
     "mariadb": "^2.4.2",
     "mysql": "^2.18.1",
@@ -25,9 +26,12 @@
     "socket.io": "^4.5.1",
     "types": "^0.1.1",
     "types-json": "^1.2.2",
+    "winston": "^3.8.2",
+    "yamljs": "^0.3.0",
     "yarn": "^1.22.5"
   },
   "devDependencies": {
-    "concurrently": "^4.1.2"
+    "concurrently": "^4.1.2",
+    "swagger-ui-express": "^4.6.1"
   }
 }

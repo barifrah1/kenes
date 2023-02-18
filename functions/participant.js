@@ -2,6 +2,7 @@ const {
   execQueryNew,
   transaction,
 } = require("../services/dbHandler/dbHandler");
+const { logger } = require("../logger");
 const { mail } = require("./mail");
 const Participant = {
   getParticipants: async (req, res) => {
@@ -42,6 +43,9 @@ const Participant = {
   },
 
   postParticipant: async (req, res) => {
+    logger.info(
+      `new participant creation request with this info: ${req.body.json}`
+    );
     try {
       const idRes = await ParticipantHelpers.getParticipantMaxId();
       const id = idRes[0].id;
@@ -75,6 +79,7 @@ const Participant = {
       });
       res.send(isSent);
     } catch (e) {
+      logger.error(`creation failed with this error ${e.message}`);
       res.status(400);
       res.send(false);
     }
@@ -93,6 +98,17 @@ const Participant = {
     });
     res.status(200).json(result);
   },
+
+  deleteParticipant: async (req, res) => {
+    const transactionQueries = [queries.deleteUser];
+    let params = [req.params.id];
+    const result = await transaction(transactionQueries, params).catch((e) => {
+      res.status(e.status).json({ error: e.message });
+      res.send();
+    });
+    res.status(200).json(result);
+  },
+
   putPaymentByTel: async (req, res) => {
     const result = await transaction(
       [queries.updatePayment],
@@ -128,6 +144,7 @@ const queries = {
   updatetUserSadnaot: `Update UserKenes_sadna U join Sadna S on S.id=U.sadna_id set U.sadna_id=? where U.user_id=? and S.rang=? ;`,
   participantNextId: `select max(id)+1 as id  from UserKenes;`,
   updatePayment: `update UserKenes set payment=? where id=?;`,
+  deleteUser: `delete from UserKenes where id=?;`,
 };
 
 exports.Participant = Participant;

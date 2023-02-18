@@ -58,7 +58,7 @@ const useSubmit = () => {
         container: "my-swal",
       },
     });
-    await alert(JSON.stringify(values, null, 2));
+    // await alert(JSON.stringify(values, null, 2));
     await setSubmitting(false);
     const paymentUrlRow = await Utils.getActivePaymentLink({ ...prices });
     await window.location.replace(paymentUrlRow);

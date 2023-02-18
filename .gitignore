@@ -24,3 +24,4 @@ yarn-error.log*
 connectionString.json
 /config
 # package-lock.json
+/logs
