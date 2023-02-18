@@ -23,7 +23,10 @@ const AsyncAjax = {
         "Content-Type": "application/json; charset=utf-8",
       },
       body: JSON.stringify(data),
-    }).catch(console.error());
+    }).catch((e) => {
+      console.error();
+      throw e;
+    });
     const d = await res.json();
     return d;
   },
@@ -34,7 +37,7 @@ const AsyncAjax = {
       method: "put",
       headers: customHeaders,
       body: JSON.stringify(data),
-    }).catch(e=>{
+    }).catch((e) => {
       console.error();
       throw e;
     });

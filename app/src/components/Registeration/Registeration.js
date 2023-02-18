@@ -212,7 +212,7 @@ function Registeration(props) {
                               <span>{userSadnaot[2][0]["descr"]}</span>
                             </span>
                           </div>
-                          {!Loading && (
+                          {true && (
                             <Button
                               className="send_button"
                               type="primary"

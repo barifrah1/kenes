@@ -23,7 +23,7 @@ const useSubmit = () => {
       "code",
       parseInt(values["vegan"]),
       values["way"],
-      values["nlplevel"].value,
+      // values["nlplevel"].value,
     ];
 
     const paymentLink = Utils.getActivePaymentLink(prices);
@@ -81,7 +81,7 @@ const useSubmit = () => {
       values["way"],
       values["inv"],
       values["sum"],
-      values["nlplevel"].value,
+      // values["nlplevel"].value,
       values["id"],
     ];
     /*add user and his sadnaot ajax call*/

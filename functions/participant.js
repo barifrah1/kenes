@@ -120,7 +120,7 @@ const queries = {
   sadnaotById: `select distinct S.id,S.rang,S.descr from UserKenes_sadna U join Sadna S on U.sadna_id=S.id  where U.user_id=? order by rang;`,
   phones: `select tel from UserKenes;`,
   // newUser: `INSERT INTO UserKenes VALUES(?,"משתתף",?,?,?,?,?,CURDATE(),0,?,2,?,?,?,0,0,0,0,?);`,
-  newUser: `INSERT INTO UserKenes VALUES(?,"משתתף",?,?,?,?,?,CURDATE(),0,?,2,?,?,?,0,0,0,0);`,
+  newUser: `INSERT INTO UserKenes VALUES(?,"משתתף",?,?,?,?,?,CURDATE(),0,?,2,?,?,?,0,0,0,0,"");`,
   newUserSadnaot: `INSERT INTO UserKenes_sadna VALUES ? ;`,
   newUserTakanonConfirm: `INSERT INTO takanon VALUES (?,?) ;`,
   // updateUser: `Update UserKenes set level=?,Fname=?,Lname=?,mail=?,payment=?,photo=?,vegan=?,way=?,inv=?,sum=?,nlplevel=? where id=?;`,
