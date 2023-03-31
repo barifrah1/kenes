@@ -6,7 +6,7 @@ module.exports = {
   TEMPLATE_PATH: "./emailTemplates/beefree-qmh7wxdmlla.html",
   REGISTERATION_MAIL_SUBJECT:
     "הרשמתך לכנס קלפים ביצירה ישראלית נקלטה - מייל אוטומטי אין להשיב",
-  SEND_MAILS: false,
+  SEND_MAILS: true,
   AUDIENCE: "https://klafim.mecreativenlp.com/",
   //AUDIENCE: "http://localhost:3000/",
   JWT_ISSUER: "https://kenesklafim.us.auth0.com/",

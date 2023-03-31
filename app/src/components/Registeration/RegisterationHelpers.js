@@ -21,25 +21,34 @@ export const getSadnaot = async (values) => {
   if (result.error) throw result.error;
   const rangs = calculateRounds(result);
   const newUserSadnaot = rearrangeSadnaotByRound(rangs);
-  const newVal = {...values,userSadnaot:newUserSadnaot};
+  const newVal = { ...values, userSadnaot: newUserSadnaot };
   const sadnaByrangs = [];
   for (let i = 1; i <= rangs.length; i++) {
     sadnaByrangs[i - 1] = result.filter((row) => row.rang == i);
   }
-  return { newVal, sadnaByrangs };//userWithSadnaot, sadnaotByRounds
+  return { newVal, sadnaByrangs }; //userWithSadnaot, sadnaotByRounds
 };
 
-export const rearrangeSadnaotByRound = (rounds)=>{
-    /*rearange results by round in order to save it by round in state*/
-    const mapper = rounds.map((rang) => "f_rang" + rang);
-    const newUserSadnaot = {};
-    mapper.map((__,index) => {
-      newUserSadnaot[mapper[index]] = "";
-      return __});
-    return newUserSadnaot
-}
+export const rearrangeSadnaotByRound = (rounds) => {
+  /*rearange results by round in order to save it by round in state*/
+  const mapper = rounds.map((rang) => "f_rang" + rang);
+  const newUserSadnaot = {};
+  mapper.map((__, index) => {
+    newUserSadnaot[mapper[index]] = "";
+    return __;
+  });
+  return newUserSadnaot;
+};
 
-export const calculateRounds = (sadnaot)=>{
-  return sadnaot.map((sadna) => sadna.rang).filter((value, index, self) => self.indexOf(value) === index)
-  .sort();
-}
+export const calculateRounds = (sadnaot) => {
+  return sadnaot
+    .map((sadna) => sadna.rang)
+    .filter((value, index, self) => self.indexOf(value) === index)
+    .sort();
+};
+
+export const getGifts = async () => {
+  const result = await AsyncAjax.get("gifts?available=true");
+  if (result.error) throw result.error;
+  return result;
+};

@@ -7,6 +7,7 @@ const port = 7000;
 const server = app.listen(port, () => console.log(`Listening on port ${port}`));
 const winston = require("winston");
 const expressWinston = require("express-winston");
+const { logger } = require("./logger");
 // const swaggerUi = require("swagger-ui-express");
 // const YAML = require("yamljs");
 // const swaggerDocument = YAML.load("./swagger.yaml");
@@ -17,10 +18,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 /*controllers*/
 var participantController = require("./controllers/participantController");
 var sadnaController = require("./controllers/sadnaController");
+var giftController = require("./controllers/giftController");
 var paymentController = require("./controllers/paymentController");
 var mailController = require("./controllers/mailController");
 
 app.use("/api/participant", participantController);
+app.use("/api/gifts", giftController);
 app.use("/api/sadnaot", sadnaController);
 app.use("/api/payment", paymentController);
 app.use("/api/mail", mailController);
@@ -51,9 +54,16 @@ app.get("/api/hello", (req, res) => {
 // }
 
 /* final catch-all route to index.html defined last */
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
+
+app.use(express.static("../public_html/klafim/public"));
+
+// Then change the route handlers to:
 app.get("/participants", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
+  logger.info("got in index");
+  res.sendFile("index.html", { root: __dirname + "/build" });
+});
+
+app.get("/", (req, res) => {
+  logger.info("got in p");
+  res.sendFile("index.html", { root: __dirname + "/build" });
 });

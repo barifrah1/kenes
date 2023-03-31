@@ -6,6 +6,8 @@ const useWindow = () => {
   const [width, setWidth] = useState(isSSR ? 1200 : window.innerWidth);
   // var widerScreenWidth = window.matchMedia("(min-width: 768px)");
   useEffect(() => {
+    setWidth(window.innerWidth);
+    setHeight(window.innerHeight);
     window.addEventListener("resize", () => {
       setWidth(window.innerWidth);
       setHeight(window.innerHeight);

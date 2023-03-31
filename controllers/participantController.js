@@ -16,6 +16,8 @@ router.get("/", jwtCheck, Participant.getParticipants);
 /*returns  UserSadnaot for specific user in participants table - expanded part */
 router.get("/:id/sadnaot/", jwtCheck, Participant.getSadnaotById);
 
+router.get("/:id/gift/", jwtCheck, Participant.getGiftById);
+
 /*get all phones*/
 router.get("/phone", jwtCheck, Participant.getParticipantsPhones);
 

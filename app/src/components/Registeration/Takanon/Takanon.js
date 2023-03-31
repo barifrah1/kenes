@@ -49,7 +49,14 @@ const Takanon = (props) => {
           </li>
           <li>עלות הכנס הרשמה מוקדמת : {prices.early["price"]} ש"ח</li>
           <li>
+            עלות הכנס הרשמה מוקדמת במסלול זום: {prices.earlyzoom["price"]} ש"ח
+          </li>
+          <li>
             עלות הכנס לאחר סיום ההרשמה המוקדמת : {prices.regular["price"]} ש"ח
+          </li>
+          <li>
+            עלות הכנס לאחר סיום ההרשמה המוקדמת במסלול זום:{" "}
+            {prices.regularzoom["price"]} ש"ח
           </li>
           <li>
             עלות ביטול הרשמה לאדם במידה והתבצע תשלום : {prices.cancel["price"]}{" "}

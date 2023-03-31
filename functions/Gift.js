@@ -1,7 +1,7 @@
 const { execQueryNew } = require("../services/dbHandler/dbHandler");
 
-const Sadna = {
-  getSadnaot: async (req, res) => {
+const Gift = {
+  getGifts: async (req, res) => {
     const { available } = req.query;
     try {
       if (available) {
@@ -21,9 +21,9 @@ const Sadna = {
 };
 
 const queries = {
-  sadnaot: `select distinct S.id,S.rang,S.descr from Sadna S  order by S.rang;`,
-  sadnaotAvailable: `select distinct S.id,S.rang,S.name as descr from Sadna S left join UserKenes_sadna U on S.id=U.sadna_id group by S.id,S.rang,S.descr,S.amount having S.amount>count(U.user_id)  
-  ORDER BY S.rang ASC, S.priority ASC;`,
+  sadnaot: `select distinct S.id,S.descr from Gift S  order by S.id;`,
+  sadnaotAvailable: `select distinct S.id ,S.descr from Gift S left join UserKenes_gift U on S.id=U.gift_id group by S.id,S.descr,S.amount having S.amount>count(U.user_id)  
+  ORDER BY S.id ASC;`,
 };
 
-exports.Sadna = Sadna;
+exports.Gift = Gift;

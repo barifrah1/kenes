@@ -13,7 +13,7 @@ import OtherDetails from "./OtherDetailsForm/OtherDetailsForm";
 import Credit from "./Credit";
 import { ValidationSchema, ValidationSchemaEdit } from "./ValidationSchema";
 import useWindow from "../../hooks/useWindow";
-import { fecthingPrices, getSadnaot } from "./RegisterationHelpers";
+import { fecthingPrices, getSadnaot, getGifts } from "./RegisterationHelpers";
 import useRegisteration from "../../hooks/useRegisteration";
 import useLoading from "../../hooks/useLoading";
 import { useHistory } from "react-router-dom";
@@ -32,19 +32,23 @@ function Registeration(props) {
     photos: "1",
     takanon: "0",
     userSadnaot: {},
+    gift: "",
   });
   const [activeStep, setActiveStep] = React.useState(0);
   const [sadnaot, setSadnaot] = useState({});
+  const [gifts, setGifts] = useState({});
   /*list of fields by step used for validation part and for stepping logic*/
   const [fieldsByStep, setFieldBystep] = useState([
     ["Fname", "Lname" /*"nlplevel"*/, , "email", "phone", "city"],
-    ["userSadnaot"],
+    ["userSadnaot", "gift"],
     ["vegan", "way", "photos", "takanon"],
   ]);
 
   const [prices, setPrices] = useState({
     early: "",
+    earlyzoom: "",
     regular: "",
+    regularzoom: "",
     cancel: "",
   });
   //hooks
@@ -103,6 +107,8 @@ function Registeration(props) {
       const sadnaotResult = await getSadnaot(values);
       setValues(sadnaotResult.newVal);
       setSadnaot(sadnaotResult.sadnaByrangs);
+      const giftsOptions = await getGifts();
+      setGifts(giftsOptions);
     };
     getSadnaotAndPrices();
   }, []);
@@ -119,12 +125,15 @@ function Registeration(props) {
     const selectedSadnas = formikRef.current?.values?.userSadnaot
       ? Object.values(formikRef.current?.values?.userSadnaot)
       : undefined;
-    console.log("cala");
     return selectedSadnas && selectedSadnas.length > 0
       ? sadnaot.map((sadnaotForRangeArray) =>
           sadnaotForRangeArray.filter((sad) => selectedSadnas.includes(sad.id))
         )
       : [];
+  }, [activeStep]);
+  const userGift = useMemo(() => {
+    const selectedGift = formikRef.current?.values?.gift;
+    return selectedGift ? gifts.filter((g) => g.id == selectedGift)[0] : {};
   }, [activeStep]);
   return (
     <div className="main_container">
@@ -176,7 +185,12 @@ function Registeration(props) {
                     )}
                     {activeStep === 1 && (
                       <>
-                        <SadnaotForm sadnaotData={sadnaot} />
+                        <SadnaotForm
+                          sadnaotData={sadnaot}
+                          giftsOptions={gifts}
+                          errors={errors}
+                          touched={touched}
+                        />
                       </>
                     )}
                     {activeStep === 2 && (
@@ -199,18 +213,22 @@ function Registeration(props) {
                             בחרת להירשם לסדנאות הבאות:
                           </div>
                           <div className="chosen_sadnas">
-                            <span className="sadna_row">
+                            <div className="sadna_row">
                               <span className="label_row">סדנה 1: </span>
                               <span>{userSadnaot[0][0]["descr"]}</span>
-                            </span>
-                            <span className="sadna_row">
+                            </div>
+                            <div className="sadna_row">
                               <span className="label_row">סדנה 2:</span>
                               <span>{userSadnaot[1][0]["descr"]}</span>
-                            </span>
-                            <span className="sadna_row">
+                            </div>
+                            <div className="sadna_row">
                               <span className="label_row">סדנה 3:</span>
                               <span>{userSadnaot[2][0]["descr"]}</span>
-                            </span>
+                            </div>
+                            <div className="sadna_row">
+                              <span className="label_row">מתנה:</span>
+                              <span>{userGift["descr"] ?? ""}</span>
+                            </div>
                           </div>
                           {true && (
                             <Button
@@ -232,7 +250,8 @@ function Registeration(props) {
                                     props.rowData,
                                     callbacks
                                   );
-                                } else await handleSubmit(values, prices);
+                                } else
+                                  await handleSubmit(values, { ...prices });
                               }}
                             >
                               שלח

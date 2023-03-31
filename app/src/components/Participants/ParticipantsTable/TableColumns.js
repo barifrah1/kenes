@@ -68,11 +68,11 @@ const TableColumns = [
   },
   {
     dataField: "vegan",
-    text: "טבעוני",
+    text: "מסלול",
     type: "bool",
     sort: true,
     hidden: true,
-    formatter: (cell, row) => (row.vegan === 1 ? "כן" : "לא"),
+    formatter: (cell, row) => (row.vegan === 1 ? "פרונטלי" : "זום"),
   },
   {
     dataField: "photos",

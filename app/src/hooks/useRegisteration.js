@@ -26,11 +26,12 @@ const useSubmit = () => {
       // values["nlplevel"].value,
     ];
 
-    const paymentLink = Utils.getActivePaymentLink(prices);
+    const paymentLink = Utils.getActivePaymentLink(prices, values["vegan"]);
     const objectToServer = {
       user: newUserParams,
       email: values["email"],
       sadnaot: [userSadnaotParams],
+      gift: [values["gift"]],
       takanon: [values["id"], values["takanon"]],
       paymentLink: paymentLink,
       allValues: values,
@@ -46,22 +47,37 @@ const useSubmit = () => {
             container: "my-swal",
           },
         });
-        throw e;
+        await window.location.replace("https://klafim.mecreativenlp.com");
       }
     );
-    console.log("mail sent");
-    await Swal.fire({
-      title: "הפרטים נקלטו!",
-      text: "הפרטים נקלטו מיד תועבר לעמוד התשלום",
-      icon: "success",
-      customClass: {
-        container: "my-swal",
-      },
-    });
-    // await alert(JSON.stringify(values, null, 2));
-    await setSubmitting(false);
-    const paymentUrlRow = await Utils.getActivePaymentLink({ ...prices });
-    await window.location.replace(paymentUrlRow);
+    if (!result) {
+      await Swal.fire({
+        title: "תהליך ההרשמה נכשל",
+        text: "נסה שוב",
+        icon: "error",
+        customClass: {
+          container: "my-swal",
+        },
+      });
+      await window.location.replace("https://klafim.mecreativenlp.com");
+    } else {
+      console.log("mail sent");
+      await Swal.fire({
+        title: "הפרטים נקלטו!",
+        text: "הפרטים נקלטו מיד תועבר לעמוד התשלום",
+        icon: "success",
+        customClass: {
+          container: "my-swal",
+        },
+      });
+      // await alert(JSON.stringify(values, null, 2));
+      await setSubmitting(false);
+      const paymentUrlRow = await Utils.getActivePaymentLink(
+        prices,
+        values["vegan"]
+      );
+      await window.location.replace(paymentUrlRow);
+    }
   };
 
   const handleEditSubmit = async (values, rowData, callbacks) => {
@@ -89,7 +105,11 @@ const useSubmit = () => {
       const token = await getAccessTokenSilently();
       const result = await AsyncAjax.put(
         "participant",
-        { user: newUserParams, sadnaot: [userSadnaotParams] },
+        {
+          user: newUserParams,
+          sadnaot: [userSadnaotParams],
+          gift: values["gift"],
+        },
         token
       );
 
@@ -130,7 +150,7 @@ const useSubmit = () => {
     //set fields by step for edit mode
     setFieldBystep([
       ["Fname", "Lname", "category" /*, "nlplevel"*/, "email", "phone", "city"],
-      ["userSadnaot"],
+      ["userSadnaot", "gift"],
       ["vegan", "way", "photos", "inv", "sum"],
     ]);
     //set initial values for edited row
@@ -143,6 +163,21 @@ const useSubmit = () => {
         );
         const rowDataWithSadnaot = await buildSadnaotObject(rowData, result);
         fillSadnaotInForm(rowDataWithSadnaot, formikRef, setValues);
+      })
+      .catch((e) => {
+        console.log("error when fetching user and sadnaot data");
+        throw e;
+      });
+
+    getAccessTokenSilently()
+      .then(async (token) => {
+        const result = await AsyncAjax.get(
+          `participant/${rowData.id}/gift/`,
+          {},
+          token
+        );
+        rowData["gift"] = result[0].id;
+        formikRef.current.setFieldValue("gift", rowData.gift);
       })
       .catch((e) => {
         console.log("error when fetching user and sadnaot data");

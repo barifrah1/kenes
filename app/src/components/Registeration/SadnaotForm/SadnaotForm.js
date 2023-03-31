@@ -4,6 +4,9 @@ import Select from "react-select";
 import { Field } from "formik";
 
 const SadnaotForm = (props) => {
+  let giftsOptions = props.giftsOptions.map((gift) => {
+    return { value: gift.id, label: gift.descr };
+  });
   return (
     <>
       {props.sadnaotData.map((rangData) => {
@@ -21,6 +24,8 @@ const SadnaotForm = (props) => {
                 component={({ field, form }) => (
                   <>
                     <Select
+                      id={"userSadnaot.f_rang" + round}
+                      name={"userSadnaot.f_rang" + round}
                       key={"s_rang" + round}
                       options={options}
                       className="select_container_sad"
@@ -32,12 +37,24 @@ const SadnaotForm = (props) => {
                             )
                           : ""
                       }
-                      onChange={(option) =>
-                        form.setFieldValue(field.name, option.value)
-                      }
-                      onBlur={field.onBlur}
+                      onChange={(option) => {
+                        form.setFieldValue(field.name, option.value);
+                      }}
+                      onBlur={(e) => {
+                        props.touched[field.name] = true;
+                      }}
+                      // onBlur={field.onBlur}
                     />
                     <hr />
+                    {field.name in props.touched &&
+                    props.touched[field.name] &&
+                    props.errors.userSadnaot ? (
+                      props.errors.userSadnaot["f_rang" + round]
+                    ) : undefined ? (
+                      <div className="error_div">
+                        {props.errors.userSadnaot["f_rang" + round]}
+                      </div>
+                    ) : null}
                   </>
                 )}
               />
@@ -45,6 +62,47 @@ const SadnaotForm = (props) => {
           </>
         );
       })}
+      <>
+        <label>מתנה לבחירה</label>
+        {
+          <Field
+            name="gift"
+            key={"gift"}
+            component={({ field, form }) => (
+              <>
+                <Select
+                  id={"gift"}
+                  name={"gift"}
+                  key={"gift"}
+                  options={giftsOptions}
+                  className="select_container_sad"
+                  classNamePrefix="react_select"
+                  value={
+                    giftsOptions
+                      ? giftsOptions.find(
+                          (option) => option.value === field.value
+                        )
+                      : ""
+                  }
+                  onChange={(option) => {
+                    form.setFieldValue(field.name, option.value);
+                  }}
+                  onBlur={(e) => {
+                    props.touched[field.name] = true;
+                  }}
+                  // onBlur={field.onBlur}
+                />
+                <hr />
+                {field.name in props.touched &&
+                props.touched[field.name] &&
+                props.errors["gift"] ? (
+                  <div className="error_div">{props.errors.gift}</div>
+                ) : null}
+              </>
+            )}
+          />
+        }
+      </>
     </>
   );
 };

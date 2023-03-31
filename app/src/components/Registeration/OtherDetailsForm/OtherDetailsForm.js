@@ -8,6 +8,10 @@ import Takanon from "../Takanon/Takanon";
 
 const OtherDetails = (props) => {
   const options = [
+    { value: "1", label: "פרונטלי", id: 1 },
+    { value: "0", label: "זום", id: 0 },
+  ];
+  const optionsPhotos = [
     { value: "1", label: "כן", id: 1 },
     { value: "0", label: "לא", id: 0 },
   ];
@@ -17,7 +21,7 @@ const OtherDetails = (props) => {
 
   return (
     <div className="other_details">
-      <label>טבעוני :</label>
+      <label>מסלול :</label>
       <Field
         name="vegan"
         component={({ field, form }) => (
@@ -35,7 +39,9 @@ const OtherDetails = (props) => {
           />
         )}
       />
-      {errors.vegan ? <div className="error_div">{errors.vegan}</div> : null}
+      {touched.vegan && errors.vegan ? (
+        <div className="error_div">{errors.vegan}</div>
+      ) : null}
       <hr />
       <label>כיצד הגעת אלינו : </label>
       <Field type="text" name="way" />
@@ -49,7 +55,7 @@ const OtherDetails = (props) => {
           <RadioButtonsGroup
             name="photos"
             label="האם אתה מעוניין להצטלם?"
-            options={options}
+            options={optionsPhotos}
             onChange={(event) => {
               form.setFieldValue(field.name, event.target.value);
             }}
@@ -64,7 +70,6 @@ const OtherDetails = (props) => {
             <Field
               name="payment"
               component={({ field, form }) => (
-
                 <div className="payment_row">
                   <label className="invAndSumLabel">תשלום :</label>
                   <Checkbox
@@ -77,7 +82,7 @@ const OtherDetails = (props) => {
                       );
                     }}
                   />
-                </div> 
+                </div>
               )}
             />
           </>
@@ -100,33 +105,35 @@ const OtherDetails = (props) => {
             name="takanon"
             component={({ field, form }) => (
               <>
-              <div className="takanon_row">
-                <label>
-                  <span>אני מאשר את תנאי </span>
-                  <span>
-                    <a
-                      href="/"
+                <div className="takanon_row">
+                  <label>
+                    <span>אני מאשר את תנאי </span>
+                    <span>
+                      <a
+                        href="/"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          setOpen(true);
+                        }}
+                      >
+                        התקנון
+                      </a>
+                    </span>
+                  </label>
+                  <span className="takanon_checkbox">
+                    <Checkbox
+                      checked={
+                        parseInt(form.values.takanon) === 1 ? true : false
+                      }
+                      value={1}
                       onClick={(event) => {
-                        event.preventDefault();
-                        setOpen(true);
+                        form.setFieldValue(
+                          field.name,
+                          form.values.takanon === 1 ? 0 : 1
+                        );
                       }}
-                    >
-                      התקנון
-                    </a>
+                    />
                   </span>
-                </label>
-                <span className="takanon_checkbox">
-                  <Checkbox
-                    checked={parseInt(form.values.takanon) === 1 ? true : false}
-                    value={1}
-                    onClick={(event) => {
-                      form.setFieldValue(
-                        field.name,
-                        form.values.takanon === 1 ? 0 : 1
-                      );
-                    }}
-                  />
-                </span>
                 </div>
                 {open && (
                   <Takanon
@@ -142,7 +149,6 @@ const OtherDetails = (props) => {
           {errors.takanon ? (
             <div className="error_div">{errors.takanon}</div>
           ) : null}
-          
         </>
       )}
       <hr />

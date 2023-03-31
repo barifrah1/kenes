@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../../../../images/logo_klafim2.png";
+import Logo from "../../../../images/logo23.png";
 import "./KenesLogo.less";
 const KenesLogo = () => {
   return (

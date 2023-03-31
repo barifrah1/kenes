@@ -41,6 +41,14 @@ const Participant = {
     );
     res.send(JSON.stringify(result));
   },
+  getGiftById: async (req, res) => {
+    const params = [req.params.id];
+    const result = await execQueryNew(queries.giftById, params).catch((e) => {
+      res.status(400).json({ error: e.message });
+      res.send();
+    });
+    res.send(JSON.stringify(result));
+  },
 
   postParticipant: async (req, res) => {
     logger.info(
@@ -48,10 +56,14 @@ const Participant = {
     );
     try {
       const idRes = await ParticipantHelpers.getParticipantMaxId();
-      const id = idRes[0].id;
+      let id = idRes[0].id;
+      if (!id) {
+        id = 1;
+      }
       const transactionQueries = [
         queries.newUser,
         queries.newUserSadnaot,
+        queries.newUserGift,
         queries.newUserTakanonConfirm,
       ];
       const allUserValues = req.body.allValues;
@@ -62,7 +74,8 @@ const Participant = {
       const TAKANON_AGREEMENT_INDEX = 1;
       req.body.sadnaot[0].map((arr) => (arr[ID_INDEX] = id)); //1 is
       const takanonWithId = [id, req.body.takanon[TAKANON_AGREEMENT_INDEX]];
-      const params = [user, req.body.sadnaot, takanonWithId];
+      const giftWithId = [req.body.gift[0], id];
+      const params = [user, req.body.sadnaot, giftWithId, takanonWithId];
       const userMail = req.body.email;
       await transaction(transactionQueries, params);
       /*return data about sadnaot to registeration mail*/
@@ -132,12 +145,14 @@ const queries = {
   // participants: `select id,level as category ,Fname,Lname,mail as email,
   //   tel as phone,reg_date,payment,sug,nlplevel,city,photo as photos,vegan,way,inv,sum,cardcom_inv,cardcom_payment from UserKenes order by id desc;`,
   participants: `select id,level as category ,Fname,Lname,mail as email,
-  tel as phone,reg_date,payment,sug,city,photo as photos,vegan,way,inv,sum,cardcom_inv,cardcom_payment from UserKenes order by id desc;`,
+  tel as phone,reg_date,payment,sug,city,photo as photos,vegan,way,inv,sum,cardcom_inv,cardcom_payment from UserKenes order by id asc;`,
   sadnaotById: `select distinct S.id,S.rang,S.descr from UserKenes_sadna U join Sadna S on U.sadna_id=S.id  where U.user_id=? order by rang;`,
+  giftById: `select distinct S.id, S.descr from UserKenes_gift U join Gift S on U.gift_id=S.id  where U.user_id=? order by S.id;`,
   phones: `select tel from UserKenes;`,
   // newUser: `INSERT INTO UserKenes VALUES(?,"משתתף",?,?,?,?,?,CURDATE(),0,?,2,?,?,?,0,0,0,0,?);`,
   newUser: `INSERT INTO UserKenes VALUES(?,"משתתף",?,?,?,?,?,CURDATE(),0,?,2,?,?,?,0,0,0,0,"");`,
   newUserSadnaot: `INSERT INTO UserKenes_sadna VALUES ? ;`,
+  newUserGift: `INSERT INTO UserKenes_gift VALUES (?,?) ;`,
   newUserTakanonConfirm: `INSERT INTO takanon VALUES (?,?) ;`,
   // updateUser: `Update UserKenes set level=?,Fname=?,Lname=?,mail=?,payment=?,photo=?,vegan=?,way=?,inv=?,sum=?,nlplevel=? where id=?;`,
   updateUser: `Update UserKenes set level=?,Fname=?,Lname=?,mail=?,payment=?,photo=?,vegan=?,way=?,inv=?,sum=? where id=?;`,

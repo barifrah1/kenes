@@ -23,7 +23,6 @@ const App = () => {
         <Switch>
           <Route path="/example" component={Example} />
           <PrivateRoute path="/participants" component={Participants} />
-          <PrivateRoute path="/checkin" component={CheckIn} />
           <Route exact path="/" render={() => <Homepage />} />
         </Switch>
       </BrowserRouter>

@@ -1,5 +1,6 @@
-
+import { string } from "yup";
 import * as Constants from "./Constants";
+import { fecthingPrices } from "../src/components/Registeration/RegisterationHelpers";
 const Utils = {
   resolvePath: function () {
     const url = window.location.href;
@@ -7,27 +8,35 @@ const Utils = {
     return isLocalhost ? Constants.localhostPath : Constants.prodPath;
   },
 
-  getActivePaymentLink: function (prices) {
-    let key;
-    const keys = Object.keys(prices);
-    for (let i = 0; i < keys.length; i++) {
-      key = keys[i];
-      if (prices[key].active == 1) {
-        return prices[key].url;
+  getActivePaymentLink: function (prices, sug) {
+    return fecthingPrices().then((kenesPrices) => {
+      const ZOOM = 0;
+      const FRONT = 1;
+      let key;
+      const priceZoom = kenesPrices.filter(
+        (p) => p.name.includes("zoom") && p.active == 1
+      );
+      const priceFront = kenesPrices.filter(
+        (p) => !p.name.includes("zoom") && p.active == 1
+      );
+      if (sug == ZOOM) {
+        return priceZoom[0].url;
+      } else {
+        return priceFront[0].url;
       }
-    }
-    return Constants.prodPath;
+      return Constants.prodPath;
+    });
   },
   buildReplacingObjectMail: function buildReplacingObjectMail(
     userValues,
     paymentLink,
     userSadnas
   ) {
-    let veganHebrew="לא";
+    let veganHebrew = "לא";
     if (userValues.vegan == "0") {
-      veganHebrew = "לא";
+      veganHebrew = "פרונטלי";
     } else {
-      veganHebrew = "כן";
+      veganHebrew = "זום";
     }
 
     const toReplace = {
@@ -37,7 +46,7 @@ const Utils = {
       _email_: userValues.email,
       _tel_: userValues.phone,
       _city_: userValues.city,
-      _vegen_: userValues.vegan == "0" ? "לא" : "כן",
+      _vegen_: userValues.vegan == "0" ? "זום" : "פרונטלי",
       _helpmail_: Constants.helpMail,
       _mirimail_: Constants.helpMail,
       _paymentlink_: paymentLink,

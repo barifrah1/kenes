@@ -88,26 +88,26 @@
 
   .send_button {
     text-align: center;
-    .header_sadnaot {
-      font-size: 1.1rem;
-      text-align: right;
-      font-weight: 600;
-      margin: 10px 0%;
-    }
-    .chosen_sadnas {
+  }
+  .header_sadnaot {
+    font-size: 1.1rem;
+    text-align: right;
+    font-weight: 600;
+    margin: 10px 0%;
+  }
+  .chosen_sadnas {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5%;
+    .sadna_row {
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      margin-bottom: 5%;
-      .sadna_row {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        .label_row {
-          font-weight: 600;
-          margin-left: 5%;
-          min-width: fit-content;
-        }
+      flex-direction: row;
+      justify-content: flex-start;
+      margin-bottom: 2vh;
+      .label_row {
+        font-weight: 600;
+        margin-left: 5%;
+        min-width: fit-content;
       }
     }
   }
@@ -120,8 +120,8 @@
   }
   .modal_container {
     width: 100%;
-    height: 100%;
-    overflow: scroll;
+    height: 120vh;
+    overflow: hidden;
   }
 
   .formDiv {

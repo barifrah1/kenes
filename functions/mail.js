@@ -41,9 +41,9 @@ const MailHelpers = {
   ) {
     let veganHebrew;
     if (userValues.vegan == "0") {
-      veganHebrew = "לא";
+      veganHebrew = "זום";
     } else {
-      veganHebrew = "כן";
+      veganHebrew = "פרונטלי";
     }
 
     const toReplace = {
@@ -53,7 +53,7 @@ const MailHelpers = {
       _email_: userValues.email,
       _tel_: userValues.phone,
       _city_: userValues.city,
-      _vegen_: userValues.vegan == "0" ? "לא" : "כן",
+      _vegen_: userValues.vegan == "0" ? "זום" : "פרונטלי",
       _helpmail_: HELP_MAIL,
       _mirimail_: HELP_MAIL,
       _paymentlink_: paymentLink,
