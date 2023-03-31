@@ -5,12 +5,14 @@ const MAIL_INDEX = 3;
 
 const mail = {
   sendMail: async (params) => {
-    const { userValues, paymentLink, userSadnas } = params;
+    const { userValues, paymentLink, userSadnas, giftJson } = params;
     const sadnaotJson = JSON.parse(userSadnas);
+    const gift = JSON.parse(giftJson);
     const toReplace = MailHelpers.buildReplacingObjectMail(
       userValues,
       paymentLink,
-      sadnaotJson
+      sadnaotJson,
+      gift
     );
 
     //const toReplace = req.body.toReplace;
@@ -37,7 +39,8 @@ const MailHelpers = {
   buildReplacingObjectMail: function buildReplacingObjectMail(
     userValues,
     paymentLink,
-    userSadnas
+    userSadnas,
+    gift
   ) {
     let veganHebrew;
     if (userValues.vegan == "0") {
@@ -60,7 +63,7 @@ const MailHelpers = {
       _sad1_: userSadnas[0].descr,
       _sad2_: userSadnas[1].descr,
       _sad3_: userSadnas[2].descr,
-      _gift_: "אין",
+      _gift_: gift[0] ? gift[0]?.descr : "אין",
     };
     return toReplace;
   },

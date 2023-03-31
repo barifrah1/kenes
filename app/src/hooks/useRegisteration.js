@@ -26,7 +26,10 @@ const useSubmit = () => {
       // values["nlplevel"].value,
     ];
 
-    const paymentLink = Utils.getActivePaymentLink(prices, values["vegan"]);
+    const paymentLink = await Utils.getActivePaymentLink(
+      prices,
+      values["vegan"]
+    );
     const objectToServer = {
       user: newUserParams,
       email: values["email"],

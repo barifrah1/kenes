@@ -81,10 +81,13 @@ const Participant = {
       /*return data about sadnaot to registeration mail*/
       const result = await execQueryNew(queries.sadnaotById, [id], req);
       const sadnaotJson = await JSON.stringify(result);
+      const gift = await execQueryNew(queries.giftById, [id], req);
+      const giftJson = await JSON.stringify(gift);
       const mailParams = {
         userValues: allUserValues,
         paymentLink: paymentLink,
         userSadnas: sadnaotJson,
+        giftJson: giftJson,
       };
       const isSent = await mail.sendMail(mailParams).catch((error) => {
         res.status(200);
