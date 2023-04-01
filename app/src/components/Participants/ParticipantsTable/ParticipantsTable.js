@@ -87,8 +87,47 @@ function ParticipantsTable() {
       });
   };
 
+  const deleteParticipant = async (id) => {
+    const swalResult = await Swal.fire({
+      title: "האם אתה בטוח שאתה רוצה למחוק את המשתתף?",
+      showDenyButton: true,
+      confirmButtonText: "כן",
+      denyButtonText: "לא",
+      customClass: {
+        container: "my-swal",
+      },
+    });
+    if (swalResult.isConfirmed) {
+      const token = await getAccessTokenSilently();
+      const res = await AsyncAjax.delete(`participant/${id}`, token);
+      if (res) {
+        await Swal.fire({
+          title: "המשתתף נמחק בהצלחה!",
+          text: "רענן על מנת לצפות בשינויים",
+          icon: "success",
+          customClass: {
+            container: "my-swal",
+          },
+        });
+        const updatedData = data.filter((row) => row.id != id);
+        setData(updatedData);
+      } else {
+        await Swal.fire({
+          title: "מחיקת המשתתף נכשלה",
+          text: "",
+          icon: "error",
+          customClass: {
+            container: "my-swal",
+          },
+        });
+      }
+    }
+  };
+
   const expandRow = {
-    renderer: (row) => <Expanded row={row} cols={cols} />,
+    renderer: (row) => (
+      <Expanded row={row} cols={cols} deleteUser={deleteParticipant} />
+    ),
   };
 
   const selectRow = {

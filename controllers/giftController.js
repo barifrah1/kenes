@@ -1,8 +1,8 @@
 var express = require("express");
 var router = express.Router();
 var { jwtCheck } = require("../utils");
-const { Gift } = require("../functions/gift");
+const { gift } = require("../functions/gift");
 
-router.get("/", Gift.getGifts);
+router.get("/", gift.getGifts);
 
 module.exports = router;

@@ -4,8 +4,9 @@ import moment from "moment";
 
 const ExpandedDetails = (props) => {
   const booleanMapper = (col, value) => {
-    console.log(col.type, value);
-    if (col.type == "bool") {
+    if (col.text == "מסלול") {
+      return value == 1 ? "פרונטלי" : "זום";
+    } else if (col.type == "bool") {
       return value == 0 ? "לא" : "כן";
     }
     return value;

@@ -8,9 +8,6 @@ const server = app.listen(port, () => console.log(`Listening on port ${port}`));
 const winston = require("winston");
 const expressWinston = require("express-winston");
 const { logger } = require("./logger");
-// const swaggerUi = require("swagger-ui-express");
-// const YAML = require("yamljs");
-// const swaggerDocument = YAML.load("./swagger.yaml");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

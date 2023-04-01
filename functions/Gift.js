@@ -1,6 +1,6 @@
 const { execQueryNew } = require("../services/dbHandler/dbHandler");
 
-const Gift = {
+const gift = {
   getGifts: async (req, res) => {
     const { available } = req.query;
     try {
@@ -26,4 +26,4 @@ const queries = {
   ORDER BY S.id ASC;`,
 };
 
-exports.Gift = Gift;
+exports.gift = gift;

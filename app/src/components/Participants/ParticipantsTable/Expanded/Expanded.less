@@ -1,15 +1,22 @@
-.expanded_div {
-  float: right;
-}
+.expanded_comp {
+  display: flex;
+  flex-direction: row;
+  .expanded_div {
+  }
 
-.sadnaot_gifts {
-  display: inline-block;
-  text-align: right;
-  vertical-align: top;
-}
+  .left_comp {
+    display: flex;
+    flex-direction: column;
+    .sadnaot_gifts {
+      display: inline-block;
+      text-align: right;
+      vertical-align: top;
+    }
+  }
 
-.details {
-  display: inline-block;
-  text-align: right;
-  vertical-align: top;
+  .details {
+    display: inline-block;
+    text-align: right;
+    vertical-align: top;
+  }
 }

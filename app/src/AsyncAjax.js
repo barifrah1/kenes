@@ -44,13 +44,12 @@ const AsyncAjax = {
     const d = await res.json();
     return d;
   },
-  delete: async (route, data = {}, jwt = null) => {
+  delete: async (route, jwt = null) => {
+    const customHeaders = { ...headers };
+    if (jwt) customHeaders["Authorization"] = `Bearer ${jwt}`;
     const res = await fetch(Utils.resolvePath() + "api/" + route, {
-      method: "put",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json; charset=utf-8",
-      },
+      method: "delete",
+      headers: customHeaders,
     }).catch(console.error());
     const d = await res.json();
     return d;

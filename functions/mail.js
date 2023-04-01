@@ -48,6 +48,8 @@ const MailHelpers = {
     } else {
       veganHebrew = "פרונטלי";
     }
+    let giftName =
+      gift && gift.length == 1 && gift[0].descr ? gift[0].descr : "אין";
 
     const toReplace = {
       _kenesdate_: KENES_DATE,
@@ -63,7 +65,7 @@ const MailHelpers = {
       _sad1_: userSadnas[0].descr,
       _sad2_: userSadnas[1].descr,
       _sad3_: userSadnas[2].descr,
-      _gift_: gift[0] ? gift[0]?.descr : "אין",
+      _gift_: giftName,
     };
     return toReplace;
   },
