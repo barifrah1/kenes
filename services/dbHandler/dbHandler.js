@@ -50,7 +50,7 @@ async function execQueryNew(q, params) {
   }
 }
 
-async function transaction(queries, queryValues) {
+async function transaction(queries, queryValues, logger) {
   if (queries.length !== queryValues.length) {
     return Promise.reject(
       "Number of provided queries did not match the number of provided query values arrays"
@@ -68,6 +68,7 @@ async function transaction(queries, queryValues) {
     const queryPromises = [];
     queries.forEach((query, index) => {
       console.log(connection.format(query, queryValues[index]));
+      logger.info(connection.format(query, queryValues[index]));
       queryPromises.push(connection.query(query, queryValues[index]));
     });
     const results = await Promise.all(queryPromises);
@@ -75,6 +76,7 @@ async function transaction(queries, queryValues) {
     await connection.end();
     return results;
   } catch (err) {
+    logger.error(`error during transaction running ${e}`);
     await connection.rollback();
     await connection.end();
     return Promise.reject(err);

@@ -62,6 +62,7 @@ const BasicDataForm = (props, value) => {
                 options={Constants.categoryOptions}
                 className="select_container"
                 classNamePrefix="react_select"
+                isSearchable={false}
                 value={
                   Constants.categoryOptions
                     ? Constants.categoryOptions.find(

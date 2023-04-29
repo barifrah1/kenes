@@ -3,6 +3,7 @@ import Utils from "../Utils";
 import AsyncAjax from "../AsyncAjax";
 import Swal from "sweetalert2";
 import { useAuth0 } from "@auth0/auth0-react";
+import { v4 as uuidv4 } from "uuid";
 const useSubmit = () => {
   const [isSubmmiting, setSubmitting] = useState(false);
   const { getAccessTokenSilently } = useAuth0();
@@ -12,6 +13,7 @@ const useSubmit = () => {
       values["id"],
     ]);
     let id = -1;
+    let uuid = uuidv4().toString();
     const newUserParams = [
       id,
       values["Fname"],
@@ -20,16 +22,15 @@ const useSubmit = () => {
       values["city"],
       values["phone"],
       parseInt(values["photos"]),
-      "code",
+      uuid,
       parseInt(values["vegan"]),
       values["way"],
       // values["nlplevel"].value,
     ];
 
-    const paymentLink = await Utils.getActivePaymentLink(
-      prices,
-      values["vegan"]
-    );
+    const paymentLink =
+      (await Utils.getActivePaymentLink(prices, values["vegan"])) +
+      `?ReturnData=${uuid}&NotifyURL=https://klafim.mecreativenlp.com/api/participant/cardcom"`;
     const objectToServer = {
       user: newUserParams,
       email: values["email"],
@@ -75,10 +76,9 @@ const useSubmit = () => {
       });
       // await alert(JSON.stringify(values, null, 2));
       await setSubmitting(false);
-      const paymentUrlRow = await Utils.getActivePaymentLink(
-        prices,
-        values["vegan"]
-      );
+      const paymentUrlRow =
+        (await Utils.getActivePaymentLink(prices, values["vegan"])) +
+        `?ReturnData=${uuid}&NotifyURL=https://klafim.mecreativenlp.com/api/participant/cardcom`;
       await window.location.replace(paymentUrlRow);
     }
   };
@@ -111,7 +111,7 @@ const useSubmit = () => {
         {
           user: newUserParams,
           sadnaot: [userSadnaotParams],
-          gift: values["gift"],
+          gift: [values["gift"], values["id"]],
         },
         token
       );

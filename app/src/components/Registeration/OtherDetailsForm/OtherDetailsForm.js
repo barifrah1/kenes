@@ -9,7 +9,7 @@ import Takanon from "../Takanon/Takanon";
 const OtherDetails = (props) => {
   const options = [
     { value: "1", label: "פרונטלי", id: 1 },
-    { value: "0", label: "זום", id: 0 },
+    // { value: "0", label: "זום", id: 0 },
   ];
   const optionsPhotos = [
     { value: "1", label: "כן", id: 1 },
@@ -29,6 +29,7 @@ const OtherDetails = (props) => {
             options={options}
             className="select_container"
             classNamePrefix="react_select"
+            isSearchable={false}
             value={
               options
                 ? options.find((option) => option.value === field.value)

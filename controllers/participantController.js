@@ -38,4 +38,6 @@ router.get("/:id", Participant.checkPhoneInUse);
 
 router.put("/:id/payment", jwtCheck, Participant.putPaymentByTel);
 
+router.post("/cardcom", Participant.updateParticipantByCardcom);
+
 module.exports = router;

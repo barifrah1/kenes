@@ -50,6 +50,11 @@ function Homepage(props) {
                 className="registeration_button ghost_button"
                 type="ghost"
                 shape="round"
+                onClick={() => {
+                  window.location.replace(
+                    "https://kenesklafim.ravpage.co.il/cardconprogram2023"
+                  );
+                }}
               >
                 מידע נוסף
               </Button>

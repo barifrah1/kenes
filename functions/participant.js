@@ -52,7 +52,9 @@ const Participant = {
 
   postParticipant: async (req, res) => {
     logger.info(
-      `new participant creation request with this info: ${req.body.json}`
+      `new participant creation request with this info: ${JSON.stringify(
+        req.body
+      )}`
     );
     try {
       const idRes = await ParticipantHelpers.getParticipantMaxId();
@@ -77,7 +79,7 @@ const Participant = {
       const giftWithId = [req.body.gift[0], id];
       const params = [user, req.body.sadnaot, giftWithId, takanonWithId];
       const userMail = req.body.email;
-      await transaction(transactionQueries, params);
+      await transaction(transactionQueries, params, logger);
       /*return data about sadnaot to registeration mail*/
       const result = await execQueryNew(queries.sadnaotById, [id], req);
       const sadnaotJson = await JSON.stringify(result);
@@ -102,26 +104,34 @@ const Participant = {
   },
 
   putParticipant: async (req, res) => {
-    const transactionQueries = [queries.updateUser];
-    let params = [req.body.user];
+    logger.info(` putParticipant with body ${JSON.stringify(req.body)}`);
+    const transactionQueries = [queries.updateUser, queries.updatetUserGift];
+    let params = [req.body.user, req.body.gift];
     for (let i = 0; i < req.body.sadnaot[0].length; i++) {
       transactionQueries.push(queries.updatetUserSadnaot);
       params.push(req.body.sadnaot[0][i]);
     }
-    const result = await transaction(transactionQueries, params).catch((e) => {
-      res.status(400).json({ error: e.message });
-      res.send();
-    });
+    const result = await transaction(transactionQueries, params, logger).catch(
+      (e) => {
+        logger.error(`error while trying to update user: ${e}`);
+        res.status(400).json({ error: e.message });
+        res.send();
+      }
+    );
     res.status(200).json(result);
   },
 
   deleteParticipant: async (req, res) => {
+    logger.info(` deleteParticipant with body ${JSON.stringify(req.body)}`);
     const transactionQueries = [queries.deleteUser];
     let params = [req.params.id];
-    const result = await transaction(transactionQueries, params).catch((e) => {
-      res.status(e.status).json({ error: e.message });
-      res.send();
-    });
+    const result = await transaction(transactionQueries, params, logger).catch(
+      (e) => {
+        res.status(e.status).json({ error: e.message });
+        res.send();
+      }
+    );
+    logger.info(` deleteParticipant for id ${req.params.id} completed`);
     res.status(200).json(result);
   },
 
@@ -134,6 +144,30 @@ const Participant = {
       res.send();
     });
     res.status(200).json("payment was updated succeussfully");
+  },
+  updateParticipantByCardcom: async (req, res) => {
+    logger.info(`carcom update for user: ${JSON.stringify(req.body)}`);
+    const releventProducts = ["58"];
+    const body = req.body;
+    const { invNumber, suminfull, UserEmail, ProductID, ReturnData } = req.body;
+
+    if (releventProducts.includes(ProductID)) {
+      const result = await transaction(
+        [queries.updateCardcom],
+        [[invNumber, invNumber, suminfull, ReturnData]],
+        logger
+      ).catch((e) => {
+        log.error(`error when updating cardcom payment ${e.message}`);
+        res.status(400).json({ error: e.message });
+        res.send();
+      });
+      logger.info(
+        `cardcom update for user ${UserEmail} completed succeussfully`
+      );
+      res.status(200).json("cardcom deatials were updated succeussfully");
+    } else {
+      res.status(200).json("cant find the user with this emails");
+    }
   },
 };
 
@@ -160,8 +194,10 @@ const queries = {
   // updateUser: `Update UserKenes set level=?,Fname=?,Lname=?,mail=?,payment=?,photo=?,vegan=?,way=?,inv=?,sum=?,nlplevel=? where id=?;`,
   updateUser: `Update UserKenes set level=?,Fname=?,Lname=?,mail=?,payment=?,photo=?,vegan=?,way=?,inv=?,sum=? where id=?;`,
   updatetUserSadnaot: `Update UserKenes_sadna U join Sadna S on S.id=U.sadna_id set U.sadna_id=? where U.user_id=? and S.rang=? ;`,
+  updatetUserGift: `Update UserKenes_gift U join Gift S on S.id=U.gift_id set U.gift_id=? where U.user_id=?;`,
   participantNextId: `select max(id)+1 as id  from UserKenes;`,
   updatePayment: `update UserKenes set payment=? where id=?;`,
+  updateCardcom: `update UserKenes set payment=1, cardcom_payment=1, inv=?, cardcom_inv=?,sum=? where code=?;`,
   deleteUser: `delete from UserKenes where id=?;`,
 };
 

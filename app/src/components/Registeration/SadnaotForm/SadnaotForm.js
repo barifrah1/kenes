@@ -30,6 +30,7 @@ const SadnaotForm = (props) => {
                       options={options}
                       className="select_container_sad"
                       classNamePrefix="react_select"
+                      isSearchable={false}
                       value={
                         options
                           ? options.find(
@@ -77,6 +78,7 @@ const SadnaotForm = (props) => {
                   options={giftsOptions}
                   className="select_container_sad"
                   classNamePrefix="react_select"
+                  isSearchable={false}
                   value={
                     giftsOptions
                       ? giftsOptions.find(

@@ -53,9 +53,9 @@ async function customMailSender(subject, sendTo, templatePath, replaceObject) {
             cid: "emailTemplates/images/nlpcreativeschool.png", //same cid value as in the html img src
           },
           {
-            filename: "kenes21.png",
-            path: `./services/mailHandler/emailTemplates/images/kenes21.jpg`,
-            cid: "emailTemplates/images/kenes21.png", //same cid value as in the html img src
+            filename: "logo23.png",
+            path: `./services/mailHandler/emailTemplates/images/logo23.png`,
+            cid: "emailTemplates/images/logo23.png", //same cid value as in the html img src
           },
           {
             filename: "bee.png",
