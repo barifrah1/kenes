@@ -4,7 +4,8 @@ import ExpandedDetails from "./ExpandedDetails/ExpandedDetails";
 import SadnaotDetails from "./sadnaot_details/sadnaot_details";
 
 const Expanded = (props) => {
-  const { deleteUser } = props;
+  const { deleteUser }  = props;
+  const { checkinUser }   = props;
   return (
     <div className="expanded_comp">
       <div className="expanded_div">
@@ -26,8 +27,16 @@ const Expanded = (props) => {
           </button>
         </span>
       </div>
+      <div className="button_container">
+          <span className="checkin_user">
+            <button type="button" onClick={(e) => checkinUser(props.row["id"])}>
+             רישום משתתף
+            </button>
+          </span>
+        </div>
     </div>
   );
 };
 
 export default Expanded;
+

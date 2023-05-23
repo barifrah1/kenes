@@ -15,6 +15,8 @@ import TableColumns from "./TableColumns";
 import { useAuth0 } from "@auth0/auth0-react";
 import AsyncAjax from "../../../AsyncAjax";
 import Registeration from "../../Registeration/Registeration";
+import GetRegCount from "./GetRegCount";
+
 const { SearchBar } = Search;
 
 function ParticipantsTable() {
@@ -87,6 +89,47 @@ function ParticipantsTable() {
       });
   };
 
+
+  const registerParticipant = async (id) => {
+    const swalResult = await Swal.fire({
+      title: "האם אתה בטוח שאתה רוצה לקלוט את המשתתף לכנס?",
+      showDenyButton: true,
+      confirmButtonText: "כן",
+      denyButtonText: "לא",
+      customClass: {
+        container: "my-swal",
+      },
+    });
+    if (swalResult.isConfirmed) {
+      const token = await getAccessTokenSilently();
+      const tokenString = JSON.stringify(token);
+      const objectToServer = {
+        id: id
+      };
+      const res = await AsyncAjax.post(`participant/${id}/register`,objectToServer, tokenString);
+      /*const res = await AsyncAjax.post(`participant/${id}/register`, tokenString);*/
+      if (res) {
+        await Swal.fire({
+          title: "המשתתף נרשם  בהצלחה!",
+          text: "אחל לו יום טוב ופורה",
+          icon: "success",
+          customClass: {
+            container: "my-swal",
+          },
+        });
+      } else {
+          await Swal.fire({
+            title: "משתתף לא נרשם ",
+            text: "",
+            icon: "error",
+            customClass: {
+            container: "my-swal",
+          },
+        });
+      }
+    }
+  };
+
   const deleteParticipant = async (id) => {
     const swalResult = await Swal.fire({
       title: "האם אתה בטוח שאתה רוצה למחוק את המשתתף?",
@@ -124,10 +167,10 @@ function ParticipantsTable() {
     }
   };
 
+
+
   const expandRow = {
-    renderer: (row) => (
-      <Expanded row={row} cols={cols} deleteUser={deleteParticipant} />
-    ),
+    renderer: (row) => <Expanded row={row} cols={cols} deleteUser={deleteParticipant} checkinUser={() => registerParticipant(row.id)} />,
   };
 
   const selectRow = {
@@ -149,6 +192,7 @@ function ParticipantsTable() {
       >
         {(props) => (
           <div className="table_frame">
+            <h1 className="title">רשימת הרשומים לכנס</h1>
             <div className="top_frame">
               <SearchBar
                 {...props.searchProps}
@@ -180,6 +224,10 @@ function ParticipantsTable() {
                 bordered
                 hover
               />
+              </div>
+            <div className="registered_frame">
+               <GetRegCount  className="regCount_button" />
+              <h2 className="btitle">כמות רשומים שהגיעו לכנס:</h2>
             </div>
           </div>
         )}

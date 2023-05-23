@@ -10,6 +10,18 @@ const { Participant } = require("../functions/participant");
 //   console.log(req.url);
 //   next();
 // });
+
+//Debug msg from client
+router.use((req, res, next) => {
+    console.log('Received request:');
+    console.log('Method:', req.method);
+    console.log('URL:', req.originalUrl);
+    console.log('Headers:', req.headers);
+    console.log('Body:', req.body);
+    next();
+  });
+
+
 router.get("/", jwtCheck, Participant.getParticipants);
 
 //Participant.getParticipants
@@ -33,11 +45,19 @@ router.put("/", jwtCheck, Participant.putParticipant);
 /*Update User details and his Sadnaot*/
 router.delete("/:id", jwtCheck, Participant.deleteParticipant);
 
+/*update user checkin status in kenes day*/
+router.post("/:id/register",Participant.registerParticipant);
+
+/*get register count*/
+router.get("/register",Participant.registerCount);
+
 /*checkPhoneInUse*/
 router.get("/:id", Participant.checkPhoneInUse);
 
 router.put("/:id/payment", jwtCheck, Participant.putPaymentByTel);
 
 router.post("/cardcom", Participant.updateParticipantByCardcom);
+
+
 
 module.exports = router;
