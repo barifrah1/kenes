@@ -20,9 +20,16 @@ function GetRegCount() {
           onClick={() => {
             getAccessTokenSilently()
                 .then(async (token) => {
-                const res = await AsyncAjax.get("participant/", {}, token);
+                const res = await AsyncAjax.get("participants/register/", {}, token);
                 if (res) {
-                  console.log('Received request:');
+                  const intValue = parseInt(res); // Convert the response to an integer
+                  console.log("Received integer value:", intValue);
+                  Swal.fire({
+                    title: "אנשים שהגיעו לכנס",
+                    text: `מספרם: ${intValue}`,
+                    icon: "info",
+                    confirmButtonText: "OK",
+                  });
                 }
             })
             .catch((error) => Swal.fire("שגיאה בטעינת המידע"));
