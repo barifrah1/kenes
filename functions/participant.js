@@ -124,7 +124,7 @@ const Participant = {
   registerParticipant: async (req, res) => {
     logger.info(`  Register participant for id ${req.params.id} completed`);
     const transactionQueries = [queries.RegisterUser];
-    let params = [[req.params.id,true]];
+    let params = [[req.body.id,true,req.body.parti_tel,req.body.parti_name]];
     const result = await transaction(transactionQueries, params, logger).catch(
       (e) => {
         logger.error(`error while trying to update user: ${e}`);
@@ -135,9 +135,19 @@ const Participant = {
   },
 
   registerCount: async(req,res) => {
-    console.info("Retrive registered count");
+    /* get total register count */
+    //console.info("Retrive registered count");
     const params = [true];
     const result = await execQueryNew(queries.registerCount, params).catch((e) => {
+      res.status(400).json({ error: e.message });
+      res.send();
+    });
+    res.send(JSON.stringify(result));
+  },
+
+  getArrParticipants: async(req,res) => {
+    //console.info("Retrive arrived prarticipants");
+    const result = await execQueryNew(queries.ArrParticipants, []).catch((e) => {
       res.status(400).json({ error: e.message });
       res.send();
     });
@@ -222,8 +232,9 @@ const queries = {
   updatePayment: `update UserKenes set payment=? where id=?;`,
   updateCardcom: `update UserKenes set payment=1, cardcom_payment=1, inv=?, cardcom_inv=?,sum=? where code=?;`,
   deleteUser: `delete from UserKenes where id=?;`,
-  RegisterUser: `INSERT INTO registerParti VALUES (?,?) ;`,
+  RegisterUser: `INSERT INTO registerParti VALUES (?,?,?,?) ;`,
   registerCount: `COUNT(*)`,
+  ArrParticipants: `select id,register, parti_tel, parti_name from registerParti order by id asc;` 
 };
 
 exports.Participant = Participant;

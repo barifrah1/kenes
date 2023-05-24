@@ -20,7 +20,7 @@ function GetRegCount() {
           onClick={() => {
             getAccessTokenSilently()
                 .then(async (token) => {
-                const res = await AsyncAjax.get("participants/register/", {}, token);
+                const res = await AsyncAjax.get(`participants/registerC`, {}, token);
                 if (res) {
                   const intValue = parseInt(res); // Convert the response to an integer
                   console.log("Received integer value:", intValue);
@@ -35,7 +35,7 @@ function GetRegCount() {
             .catch((error) => Swal.fire("שגיאה בטעינת המידע"));
           }}
         >
-          נקלטו
+          נרשמו עד עכשיו?
         </Button>
       </Tooltip>
     );

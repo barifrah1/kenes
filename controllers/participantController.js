@@ -23,6 +23,10 @@ router.use((req, res, next) => {
 
 
 router.get("/", jwtCheck, Participant.getParticipants);
+/*get arrival participants*/
+router.get("/register",jwtCheck,Participant.getArrParticipants);
+/*get arrival participants count*/
+router.get("/registerC",jwtCheck,Participant.registerCount);
 
 //Participant.getParticipants
 /*returns  UserSadnaot for specific user in participants table - expanded part */
@@ -48,8 +52,6 @@ router.delete("/:id", jwtCheck, Participant.deleteParticipant);
 /*update user checkin status in kenes day*/
 router.post("/:id/register",Participant.registerParticipant);
 
-/*get register count*/
-router.get("/register",Participant.registerCount);
 
 /*checkPhoneInUse*/
 router.get("/:id", Participant.checkPhoneInUse);

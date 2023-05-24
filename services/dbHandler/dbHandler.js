@@ -62,12 +62,12 @@ async function transaction(queries, queryValues, logger) {
     password: cs.password,
     database: cs.database,
   });
-  console.log(queryValues);
+  //console.log(queryValues);
   try {
     await connection.beginTransaction();
     const queryPromises = [];
     queries.forEach((query, index) => {
-      console.log(connection.format(query, queryValues[index]));
+      //console.log(connection.format(query, queryValues[index]));
       logger.info(connection.format(query, queryValues[index]));
       queryPromises.push(connection.query(query, queryValues[index]));
     });

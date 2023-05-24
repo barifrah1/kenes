@@ -12,6 +12,7 @@ import Expanded from "./Expanded/Expanded";
 import Swal from "sweetalert2";
 import LogoutButton from "../../Login/LogoutButton/LogoutButton";
 import TableColumns from "./TableColumns";
+import ArrTableColumns from "./ArrTableColumns";
 import { useAuth0 } from "@auth0/auth0-react";
 import AsyncAjax from "../../../AsyncAjax";
 import Registeration from "../../Registeration/Registeration";
@@ -32,6 +33,7 @@ function ParticipantsTable() {
     rowIndex: -1,
   };
   const [data, setData] = useState([]);
+  const [Arrdata, setArrData] = useState([]);
 
   /*table's columns definition*/
   const [cols, setCols] = useState(TableColumns);
@@ -51,6 +53,24 @@ function ParticipantsTable() {
       })
       .catch((error) => console.log(error));
   }, []);
+
+  /*Adding new arrival table for people that arrived in kenes day */
+  /*table's columns definition*/
+  const [Arrcols, setArrCols] = useState(ArrTableColumns);
+  //const { ArrgetAccessTokenSilently } = useAuth0();
+
+  useEffect(() => {
+    setArrCols(ArrTableColumns);
+    getAccessTokenSilently()
+      .then(async (token) => {
+     /*   const res = await AsyncAjax.get("register/", {}, token);*/
+        const res = await AsyncAjax.get("participant/register", {}, token);
+
+        setArrData(res);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
 
   /* updat payment function is called every time the user uses the option to update payment culomn from the table itself*/
   const updatePayment = async (_cellValue, _cellName, row) => {
@@ -90,7 +110,8 @@ function ParticipantsTable() {
   };
 
 
-  const registerParticipant = async (id) => {
+  const registerParticipant = async (row) => {
+    const id = row.id; 
     const swalResult = await Swal.fire({
       title: "האם אתה בטוח שאתה רוצה לקלוט את המשתתף לכנס?",
       showDenyButton: true,
@@ -104,10 +125,11 @@ function ParticipantsTable() {
       const token = await getAccessTokenSilently();
       const tokenString = JSON.stringify(token);
       const objectToServer = {
-        id: id
+        id: row.id,
+        parti_tel: row.phone, 
+        parti_name: row.Fname + " " + row.Lname,
       };
       const res = await AsyncAjax.post(`participant/${id}/register`,objectToServer, tokenString);
-      /*const res = await AsyncAjax.post(`participant/${id}/register`, tokenString);*/
       if (res) {
         await Swal.fire({
           title: "המשתתף נרשם  בהצלחה!",
@@ -170,7 +192,7 @@ function ParticipantsTable() {
 
 
   const expandRow = {
-    renderer: (row) => <Expanded row={row} cols={cols} deleteUser={deleteParticipant} checkinUser={() => registerParticipant(row.id)} />,
+    renderer: (row) => <Expanded row={row} cols={cols} deleteUser={deleteParticipant} checkinUser={() => registerParticipant(row)} />,
   };
 
   const selectRow = {
@@ -227,8 +249,29 @@ function ParticipantsTable() {
               </div>
             <div className="registered_frame">
                <GetRegCount  className="regCount_button" />
-              <h2 className="btitle">כמות רשומים שהגיעו לכנס:</h2>
+              <h2 className="btitle">רשימת הרשומים שהגיעו לכנס:</h2>
             </div>
+            <div className="bottom_frame">
+              <BootstrapTable
+                {...props.baseProps}
+                keyField="id"
+                data={Arrdata}
+                columns={Arrcols}
+                bootstrap4={true}
+                cellEdit={cellEditFactory({
+                  mode: "dbclick",
+                  blurToSave: true,
+                  afterSaveCell: (cellValue, cellName, row) =>
+                    updatePayment(cellValue, cellName, row),
+                })}
+                headerClasses="header_row"
+                rowClasses="rows"
+                pagination={paginationFactory()}
+                striped
+                bordered
+                hover
+              />
+              </div>
           </div>
         )}
       </ToolkitProvider>
