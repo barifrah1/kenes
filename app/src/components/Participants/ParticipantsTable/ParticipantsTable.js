@@ -63,9 +63,7 @@ function ParticipantsTable() {
     setArrCols(ArrTableColumns);
     getAccessTokenSilently()
       .then(async (token) => {
-     /*   const res = await AsyncAjax.get("register/", {}, token);*/
         const res = await AsyncAjax.get("participant/register", {}, token);
-
         setArrData(res);
       })
       .catch((error) => console.log(error));
@@ -112,7 +110,7 @@ function ParticipantsTable() {
 
   const registerParticipant = async (row) => {
     const id = row.id; 
-    const swalResult = await Swal.fire({
+    await Swal.fire({
       title: "האם אתה בטוח שאתה רוצה לקלוט את המשתתף לכנס?",
       showDenyButton: true,
       confirmButtonText: "כן",
@@ -120,36 +118,43 @@ function ParticipantsTable() {
       customClass: {
         container: "my-swal",
       },
-    });
-    if (swalResult.isConfirmed) {
-      const token = await getAccessTokenSilently();
-      const tokenString = JSON.stringify(token);
-      const objectToServer = {
-        id: row.id,
-        parti_tel: row.phone, 
-        parti_name: row.Fname + " " + row.Lname,
-      };
-      const res = await AsyncAjax.post(`participant/${id}/register`,objectToServer, tokenString);
-      if (res) {
-        await Swal.fire({
-          title: "המשתתף נרשם  בהצלחה!",
-          text: "אחל לו יום טוב ופורה",
-          icon: "success",
-          customClass: {
-            container: "my-swal",
-          },
-        });
-      } else {
-          await Swal.fire({
-            title: "משתתף לא נרשם ",
-            text: "",
-            icon: "error",
-            customClass: {
-            container: "my-swal",
-          },
-        });
+    })
+    .then(async (result) => {
+      if (result.isConfirmed) {
+        const objectToServer = {
+          id: row.id,
+          parti_tel: row.phone, 
+          parti_name: row.Fname + " " + row.Lname,
+        };
+        const token = await getAccessTokenSilently();
+        const res = await AsyncAjax.post(`participant/registerP`,objectToServer, token)
+        .then (async (res) => {
+          if (res) {
+            await Swal.fire({
+              title: "המשתתף נרשם  בהצלחה!",
+              text: "אחל לו יום טוב ופורה",
+              icon: "success",
+              customClass: {
+                container: "my-swal",
+              },
+            });
+          } else {
+              await Swal.fire({
+                title: "משתתף לא נרשם ",
+                text: "",
+                icon: "error",
+                customClass: {
+                  container: "my-swal",
+                },
+             });
+          }
+        })
       }
-    }
+    })
+    .catch((error) => {
+      console.log("error when updating registeration");
+      throw error;
+    });
   };
 
   const deleteParticipant = async (id) => {

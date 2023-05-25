@@ -12,7 +12,7 @@ const { Participant } = require("../functions/participant");
 // });
 
 //Debug msg from client
-router.use((req, res, next) => {
+/*router.use((req, res, next) => {
     console.log('Received request:');
     console.log('Method:', req.method);
     console.log('URL:', req.originalUrl);
@@ -20,7 +20,7 @@ router.use((req, res, next) => {
     console.log('Body:', req.body);
     next();
   });
-
+*/
 
 router.get("/", jwtCheck, Participant.getParticipants);
 /*get arrival participants*/
@@ -50,7 +50,7 @@ router.put("/", jwtCheck, Participant.putParticipant);
 router.delete("/:id", jwtCheck, Participant.deleteParticipant);
 
 /*update user checkin status in kenes day*/
-router.post("/:id/register",Participant.registerParticipant);
+router.post("/registerP",Participant.registerParticipant);
 
 
 /*checkPhoneInUse*/
