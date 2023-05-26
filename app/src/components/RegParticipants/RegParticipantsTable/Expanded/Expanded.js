@@ -4,7 +4,6 @@ import ExpandedDetails from "./ExpandedDetails/ExpandedDetails";
 import SadnaotDetails from "./sadnaot_details/sadnaot_details";
 
 const Expanded = (props) => {
-  const { deleteUser }  = props;
   const { checkinUser }   = props;
   return (
     <div className="expanded_comp">
@@ -34,4 +33,3 @@ const Expanded = (props) => {
 };
 
 export default Expanded;
-

@@ -1,4 +1,5 @@
-import React from "react";
+//import React from "react";
+import React, { useRef } from "react";
 import { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import "./bootstrap.min.css";
@@ -30,8 +31,15 @@ function regParticipantsTable() {
     fetchRowColors();
   }, []);
   
+  // used for checking if user was register in the expand section 
+  const [isButtonPressed, setIsButtonPressed] = useState(false);
+  const [clickedRowId, setClickedRowId] = useState(null);
+  const handleButtonPress = (rowId) => {
+    setClickedRowId(row.id);
+    // Perform any additional actions related to the button press
+  };
 
-  
+
   /*a use state hook that tells us if we are in edit mode or not and gives the data to edit form*/
   const [editingModalInfo, setEditModalInfo] = useState({
     visible: false,
@@ -261,6 +269,46 @@ function determineRowColor(row) {
       setEditModalInfo({ visible: true, row: row, rowIndex: rowIndex }),
   };
 
+  
+  const expandedRef = useRef(null);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+
+    const handleCloseRow = (event) => {
+      const isRowClick = event.target.tagName === "TD";
+      if (isRowClick){
+        Swal.fire({
+          title: "תזכורת האם רשמת את המשתתף?",
+          text: "זה רק תזכורת אפשר להתעלם",
+          icon: "warning",
+          showCancelButton: false,
+          confirmButtonText: "כן",
+          cancelButtonText: "לא",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Handle closing the row here
+          }
+        });
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    document.addEventListener("click", handleCloseRow);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      document.removeEventListener("click", handleCloseRow);
+    };
+  }, []);
+  
+  useEffect(() => {
+    setIsButtonPressed(false);
+  }, [editingModalInfo.visible]);
+
   return (
     <div className="participants_table">
       <ToolkitProvider
@@ -281,7 +329,7 @@ function determineRowColor(row) {
               <LogoutButton className="logout_button" />
             </div>
             <hr />
-            <div className="bottom_frame">
+            <div ref={expandedRef} className="bottom_frame" >
               <BootstrapTable
                 {...props.baseProps}
                 keyField="id"
@@ -305,6 +353,12 @@ function determineRowColor(row) {
                 rowStyle={(row, rowIndex) => ({
                   backgroundColor: determineRowColor(row),
                 })}
+                onClick={(e, row) => {
+                  // Handle button clicks inside the table row
+                  if (e.target.tagName === "BUTTON") {
+                    handleButtonPress(row.id);
+                  }
+                }}
 
               />
               </div>
