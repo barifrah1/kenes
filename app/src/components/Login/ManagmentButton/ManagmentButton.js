@@ -23,6 +23,15 @@ function ManagmentButton() {
         >
           ניהול
         </Button>
+        <Button
+          className="managment_button"
+          type="ghost"
+          onClick={() => {
+            window.location.replace(Utils.resolvePath() + "regparticipants");
+          }}
+        >
+          רישום לכנס
+        </Button>
       </Tooltip>
     )
   );

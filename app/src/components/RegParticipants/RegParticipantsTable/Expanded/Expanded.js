@@ -21,12 +21,14 @@ const Expanded = (props) => {
         <span className="sadnaot_gifts">
           <SadnaotDetails row={props.row} />
         </span>
-        <span className="delete_user">
-          <button type="button" onClick={(e) => deleteUser(props.row["id"])}>
-            מחק משתתף
-          </button>
-        </span>
       </div>
+      <div className="button_container">
+          <span className="checkin_user">
+            <button type="button" onClick={(e) => checkinUser(props.row["id"])}>
+             רישום משתתף
+            </button>
+          </span>
+        </div>
     </div>
   );
 };

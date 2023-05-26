@@ -27,6 +27,8 @@ router.get("/", jwtCheck, Participant.getParticipants);
 router.get("/register",jwtCheck,Participant.getArrParticipants);
 /*get arrival participants count*/
 router.get("/registerC",jwtCheck,Participant.registerCount);
+// check registration status for specific participant
+router.get("/registerS", jwtCheck, Participant.getRegisterStatus);
 
 //Participant.getParticipants
 /*returns  UserSadnaot for specific user in participants table - expanded part */

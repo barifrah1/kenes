@@ -129,8 +129,8 @@ const Participant = {
       (e) => {
         logger.error(`error while trying to update user probably adding him twice key exist: ${e}`);
         // don't complain as it confuse the client 
-        //res.status(400).json({ error: e.message });
-        //res.send();
+        res.status(400).json({ error: e.message });
+        res.send();
       }
     );
     res.status(200).json(result);
@@ -146,6 +146,23 @@ const Participant = {
     });
     res.send(JSON.stringify(result));
   },
+
+  getRegisterStatus: async(req,res) =>{
+    // get registeration status for specific id
+    const params = [];
+    const result = await execQueryNew(queries.registerStatus, params).catch(
+      (e) => {
+        res.status(400).json({ error: e.message });
+        res.send();
+      }
+    );
+    if (result.length == 0) {
+      res.send(JSON.stringify([{register: 0}]));
+    }else {
+      res.send(JSON.stringify(result));
+    }    
+  },
+
 
   getArrParticipants: async(req,res) => {
     //console.info("Retrive arrived prarticipants");
@@ -236,7 +253,8 @@ const queries = {
   deleteUser: `delete from UserKenes where id=?;`,
   RegisterUser: `INSERT INTO registerParti VALUES (?,?,?,?) ;`,
   registerCount: ` select COUNT(*) as count from registerParti `,
-  ArrParticipants: `select id,register, parti_tel, parti_name from registerParti order by id asc;` 
+  ArrParticipants: `select id,register, parti_tel, parti_name from registerParti order by id asc;`,
+  registerStatus: `select id, register from registerParti;`
 };
 
 exports.Participant = Participant;

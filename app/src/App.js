@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Homepage from "./components/Homepage/Homepage.js";
 import "./App.less";
 import Participants from "./components/Participants/Participants";
+import RegParticipants from "./components/RegParticipants/RegParticipants.js";
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import CheckIn from "./components/CheckIn/CheckIn.js";
 import Example from "./components/Example";
@@ -23,6 +24,7 @@ const App = () => {
         <Switch>
           <Route path="/example" component={Example} />
           <PrivateRoute path="/participants" component={Participants} />
+          <PrivateRoute path="/regparticipants" component={RegParticipants} />
           <Route exact path="/" render={() => <Homepage />} />
         </Switch>
       </BrowserRouter>

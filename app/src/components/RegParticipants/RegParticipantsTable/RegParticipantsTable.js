@@ -17,10 +17,21 @@ import { useAuth0 } from "@auth0/auth0-react";
 import AsyncAjax from "../../../AsyncAjax";
 import Registeration from "../../Registeration/Registeration";
 import GetRegCount from "./GetRegCount";
+import { error } from "winston";
 
 const { SearchBar } = Search;
 
-function ParticipantsTable() {
+function regParticipantsTable() {
+  
+  // used for coloring registered users 
+  const [rowColors, setRowColors] = useState({});
+
+  useEffect(() => {
+    fetchRowColors();
+  }, []);
+  
+
+  
   /*a use state hook that tells us if we are in edit mode or not and gives the data to edit form*/
   const [editingModalInfo, setEditModalInfo] = useState({
     visible: false,
@@ -32,6 +43,8 @@ function ParticipantsTable() {
     row: {},
     rowIndex: -1,
   };
+  
+
   const [data, setData] = useState([]);
   const [Arrdata, setArrData] = useState([]);
 
@@ -49,7 +62,9 @@ function ParticipantsTable() {
     getAccessTokenSilently()
       .then(async (token) => {
         const res = await AsyncAjax.get("participant/", {}, token);
-        setData(res);
+       setData(res);
+       // const slicedData = res.slice(0, 5); // Show only the first 10 rows
+       // setData(slicedData);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -108,7 +123,54 @@ function ParticipantsTable() {
   };
 
 
-  
+  const registerParticipant = async (row) => {
+    const id = row.id; 
+    await Swal.fire({
+      title: "האם אתה בטוח שאתה רוצה לקלוט את המשתתף לכנס?",
+      showDenyButton: true,
+      confirmButtonText: "כן",
+      denyButtonText: "לא",
+      customClass: {
+        container: "my-swal",
+      },
+    })
+    .then(async (result) => {
+      if (result.isConfirmed) {
+        const objectToServer = {
+          id: row.id,
+          parti_tel: row.phone, 
+          parti_name: row.Fname + " " + row.Lname,
+        };
+        const token = await getAccessTokenSilently();
+        const res = await AsyncAjax.post(`participant/registerP`,objectToServer, token)
+        .then (async (res) => {
+          if (res) {
+            await Swal.fire({
+              title: "המשתתף נרשם  בהצלחה!",
+              text: "אחל לו יום טוב ופורה",
+              icon: "success",
+              customClass: {
+                container: "my-swal",
+              },
+            });
+          } else {
+              await Swal.fire({
+                title: "משתתף לא נרשם ",
+                text: "",
+                icon: "error",
+                customClass: {
+                  container: "my-swal",
+                },
+             });
+          }
+        })
+      }
+    })
+    .catch((error) => {
+      console.log("error when updating registeration");
+      throw error;
+    });
+  };
 
   const deleteParticipant = async (id) => {
     const swalResult = await Swal.fire({
@@ -147,10 +209,47 @@ function ParticipantsTable() {
     }
   };
 
+  // Fetch the row colors in advance and store them in a separate data structure
 
+
+async function fetchRowColors() {
+  try {
+    let intValue = 0;
+    getAccessTokenSilently()
+    .then(async (token) => {
+      const res = await AsyncAjax.get(`participant/registerS`, {}, token);
+      if (res) {
+        res.forEach(item => {
+          const { id, register } = item;
+          intValue = parseInt(register); // Convert the response to an integer
+          // Store the color in the rowColors object using the 'id' as the key
+          if (intValue==1){
+            rowColors[id] ="green";
+          } else {
+            rowColors[id] ="white";
+          }
+        })
+      }
+    });
+    setRowColors(rowColors);
+  } catch (error) {
+    console.error('Error fetching row colors:', error);
+  }
+}
+
+
+
+// Define the rowStyle function
+function determineRowColor(row) {
+  const color = rowColors[row.id] || 'white'; // Get the color from the rowColors object
+  return color;
+}
+
+
+ 
 
   const expandRow = {
-    renderer: (row) => <Expanded row={row} cols={cols} deleteUser={deleteParticipant} />,
+    renderer: (row) => <Expanded row={row} cols={cols} checkinUser={() => registerParticipant(row)} />,
   };
 
   const selectRow = {
@@ -172,7 +271,7 @@ function ParticipantsTable() {
       >
         {(props) => (
           <div className="table_frame">
-            <h1 className="title">רשימת הרשומים לכנס</h1>
+            <h1 className="title"> דף הרשמה: רשימת הרשומים לכנס</h1>
             <div className="top_frame">
               <SearchBar
                 {...props.searchProps}
@@ -203,9 +302,38 @@ function ParticipantsTable() {
                 striped
                 bordered
                 hover
+                rowStyle={(row, rowIndex) => ({
+                  backgroundColor: determineRowColor(row),
+                })}
+
               />
               </div>
-        </div>
+            <div className="registered_frame">
+               <GetRegCount  className="regCount_button" />
+              <h2 className="btitle">רשימת הרשומים שהגיעו לכנס:</h2>
+            </div>
+            <div className="bottom_frame">
+              <BootstrapTable
+                {...props.baseProps}
+                keyField="id"
+                data={Arrdata}
+                columns={Arrcols}
+                bootstrap4={true}
+                cellEdit={cellEditFactory({
+                  mode: "dbclick",
+                  blurToSave: true,
+                  afterSaveCell: (cellValue, cellName, row) =>
+                    updatePayment(cellValue, cellName, row),
+                })}
+                headerClasses="header_row"
+                rowClasses="rows"
+                pagination={paginationFactory()}
+                striped
+                bordered
+                hover
+              />
+              </div>
+          </div>
         )}
       </ToolkitProvider>
       <div>
@@ -223,4 +351,4 @@ function ParticipantsTable() {
     </div>
   );
 }
-export default ParticipantsTable;
+export default regParticipantsTable;
