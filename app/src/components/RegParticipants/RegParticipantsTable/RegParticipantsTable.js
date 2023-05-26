@@ -19,10 +19,19 @@ import AsyncAjax from "../../../AsyncAjax";
 import Registeration from "../../Registeration/Registeration";
 import GetRegCount from "./GetRegCount";
 import { error } from "winston";
+import { Button, Tooltip } from "antd";
 
 const { SearchBar } = Search;
 
 function regParticipantsTable() {
+  
+  
+  // enable updates in registeration state  
+  const [enUpdate, setenUpdate] = useState({});
+   // Set the initial value of enUpdate
+  useState(() => {
+    setenUpdate({ en: true });
+  }, []);
   
   // used for coloring registered users 
   const [rowColors, setRowColors] = useState({});
@@ -134,7 +143,7 @@ function regParticipantsTable() {
   const registerParticipant = async (row,eid,set) => {
     // This function handle register participant or unregister it according to set input
     const id = row.id; 
-    if (set) {
+    if (set&&enUpdate.en) {
           await Swal.fire({
             title: "האם אתה בטוח שאתה רוצה לקלוט את המשתתף לכנס?",
             showDenyButton: true,
@@ -180,7 +189,7 @@ function regParticipantsTable() {
             console.log("error when updating registeration");
             throw error;
           });
-    }else {
+    }else if(!set&&enUpdate.en) {
       await Swal.fire({
         title: "האם אתה בטוח שאתה רוצה לבטל את רישום המשתתף בכנס?",
         showDenyButton: true,
@@ -368,7 +377,7 @@ function determineRowColor(row) {
       >
         {(props) => (
           <div className="table_frame">
-            <h1 className="title"> דף הרשמה: רשימת הרשומים לכנס</h1>
+            <h1 className="title"> דף הרשמה ביום הכנס: רשימת הרשומים לכנס</h1>
             <div className="top_frame">
               <SearchBar
                 {...props.searchProps}
@@ -415,6 +424,24 @@ function determineRowColor(row) {
                <GetRegCount  className="regCount_button" />
               <h2 className="btitle">רשימת הרשומים שהגיעו לכנס:</h2>
             </div>
+            <div className="en_button">
+              <Button
+                  type="ghost"
+                  shape="round"
+                  className="E"
+                  onClick={() => {                     
+                          Swal.fire({
+                            title: " מנע עידכונים ",
+                            text: "",
+                            icon: "info",
+                            confirmButtonText: "OK",
+                          });
+                          setenUpdate({ en: false });
+                  }}
+              >
+              Disable updates
+              </Button>
+           </div>
             <div className="bottom_frame">
               <BootstrapTable
                 {...props.baseProps}
