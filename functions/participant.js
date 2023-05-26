@@ -136,6 +136,25 @@ const Participant = {
     res.status(200).json(result);
   },
 
+  UnregisterParticipant: async (req, res) => {
+    logger.info(`  Un Register participant for id ${req.params.id} completed`);
+    const transactionQueries = [queries.UnRegisterUser];
+    let params = [[req.params.id]];
+    const result = await transaction(transactionQueries, params, logger).catch(
+      (e) => {
+        logger.error(`error while trying to update user probably adding him twice key exist: ${e}`);
+        // don't complain as it confuse the client 
+        res.status(400).json({ error: e.message });
+        res.send();
+      }
+    );
+    res.status(200).json(result);
+  },
+
+
+
+
+
   registerCount: async(req,res) => {
     /* get total register count */
     //console.info("Retrive registered count");
@@ -252,6 +271,7 @@ const queries = {
   updateCardcom: `update UserKenes set payment=1, cardcom_payment=1, inv=?, cardcom_inv=?,sum=? where code=?;`,
   deleteUser: `delete from UserKenes where id=?;`,
   RegisterUser: `INSERT INTO registerParti VALUES (?,?,?,?) ;`,
+  UnRegisterUser: `delete from registerParti where id=?;`,
   registerCount: ` select COUNT(*) as count from registerParti `,
   ArrParticipants: `select id,register, parti_tel, parti_name from registerParti order by id asc;`,
   registerStatus: `select id, register from registerParti;`

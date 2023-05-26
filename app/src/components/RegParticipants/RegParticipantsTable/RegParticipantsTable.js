@@ -131,53 +131,102 @@ function regParticipantsTable() {
   };
 
 
-  const registerParticipant = async (row) => {
+  const registerParticipant = async (row,eid,set) => {
+    // This function handle register participant or unregister it according to set input
     const id = row.id; 
-    await Swal.fire({
-      title: "האם אתה בטוח שאתה רוצה לקלוט את המשתתף לכנס?",
-      showDenyButton: true,
-      confirmButtonText: "כן",
-      denyButtonText: "לא",
-      customClass: {
-        container: "my-swal",
-      },
-    })
-    .then(async (result) => {
-      if (result.isConfirmed) {
-        const objectToServer = {
-          id: row.id,
-          parti_tel: row.phone, 
-          parti_name: row.Fname + " " + row.Lname,
-        };
-        const token = await getAccessTokenSilently();
-        const res = await AsyncAjax.post(`participant/registerP`,objectToServer, token)
-        .then (async (res) => {
-          if (res) {
-            await Swal.fire({
-              title: "המשתתף נרשם  בהצלחה!",
-              text: "אחל לו יום טוב ופורה",
-              icon: "success",
-              customClass: {
-                container: "my-swal",
-              },
-            });
-          } else {
+    if (set) {
+          await Swal.fire({
+            title: "האם אתה בטוח שאתה רוצה לקלוט את המשתתף לכנס?",
+            showDenyButton: true,
+            confirmButtonText: "כן",
+            denyButtonText: "לא",
+            customClass: {
+              container: "my-swal",
+            },
+          })
+          .then(async (result) => {
+            if (result.isConfirmed) {
+              const objectToServer = {
+                id: row.id,
+                parti_tel: row.phone, 
+                parti_name: row.Fname + " " + row.Lname,
+              };
+              const token = await getAccessTokenSilently();
+              const res = await AsyncAjax.post(`participant/registerP`,objectToServer, token)
+              .then (async (res) => {
+                if (res) {
+                  await Swal.fire({
+                    title: "המשתתף נרשם  בהצלחה!",
+                    text: "אחל לו יום טוב ופורה",
+                    icon: "success",
+                    customClass: {
+                      container: "my-swal",
+                    },
+                  });
+                } else {
+                    await Swal.fire({
+                      title: "משתתף לא נרשם ",
+                      text: "",
+                      icon: "error",
+                      customClass: {
+                        container: "my-swal",
+                      },
+                  });
+                }
+              })
+            }
+          })
+          .catch((error) => {
+            console.log("error when updating registeration");
+            throw error;
+          });
+    }else {
+      await Swal.fire({
+        title: "האם אתה בטוח שאתה רוצה לבטל את רישום המשתתף בכנס?",
+        showDenyButton: true,
+        confirmButtonText: "כן",
+        denyButtonText: "לא",
+        customClass: {
+          container: "my-swal",
+        },
+      })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          const objectToServer = {
+            id: row.id,
+            parti_tel: row.phone, 
+            parti_name: row.Fname + " " + row.Lname,
+          };
+          const token = await getAccessTokenSilently();
+          await AsyncAjax.put(`participant/${id}/UregisterP`,objectToServer, token)
+          .then (async (res) => {
+            if (res) {
               await Swal.fire({
-                title: "משתתף לא נרשם ",
-                text: "",
-                icon: "error",
+                title: "ביטול הרשום למשתתף בוצע!",
+                text: "אחל לו המשך יום טוב ופורה",
+                icon: "success",
                 customClass: {
                   container: "my-swal",
                 },
-             });
-          }
-        })
-      }
-    })
-    .catch((error) => {
-      console.log("error when updating registeration");
-      throw error;
-    });
+              });
+            } else {
+                await Swal.fire({
+                  title: "משתתף לא נרשם ",
+                  text: "",
+                  icon: "error",
+                  customClass: {
+                    container: "my-swal",
+                  },
+              });
+            }
+          })
+        }
+      })
+      .catch((error) => {
+        console.log("error when updating registeration");
+        throw error;
+      });
+    }
   };
 
   const deleteParticipant = async (id) => {
@@ -257,7 +306,7 @@ function determineRowColor(row) {
  
 
   const expandRow = {
-    renderer: (row) => <Expanded row={row} cols={cols} checkinUser={() => registerParticipant(row)} />,
+    renderer: (row) => <Expanded row={row} cols={cols} checkinUser={(id,set) => registerParticipant(row,id,set)} />,
   };
 
   const selectRow = {

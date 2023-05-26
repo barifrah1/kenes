@@ -23,8 +23,15 @@ const Expanded = (props) => {
       </div>
       <div className="button_container">
           <span className="checkin_user">
-            <button type="button" onClick={(e) => checkinUser(props.row["id"])}>
+            <button type="button" onClick={(e) => checkinUser(props.row["id"],true)}>
              רישום משתתף
+            </button>
+          </span>
+        </div>
+        <div className="cancel_button_container">
+          <span className="checkin_user">
+            <button type="button" onClick={(e) => checkinUser(props.row["id"],false)}>
+             ביטול רישום משתתף
             </button>
           </span>
         </div>

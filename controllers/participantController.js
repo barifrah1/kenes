@@ -12,7 +12,7 @@ const { Participant } = require("../functions/participant");
 // });
 
 //Debug msg from client
-/*router.use((req, res, next) => {
+router.use((req, res, next) => {
     console.log('Received request:');
     console.log('Method:', req.method);
     console.log('URL:', req.originalUrl);
@@ -20,7 +20,7 @@ const { Participant } = require("../functions/participant");
     console.log('Body:', req.body);
     next();
   });
-*/
+
 
 router.get("/", jwtCheck, Participant.getParticipants);
 /*get arrival participants*/
@@ -29,6 +29,10 @@ router.get("/register",jwtCheck,Participant.getArrParticipants);
 router.get("/registerC",jwtCheck,Participant.registerCount);
 // check registration status for specific participant
 router.get("/registerS", jwtCheck, Participant.getRegisterStatus);
+/*update user checkin status in kenes day*/
+router.post("/registerP",Participant.registerParticipant);
+// unregister participant
+router.put("/:id/UregisterP", jwtCheck, Participant.UnregisterParticipant);
 
 //Participant.getParticipants
 /*returns  UserSadnaot for specific user in participants table - expanded part */
@@ -50,10 +54,6 @@ router.put("/", jwtCheck, Participant.putParticipant);
 
 /*Update User details and his Sadnaot*/
 router.delete("/:id", jwtCheck, Participant.deleteParticipant);
-
-/*update user checkin status in kenes day*/
-router.post("/registerP",Participant.registerParticipant);
-
 
 /*checkPhoneInUse*/
 router.get("/:id", Participant.checkPhoneInUse);
