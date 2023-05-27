@@ -12,6 +12,7 @@ const { Participant } = require("../functions/participant");
 // });
 
 //Debug msg from client
+/*
 router.use((req, res, next) => {
     console.log('Received request:');
     console.log('Method:', req.method);
@@ -20,7 +21,7 @@ router.use((req, res, next) => {
     console.log('Body:', req.body);
     next();
   });
-
+*/
 
 router.get("/", jwtCheck, Participant.getParticipants);
 /*get arrival participants*/

@@ -26,13 +26,24 @@ const { SearchBar } = Search;
 function regParticipantsTable() {
   
   
-  // enable updates in registeration state  
+  // Enable updates in registeration state  
   const [enUpdate, setenUpdate] = useState({});
    // Set the initial value of enUpdate
   useState(() => {
     setenUpdate({ en: true });
   }, []);
   
+// Use this state to filter warrning notification when closing a row expand
+  const [WarnningOn, setWarnningOn] = useState({});
+  useState(() => {
+    setWarnningOn({ en: false });
+  }, []);
+
+
+  useEffect(() => {
+    fetchRowColors();
+  }, []);
+
   // used for coloring registered users 
   const [rowColors, setRowColors] = useState({});
 
@@ -338,7 +349,7 @@ function determineRowColor(row) {
 
     const handleCloseRow = (event) => {
       const isRowClick = event.target.tagName === "TD";
-      if (isRowClick){
+      if (isRowClick&&WarnningOn.en){
         Swal.fire({
           title: "תזכורת האם רשמת את המשתתף?",
           text: "זה רק תזכורת אפשר להתעלם",
@@ -349,10 +360,14 @@ function determineRowColor(row) {
         }).then((result) => {
           if (result.isConfirmed) {
             // Handle closing the row here
+            setWarnningOn(prevState => ({ ...prevState, en: false }));
           }
         });
       }
+      setWarnningOn(prevState => ({ ...prevState, en: true }));
+      console.log("Warning en:"+WarnningOn.en);      
     };
+    
 
     window.addEventListener("beforeunload", handleBeforeUnload);
     document.addEventListener("click", handleCloseRow);
@@ -361,7 +376,7 @@ function determineRowColor(row) {
       window.removeEventListener("beforeunload", handleBeforeUnload);
       document.removeEventListener("click", handleCloseRow);
     };
-  }, []);
+  }, [WarnningOn]);
   
   useEffect(() => {
     setIsButtonPressed(false);
