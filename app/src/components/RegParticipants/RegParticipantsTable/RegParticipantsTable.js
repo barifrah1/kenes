@@ -38,7 +38,11 @@ function regParticipantsTable() {
   useState(() => {
     setWarnningOn({ en: false });
   }, []);
-
+// Use this state to get indication that we handled participant regist..
+  const [handleRegOn, sethandleRegOn] = useState({});
+  useState(() => {
+    sethandleRegOn({ en: false });
+  }, []);
 
   useEffect(() => {
     fetchRowColors();
@@ -171,6 +175,8 @@ function regParticipantsTable() {
                 parti_tel: row.phone, 
                 parti_name: row.Fname + " " + row.Lname,
               };
+              sethandleRegOn(prevState => ({ ...prevState, en: true }));
+              setWarnningOn(prevState => ({ ...prevState, en: false }));
               const token = await getAccessTokenSilently();
               const res = await AsyncAjax.post(`participant/registerP`,objectToServer, token)
               .then (async (res) => {
@@ -217,6 +223,8 @@ function regParticipantsTable() {
             parti_tel: row.phone, 
             parti_name: row.Fname + " " + row.Lname,
           };
+          sethandleRegOn(prevState => ({ ...prevState, en: true }));
+          setWarnningOn(prevState => ({ ...prevState, en: false }));
           const token = await getAccessTokenSilently();
           await AsyncAjax.put(`participant/${id}/UregisterP`,objectToServer, token)
           .then (async (res) => {
@@ -349,7 +357,7 @@ function determineRowColor(row) {
 
     const handleCloseRow = (event) => {
       const isRowClick = event.target.tagName === "TD";
-      if (isRowClick&&WarnningOn.en){
+      if (isRowClick&&WarnningOn.en&&!handleRegOn.en){
         Swal.fire({
           title: "תזכורת האם רשמת את המשתתף?",
           text: "זה רק תזכורת אפשר להתעלם",
@@ -364,8 +372,12 @@ function determineRowColor(row) {
           }
         });
       }
-      setWarnningOn(prevState => ({ ...prevState, en: true }));
-      console.log("Warning en:"+WarnningOn.en);      
+      if (isRowClick) {
+        if (!handleRegOn.en)
+        setWarnningOn(prevState => ({ ...prevState, en: true }));
+        sethandleRegOn(prevState => ({ ...prevState, en: false }));
+        console.log("Warning en:"+WarnningOn.en);      
+      }
     };
     
 
@@ -376,7 +388,7 @@ function determineRowColor(row) {
       window.removeEventListener("beforeunload", handleBeforeUnload);
       document.removeEventListener("click", handleCloseRow);
     };
-  }, [WarnningOn]);
+  }, [WarnningOn,handleRegOn]);
   
   useEffect(() => {
     setIsButtonPressed(false);
