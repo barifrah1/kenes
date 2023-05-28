@@ -60,6 +60,11 @@ app.get("/participants", (req, res) => {
   res.sendFile("index.html", { root: __dirname + "/build" });
 });
 
+app.get("/regparticipants", (req, res) => {
+  logger.info("got in index");
+  res.sendFile("index.html", { root: __dirname + "/build" });
+});
+
 app.get("/", (req, res) => {
   logger.info("got in p");
   res.sendFile("index.html", { root: __dirname + "/build" });
